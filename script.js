@@ -1,10 +1,26 @@
 // Base URL for GitHub raw content - adjust branch and path as needed
 // Try GitHub Pages URL first, fallback to raw GitHub
-const GITHUB_PAGES_URL = window.location.origin.includes('github.io') 
-    ? `${window.location.origin}/learnings/` 
-    : './learnings/';
+const getBaseUrl = () => {
+    if (window.location.origin.includes('github.io')) {
+        // GitHub Pages - construct path from current location
+        // If URL is like https://arihara-sudhan.github.io/ari-learns/ or similar
+        let pathname = window.location.pathname;
+        // Remove trailing slash and index.html
+        pathname = pathname.replace(/\/index\.html$/, '').replace(/\/$/, '');
+        // If pathname includes 'ari-learns' or similar, use it
+        // Otherwise, try to detect from path
+        if (pathname && pathname !== '/') {
+            return `${window.location.origin}${pathname}/learnings/`;
+        }
+        // Default: try common paths
+        // First try: /ari-learns/learnings/
+        // If that doesn't work, use raw GitHub
+        return `${window.location.origin}/ari-learns/learnings/`;
+    }
+    // Local development
+    return './learnings/';
+};
 const RAW_GITHUB_URL = "https://raw.githubusercontent.com/arihara-sudhan/arihara-sudhan.github.io/main/ari-learns/learnings/";
-const BASE_URL = GITHUB_PAGES_URL; // Use GitHub Pages URL first
 
 // Base URL for images
 const getImageBaseUrl = () => {
@@ -44,8 +60,9 @@ async function loadLearnings(fileName) {
         return;
     }
 
-    const fileUrl = `${BASE_URL}${fileName}.txt`;
-    const fallbackUrl = `${RAW_GITHUB_URL}${fileName}.txt`;
+    // Try raw GitHub URL first (most reliable), then fallback to GitHub Pages
+    const fileUrl = `${RAW_GITHUB_URL}${fileName}.txt`;
+    const fallbackUrl = `${getBaseUrl()}${fileName}.txt`;
     const contentDiv = document.getElementById("content");
     
     // Show loading indicator
