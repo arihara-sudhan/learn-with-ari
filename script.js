@@ -221,6 +221,9 @@ async function loadLearnings(fileName) {
         contentCache.set(fileName, htmlContent);
         
         updateActiveButton(fileName);
+        
+        // Update URL with route
+        updateRoute(fileName);
     } catch (error) {
         const errorMsg = error.message || 'Unknown error';
         const fileUrl = `${BASE_URL}${fileName}.txt`;
@@ -247,13 +250,80 @@ function updateActiveButton(topic) {
         activeButton.style.color = "lightgreen";
     }
 
-    const clickedButton = document.querySelector(`h2[onclick="loadLearnings('${topic}')"]`);
+    const clickedButton = document.querySelector(`h2[data-id="${topic}"]`);
     if (clickedButton) {
         clickedButton.style.backgroundColor = "red";
         clickedButton.style.color = "white";
         activeButton = clickedButton;
     }
 }
+
+// Update URL route
+function updateRoute(fileName) {
+    const currentPath = window.location.pathname;
+    
+    // Get base path (everything except the route)
+    const pathParts = currentPath.split('/').filter(p => p && p !== 'index.html');
+    
+    // Determine base path
+    let basePath = '';
+    if (pathParts.length > 0) {
+        // If current route is one of the navigation items, remove it to get base
+        const navigationIds = ['nlp', 'classicalml', 'rag', 'linear-algebra', 'advanced-dsa', 'advanced-db', 'crispr'];
+        if (pathParts.length > 0 && navigationIds.includes(pathParts[pathParts.length - 1])) {
+            // Current path has a route, remove it to get base
+            pathParts.pop();
+        }
+        // Construct base path from remaining parts
+        if (pathParts.length > 0) {
+            basePath = '/' + pathParts.join('/');
+        }
+    }
+    
+    const newPath = basePath ? `${basePath}/${fileName}` : `/${fileName}`;
+    
+    // Only update if path is different
+    if (currentPath !== newPath) {
+        window.history.pushState({ fileName: fileName }, '', newPath);
+    }
+}
+
+// Get route from URL
+function getRouteFromUrl() {
+    const path = window.location.pathname;
+    // Split path and filter out empty strings
+    const pathParts = path.split('/').filter(p => p && p !== 'index.html');
+    
+    // If path is like /learn-with-ari/advanced-db, get the last part
+    // If path is like /advanced-db, get that part
+    // If path is like /, return null (home page)
+    if (pathParts.length === 0) {
+        return null;
+    }
+    
+    // Get the last part (the route)
+    const route = pathParts[pathParts.length - 1];
+    
+    // Return route if it exists and is not just 'learn-with-ari'
+    return (route && route !== 'learn-with-ari') ? route : null;
+}
+
+// Handle browser back/forward buttons
+window.addEventListener('popstate', function(event) {
+    const route = getRouteFromUrl();
+    if (route) {
+        loadLearnings(route);
+    } else {
+        // Load default if no route (first item from navigation)
+        // Note: navigation should already be loaded, so just load default
+        const tagsDiv = document.getElementById('tags');
+        const firstButton = tagsDiv.querySelector('h2[data-id]');
+        if (firstButton) {
+            const firstId = firstButton.getAttribute('data-id');
+            loadLearnings(firstId);
+        }
+    }
+});
 
 async function loadNavigation() {
     try {
@@ -273,13 +343,29 @@ async function loadNavigation() {
         navigationItems.forEach(item => {
             const button = document.createElement('h2');
             button.textContent = item.label;
+            button.setAttribute('data-id', item.id);
             button.setAttribute('onclick', `loadLearnings('${item.id}')`);
             tagsDiv.appendChild(button);
         });
         
-        // Load default content after navigation is loaded
-        if (navigationItems.length > 0) {
-            loadLearnings(navigationItems[0].id);
+        // Check if there's a route in the URL
+        const route = getRouteFromUrl();
+        if (route) {
+            // Load content based on route
+            const itemExists = navigationItems.some(item => item.id === route);
+            if (itemExists) {
+                loadLearnings(route);
+            } else {
+                // Invalid route, load default
+                if (navigationItems.length > 0) {
+                    loadLearnings(navigationItems[0].id);
+                }
+            }
+        } else {
+            // No route, load default content
+            if (navigationItems.length > 0) {
+                loadLearnings(navigationItems[0].id);
+            }
         }
     } catch (error) {
         const tagsDiv = document.getElementById('tags');
