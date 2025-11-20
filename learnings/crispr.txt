@@ -1,0 +1,229 @@
+SOURCE: A CRACK IN CREATION : Gene Editing And The Unthinkable Power To Control Evolution by JENNIFER A. DOUDNA SAMUEL H. STERNBERG
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[12/07/2025]
+IMG_URL dna-structure.png
+1. Zinc Finger Protein: Recognizer of DNA Bases: Adenine, Cytosine, Guanine, and Thymine
+2. Nuclease: Cutting Protein
+3. ZFNs: Zinc Finger Protein + Nuclease: Kandupidi + Cut Pannu
+4. If a sequence is common say, ACG, cutting them all will lead to Cell Death, Cancer
+ - Zing Finger can bind only with a nucleotide of 3 bases
+ - CRISPR turn offs Genes which let us know to what property that particular Gene Combination contribute to
+ - We need to do Gene-Knockout using Technologies like CRISPR
+5. If a sequence is uncommon  say, ACGTTGCAACTGGTCTA, cutting this unique sequence is precise
+ - We target only the disease-causing gene
+ - Leave the rest of the genome untouched
+6. CRISPR: Pattern found in Bacterial DNA
+  Pattern: REPEAT-UNIQUE-REPEAT-UNIQUE-REPEAT
+  REPEAT: Short and Similar
+  UNIQUE: Comes from Viral Attack to Bacteria
+7. Bacteria recorded memories of past viral infections in its DNA using CRISPR. Like a “wanted” list for viruses
+8. Cas Protein: Cas proteins can cut DNA at very specific spots
+Cas9	Cuts double-stranded DNA: Gene editing (most common)
+Cas12	Also cuts DNA, but can do more types of cuts: Advanced editing
+Cas13	Cuts RNA instead of DNA	RNA editing and diagnostics
+9. PAM: PAM (Protospacer Adjacent Motif) is a short DNA sequence that is essential for CRISPR-Cas9 to recognize and cut a specific target in the genome. Cas9 doesn't search directly for the target sequence; instead, it scans the DNA for the PAM sequence (commonly "NGG"), and only when it finds PAM does it check the 20 bases just before it to see if they match the guide RNA. Without PAM, Cas9 won’t even stop to check the DNA — meaning no recognition, no binding, and no cutting. So, PAM acts like a “license” or “trigger” that tells Cas9 where it's allowed to cut.
+10. Double-Stranded Break: When Cas9 cuts the DNA, it breaks both strands of the DNA double helix at the target spot
+11. Cut will be HEALED: REPAIRED AUTOMATICALLY
+	NHEJ (Non-Homologous End Joining) is the cell’s quick and easy way of fixing broken DNA. When CRISPR cuts the DNA, the cell rushes to glue the ends back together. This method is fast and happens in most cells, but it’s not very careful — it often makes small mistakes by adding or removing a few letters (called insertions or deletions). These little errors can break the gene so it no longer works. That’s why NHEJ is useful when we want to turn off or knock out a gene.
+	HDR (Homology Directed Repair) is a slower but smarter way the cell can fix DNA. Instead of just gluing the ends, it uses a “template” — like a copy or instruction manual — to fix or replace the damaged part. This method is very accurate and allows scientists to correct gene mutations or even insert new genes. However, HDR only works well under certain conditions, usually when the cell is dividing. Because of this, HDR is harder to use, but it’s great for precise gene editing.
+IMG_URL crispr-sgrna.png
+12. The gRNA (guide RNA) acts like a GPS, directing the Cas9 protein to the specific DNA sequence that needs to be cut. However, Cas9 can’t cut just anywhere—it needs to see a small tag next to the target site called the PAM (Protospacer Adjacent Motif). PAM isn’t part of the guidance system but acts like a "cut here" signal or a permission slip; without it, Cas9 won’t make the cut, even if the gRNA is correct. So, the gRNA shows where to go, and the PAM confirms whether it’s allowed to cut there.
+13. Vectors: To get Cas9 and gRNA into the cell, we need a carrier (like a box) to deliver them. These carriers are called vectors
+14. OFFTARGETS: Off-targets are accidental edits in the wrong place
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[14/07/2025]
+IMG_URL cell-chromosome-gene-dna.png
+15. WHIM Syndrome: Affecting just a few dozen people worldwide, WHIM is a painful, potentially deadly immunodeficiency disease that makes life difficult for those unfortunate enough to suffer from it. It is caused by a tiny mutation, a single incorrect letter among some six billion total letters of one’s DNA
+16. Kim’s Mysterious Recovery: Diagnosed with WHIM from birth. By age 58, she was symptom-free for over 20 years, without treatment. Her daughters still had the disease. Kim’s skin cells still had the mutation. Her blood cells did not, the mutated gene was missing. DNA from one of her chromosomes was heavily damaged and rearranged.
+17. Chromothripsis: A rare event where a chromosome shatters and reassembles itself. Typically deadly or causes cancer, but in Kim’s case, it deleted the faulty gene. This happened in a stem cell (Hematopoietic stem cells has the power to give rise to all types of blood cells and repopulate the immune system) that regenerated her entire immune system. That one stem cell gave rise to all her healthy blood cells. Her body essentially cured itself by deleting the disease-causing gene. Other rare cases exist of people being spontaneously cured of genetic diseases like SCID (bubble boy disease) due to accidental genetic corrections
+18. Inspired by nature, scientists began developing intentional gene-editing tools; Achieving this required knowing:: What the genome is; How it’s built; How it can be safely modified
+19. Genome: A mix of gene + chromosome; It’s the full instruction manual of an organism; Tells cells how to grow, function, and pass traits on; Responsible for all traits: height, skin color, disease risk, etc
+20. DNA is the basic material, a long string of genetic code. A gene is a specific section of DNA with instructions for making something (like a protein). A chromosome is a big package of DNA that contains many genes. The genome is the full collection of all your chromosomes, your entire genetic code.
+21. DNA Structure Basics: DNA is made of four building blocks called nucleotides: A (Adenine), T (Thymine), G (Guanine), C (Cytosine)
+Double Helix: DNA has two strands twisted into a spiral ladder (the double helix). The sides of the ladder are made of sugar-phosphate backbones.
+    The rungs are base pairs:
+       A always pairs with T
+       G always pairs with C
+22. Base Pairing = Genetic Stability
+The above mentioned precise pairing allows DNA to copy itself accurately. Before a cell divides, enzymes unzip the DNA, and new strands are built using base-pair rules — creating two identical copies.
+IMG_URL dna-rna-protein.png
+23. DNA → RNA → Protein: DNA is copied into RNA (transcription). RNA is similar to DNA, but uses U (uracil) instead of T, and has a different sugar. RNA is used to build proteins (translation). Every 3 RNA letters = 1 amino acid, the building blocks of proteins.
+24. A gene = a segment of DNA that makes a protein. A genome = all the DNA in an organism. Humans have ~3.2 billion DNA letters and ~21,000 protein-coding genes
+25. Human genome = 23 pairs of chromosomes (46 total; one set from each parent). Extra or missing chromosomes can cause diseases (e.g., Down syndrome = extra chromosome 21). Mitochondria also have their own DNA (inherited only from the mother)
+26. Mutations
+ a. Substitution (one letter swapped): Example: Sickle cell: A → T in the HBB gene = malformed hemoglobin
+ b. Insertion/Deletion: Example: Huntington’s = repeated DNA letters | Cystic fibrosis = 3-letter deletion
+27. DNA sequencing = reading the genetic code letter by letter | DNA is double-stranded, but the two strands can be separated (unzipped) by heat or enzymes. This breaks the hydrogen bonds between base pairs (A–T, G–C), giving us single-stranded DNA. Reading just one strand is enough (Guess Why)
+IMG_URL gene-addition.png
+28. Early researchers realized that instead of correcting tiny mutations directly, they could insert healthy replacement genes into cells. Inspired by how viruses naturally inject their own DNA into host cells, scientists began using viruses as delivery tools, or “vectors,” for therapeutic genes. In the 1960s, physician Stanfield Rogers tried this on two girls with a rare genetic disorder, using a rabbit virus he believed carried a helpful gene—but the experiment failed. Still, his bold attempt sparked a breakthrough: viruses, despite early failures, became powerful tools in gene therapy.  In the 1970s–80s, scientists learned to engineer lab-made DNA and safely insert it into cells using viruses. Gene therapy advanced, but setbacks occurred—including patient death (1999) and leukemia cases due to accidental activation of cancer genes.
+29. 🧬 Recessive Disease: Both gene copies (one from each parent) must be mutated for the disease to appear. If only one gene copy is mutated, the person is a carrier but usually healthy.
+Example: Sickle cell disease – You need two faulty HBB genes to have the disease.
+🧬 Dominant Disease: Only one gene copy needs to be mutated to cause the disease. The faulty gene overrides the normal one. Example: Huntington’s disease or WHIM syndrome – Even one mutated gene causes symptoms.
+30. Scientists realized they needed tools to fix faulty genes at the source, not just add copies. New Approaches Explored: Researchers began experimenting with editing RNA and DNA directly in cells and animal models, enabling precise genetic modifications
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[15/07/2025]
+31. Sickle cell is a recessive genetic disease: One must inherit two copies of the mutated gene (one from each parent) to be affected. If someone only inherits one copy, he/she is a carrier; he/she usually doesn’t get sick, but he/she can pass it to his/her kids
+32. In sickle cell disease: A single letter in the gene is changed: an “A” is swapped for a “T” at position 17. This changes one amino acid in the hemoglobin protein: glutamate → valine. Even though it’s just 10 atoms out of 8000+, this causes: Hemoglobin proteins to stick together. Red blood cells to change shape (become sickle-shaped)
+Health problems: anemia, pain, stroke risk, infections
+33. Chromosomes and DNA in Humans: Humans normally have 46 chromosomes in almost every cell: 23 from the mother and 23 from the father. These chromosomes carry DNA, which is the instruction manual for how your body works. A few exceptions exist, for example, people with Down syndrome have an extra copy of chromosome 21 (so 47 total).
+Not All DNA Is in the Nucleus: Most DNA is in the nucleus (the cell’s control center). But there’s also a small amount of DNA inside mitochondria, the energy factories of the cell. This mitochondrial DNA has only about 16,000 letters (tiny compared to nuclear DNA) and is inherited only from mother. A mutation is a change in the DNA code. Even a single-letter change (called a substitution) can disrupt a gene and cause a disease.
+34. Rogers' Hypothesis: Dr. Stanfield Rogers believed the Shope virus could deliver a gene that increases arginase production. He imagined using modified viruses to deliver useful genes to treat genetic diseases. Two girls in Germany had a rare genetic disease (hyperargininemia) caused by lack of arginase. Rogers injected the Shope virus into the girls, hoping it would fix their condition. The virus didn’t work. It did not contain the arginase gene. The therapy had no effect on the girls. Rogers was criticized for performing an unsafe and premature human experiment
+35. Why Viruses Work So Well: They naturally evolved to: Infiltrate cells of all types, Inject their own DNA efficiently, Bypass cell defenses like expert hackers, Viral vectors can deliver genes with almost 100% success rate, Scientists use viruses to sneak therapeutic genes into cells like Trojan horses carrying a hidden cure
+36. Viruses Don't Just Enter Cells, They Stay: Viruses can insert their DNA into the host cell’s genome — making the change permanent. In the 1920s–30s, scientists were puzzled by viruses reactivating in bacteria long after infection. These viruses hide their DNA inside bacterial chromosomes and reactivate later when conditions favor infection. Retroviruses (like HIV) splice their DNA into human genomes, making infections hard to cure. Around 8% of human DNA (250 million letters) comes from ancient retroviral infections of our ancestors
+37. Recombinant DNA Revolution (1970s–1980s): Scientists learned to cut, paste, and edit DNA in the lab. They began modifying viruses to carry therapeutic genes without harming cells. Viruses as Gene Delivery Tools Dangerous parts of viruses were removed. Viruses became safe “missiles” that could deliver helpful genes into cells.
+Success in Mice → Human Trials Begin: By the late 1980s, lab-made retroviruses successfully delivered genes in mice. Human trials began, starting with ADA-SCID, a rare immune disease. Used a virus carrying the healthy ADA gene to help two patients. Results Were Unclear Patients showed some immune improvement... But it might’ve been due to other treatments, not the gene therapy. Only a few cells actually received the gene, meaning the virus delivery wasn’t very efficient
+38. Gene therapy has come a long way since its early trials, with better viral tools now used to treat many genetic diseases like SCID, cystic fibrosis, and some cancers. However, it hasn’t been a perfect solution. In some cases, it caused serious side effects like immune reactions or even cancer due to the way viral DNA was inserted into the body. Also, gene therapy doesn’t work well for certain conditions like Huntington’s disease, where the faulty gene overpowers the healthy one. For these tough cases, scientists realized they needed a better method—not just adding new genes, but fixing the broken ones directly
+39. Virus-free methods: Lab-made DNA
+Scientists tried simple methods to get lab-made DNA into cells (no viruses). They injected DNA into fertilized mouse eggs. The mice grew up with the new gene and passed it to their babies. This helped scientists test how genes work by watching what changed in the animals. It was the early foundation for future gene editing tools like CRISPR
+IMG_URL gene-editing.png
+40. Capecchi saw that lab DNA was not random, it clustered together in cells. This was due to homologous recombination, a natural DNA swap mechanism. It allows similar DNA sequences to match up and combine accurately. This process is used during reproduction to mix parental genes. Biologists had already been using this process in bacteria and yeast. This discovery helped scientists understand how to precisely target genes — a big step toward gene editing! The cell’s machinery had recognized the foreign DNA because it looked similar to its own sequence. It aligned the sequences and integrated the foreign DNA at the matching site.
+41. Oliver Smithies – Key Discovery
+Goal: Test if lab-made DNA can replace a specific gene in human cells (not just insert randomly).
+Used human bladder tumor cells containing the beta-globin gene. Designed a modified (recombinant) version of the same gene in the lab. Mixed the recombinant DNA with calcium phosphate. Added it directly to cells (no viruses, no special delivery tools). Some cells recognized the similarity between the artificial and native gene. Used homologous recombination to replace their own beta-globin gene with the lab-made one. Cells can swap native DNA with foreign DNA at an exact location — as long as the sequences match closely. Proved that precise gene editing is possible in human cells using natural repair mechanisms. Introduced the concept of gene targeting, which is the foundation of modern genome editing
+42. Martin Evans’s lab showed it was possible to: Modify mouse embryonic stem cells via gene targeting. Inject them into embryos to produce genetically altered mice
+43. In therapeutic applications, homologous recombination was rare. Instead, cells often used nonhomologous (random) recombination, inserting new DNA incorrectly. This happened ~100x more frequently than the desired, precise repair.
+🧪 Result: Only ~1% of edited cells got the gene at the correct spot, too low for medical use
+44. Jack Szostak’s model (1983) showed that if there's a double-strand break (DSB) in DNA: The cell activates its repair system. It then looks for a similar sequence (homologous DNA) to fix the break. If you give the cell lab-made DNA with matching sequences, it can use that as a repair template → leading to accurate gene editing
+45. Tools like CRISPR-Cas9 create a deliberate break in DNA at a specific spot. Then, scientists provide a repair template (the lab-made DNA).
+The cell says: “Uh-oh! DNA broken! Let me fix it using this similar DNA nearby…” And it performs precise repair (homologous recombination)
+46. Creating a targeted DNA break + giving a repair template = Efficient gene editing
+47. In 1994, Maria Jasin did an experiment: She used an enzyme (called I-SceI) that can cut DNA. But this enzyme only cuts when it sees a very specific 18-letter DNA code. Mouse DNA didn’t have this exact code, so she added it. Then she gave the cell a correct gene copy and cut the DNA at that new spot.
+What happened? 👉 The cell repaired the broken gene using the new copy she gave it
+48. Scientists said: “We need programmable scissors that can cut wherever we want, not just where I-SceI can cut.”
+49. In the 1990s, scientists realized that existing nucleases were too imprecise for gene editing because they recognized very short DNA sequences that appeared too frequently in the genome, leading to random and harmful cuts. To solve this, in 1996, Srinivasan Chandrasegaran created a hybrid enzyme by combining two natural components: the FokI nuclease, which could cut DNA but lacked specificity, and zinc finger proteins, which could recognize specific DNA sequences through finger-like domains, each binding to a 3-letter DNA segment. By assembling these zinc fingers in different combinations, scientists could target longer, unique DNA sequences, making it possible to cut DNA precisely where needed. This engineered tool, called a Zinc Finger Nuclease (ZFN), marked a major breakthrough in enabling programmable and accurate gene editing
+50. Each zinc finger typically binds to a 3-letter DNA sequence. So, if one zinc finger binds to "GAA", another to "TGC", and another to "CCT", you can link them together to form a zinc finger array that recognizes the 9-letter sequence: "GAATGCCCT".
+So:
+    Zinc Finger 1 → "GAA"
+    Zinc Finger 2 → "TGC"
+    Zinc Finger 3 → "CCT"
+    Together → targets "GAATGCCCT"
+51. Limitations of ZFNs: Difficult to design and expensive: Required expertise in protein engineering | Unpredictable performance: some ZFNs failed to cut or were too random. Because of these issues, ZFNs were not widely adopted despite their promise
+52. Next: TALENs (Transcription Activator-Like Effector Nucleases) | TALENs came from plant pathogens (Xanthomonas). Like ZFNs, they had repeatable parts that could be customized. Key advantage: Each TALE segment recognized 1 letter of DNA, making them easier to design. Scientists could easily assemble custom DNA-binding proteins. TALENs were better than ZFNs: easier to design and build. Worked well in gene editing applications
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[28/07/2025]
+53. Chromatin: Package in which the DNA is stored inside a cell nucleus; Packed
+54. Types of Chromatin: 
+	Euchromatin	-> Loosely packed: Genes are active, easy to access
+	Heterochromatin	-> Tightly packed: Genes are inactive, hard to access
+If a gene or region is tightly wrapped in chromatin, the CRISPR machinery (Cas9 + gRNA) can’t easily reach it. This is why the same gRNA might work in vitro (where DNA is open) but fail in vivo, where chromatin blocks it
+55. CRISPR Discovery Context: Discovered as a DNA region in bacteria; acronym stands for Clustered Regularly Interspaced Short Palindromic Repeats.
+IMG_URL crispr.png
+56. CRISPR Structure: 
+Repeats: Identical ~30-base sequences (palindromes).
+Spacers: Unique sequences in between each repeat.
+Clustered: These repeat-spacer arrays are found in one region, not scattered across the genome
+57. Function of Spacers: Spacers are derived from viral DNA—function as a “memory” of past infections in bacteria
+58. CRISPR System Role: A bacterial immune system that defends against viruses by storing viral DNA snippets as spacers
+59. Jill Banfield's Role: Geomicrobiologist who first approached Jennifer Doudna about CRISPR after detecting it in microbial data
+60. Early Scientific Context: At the time (2006), CRISPR was obscure—few papers existed compared to RNA interference, which was already well-studied
+61. Doudna’s Initial Impression: Intrigued by the precision and uniformity of CRISPR repeats; palindromic nature stood out
+62. Comparison with Other Repeats: Other bacterial DNA repeats (like REP and BIME) exist but lacked CRISPR’s regularity and defined structure.
+63. Significance of Repeats: CRISPR repeats are palindromic, i.e., they read nearly the same forwards and backwards, which aids in forming secondary structures in RNA.
+64. Why It Mattered: This structured and uniform DNA region hinted at a functional role, not just junk DNA prompting further research
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[29/07/2025]
+IMG_URL phage.png
+65. CRISPR (Clustered Regularly Interspaced Short Palindromic Repeats) spacers are snippets of DNA located between repeating sequences.
+66. These spacers have DNA sequences that match those of known bacterial viruses.
+67. An inverse correlation exists between the number of viral DNA sequences in a bacterium's CRISPR array and its susceptibility to viral infection. More matches correspond to a lower threat of infection.
+68. Research involving sequencing and assembling DNA from microbial communities also confirmed that CRISPR interspaced sequences matched viral DNA in the environment.
+69. This evidence suggests that CRISPR is part of an adaptive immune system in archaea and bacteria, enabling them to fight off viruses.
+70. A hypothesis from an NIH team proposed that this system is RNA-interference-based, suggesting that RNA is a key participant and that the system is functionally similar to RNA interference.
+71. Bacteriophages, or phages, are viruses that infect bacteria.
+72. Phages are the most prevalent biological entity on Earth, with an estimated 10^31 phages existing globally. They outnumber bacteria by a factor of 10 to 1.
+73. Phages are constructed with a durable protein exterior called a capsid, which contains genetic material.
+74. Phages deliver their genetic material into bacterial cells, hijacking the host's machinery. This can occur through two pathways:
+     Lysogenic pathway: The viral genome integrates into the host's genome and remains dormant for generations.
+     Lytic pathway: The viral genome immediately takes over the host, directing the production of viral proteins and replication of the viral genome, which leads to the cell bursting and releasing new phages.
+75. Bacteria have developed defense systems against phages, including:
+     Restriction-modification systems: Bacteria use enzymes called restriction endonucleases to cut up foreign DNA that lacks specific markings on the host's own genome.
+     Blocking mechanisms: Bacteria can block phages from injecting DNA or mask cell surface proteins that phages use to latch on.
+     Programmed cell death: Infected cells can commit suicide to protect the larger bacterial community.
+76. Computational analysis identified a separate set of genes, known as CRISPR-associated (cas) genes, that are typically located near CRISPR regions in bacterial chromosomes.
+77. Cas genes are thought to code for enzymes with functions such as unwinding DNA or slicing RNA and DNA molecules.
+78. The discovery of cas genes suggests they may be a source of new enzymes with potential for biotechnology, similar to how restriction endonucleases were used in recombinant DNA technology.
+IMG_URL phage2.png
+79. An early study on the milk-fermenting bacterium Streptococcus thermophilus showed that CRISPR is an effective bacterial immune system.
+80. S. thermophilus is a probiotic used in the dairy industry, and its cultures are under constant threat from phage infection, which causes significant production losses.
+81. Strains of Streptococcus thermophilus with more phage DNA-matching spacers in their CRISPR regions are more resistant to phage infections.
+82. A bacterial strain can become more resistant to a specific bacteriophage by incorporating a new segment of DNA from that phage into its CRISPR region as a spacer.
+83. This newly acquired immunity is heritable and is passed down to subsequent generations of bacteria.
+84. CRISPR functions as a form of adaptive immunity, enabling bacteria to "remember" past phage infections by storing snippets of phage DNA in their CRISPR arrays.
+85. The destruction of viral genetic material is a key part of the CRISPR immune response.
+86. Stan Brouns provided evidence that RNA molecules are involved in CRISPR’s antiviral defense, a role that appears to be universal across different microorganisms.
+87. CRISPR RNA molecules are produced from the CRISPR DNA array and are then processed by an enzyme into shorter strands, each containing a single virus-matching spacer sequence.
+88. Because RNA can pair with both other RNA strands and DNA strands, these CRISPR RNAs can potentially recognize and target a phage's genetic material (DNA or RNA) for destruction.
+89. Luciano Marraffini and Erik Sontheimer confirmed that CRISPR RNA could direct the destruction of invading DNA in the bacterium Staphylococcus epidermidis.
+90. This DNA targeting relies on base-pairing interactions, which provide the specificity for the CRISPR system to hunt its prey.
+91. A key goal for researchers was to understand the specific biochemical mechanisms of the CRISPR system, including how new spacers are acquired and how the viral DNA is destroyed.
+92. CRISPR-associated (cas) genes, which are always found near CRISPR regions, encode enzymes (Cas proteins) that perform the molecular reactions of the immune system.
+93. Blake Wiedenheft and Rachel Haurwitz discovered the functions of two such enzymes:
+     Cas1 is a protein that cuts up DNA, a function that likely helps insert new phage DNA snippets into the CRISPR array.
+     Cas6 is a protein that acts as a cleaver to slice long CRISPR RNA molecules into the shorter, functional strands used for targeting.
+94. In the Type I CRISPR-Cas system (e.g., in E. coli and P. aeruginosa), viral DNA destruction is a multi-protein process.
+     The Cascade complex (made of Cas proteins and CRISPR RNA) recognizes and binds to matching viral DNA. It has a helical structure and can discriminate between viral and host DNA.
+     The Cas3 enzyme, a nuclease, is recruited by the Cascade complex and chews up the targeted viral DNA into many pieces at a high rate.
+IMG_URL phage3.png
+95. In the Type II CRISPR-Cas system (e.g., in S. thermophilus), the DNA destruction is more precise, with the enzyme acting like a pair of scissors to cut the DNA at a specific site.
+96. The enzyme responsible for cutting DNA in the Type II system was, at that point, still unknown. The mechanisms for targeting were also a mystery.
+97. The programmable DNA-cutting ability of the Type II system drew comparisons to existing gene-editing tools like ZFNs and TALENs, highlighting its potential for future applications.
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[30/07/2025]
+98. Emmanuelle Charpentier discovered a second RNA molecule, called tracrRNA, which is also necessary for the production of CRISPR RNAs in some Type II CRISPR systems. This demonstrated a greater diversity in bacterial immunity than previously understood.
+99. The Type II CRISPR system in the bacterium Streptococcus pyogenes uses a gene called csn1 (later renamed cas9) to snip apart viral DNA.
+100. S. pyogenes is a pathogen responsible for numerous human illnesses and over half a million deaths annually, making research into its CRISPR system medically significant.
+101. The Cas9 protein, encoded by the cas9 gene, was identified as a key player in the DNA destruction phase of the immune response in Type II CRISPR systems.
+102. Collaboration between research groups in Sweden, Austria, and California was established to biochemically determine the function of the Cas9 protein.
+IMG_URL crispr-attaks-viral-dna.png
+103. Researchers successfully purified the Cas9 protein from S. pyogenes using E. coli as a host, allowing for in vitro (test-tube) experiments on its function.
+104. The initial biochemical experiment, which combined Cas9 with CRISPR RNA and matching DNA, failed to show any DNA cutting.
+105. A subsequent experiment, which added the newly discovered tracrRNA to the mix, successfully demonstrated that Cas9 could precisely cut DNA.
+106. The minimal components required for the Type II DNA-cutting machine were identified as the Cas9 enzyme, CRISPR RNA, and tracrRNA.
+107. The CRISPR RNA and one strand of the DNA form a double helix through complementary base pairing, which is the key to Cas9’s cutting specificity.
+108. It was determined that Cas9 contains two nuclease modules that simultaneously slice both strands of the DNA double helix, creating a double-strand break.
+109. The CRISPR RNA acts as a guide, providing a 20-letter sequence that directs Cas9 to a specific matching site on the DNA.
+110. This RNA-guided, DNA-cutting mechanism was recognized as a programmable nuclease, potentially capable of targeting any DNA sequence, not just viral ones.
+111. Researchers successfully engineered the two RNA molecules (CRISPR RNA and tracrRNA) into a single, synthetic molecule called a single-guide RNA.
+112. The single-guide RNA proved to be functional, directing Cas9 to cut a specific target sequence in a jellyfish gene (green fluorescent protein, or GFP), demonstrating that the system could be reprogrammed to target any chosen DNA sequence.
+113. This reprogrammable Cas9 system was proposed as a new, more straightforward technology for genome editing and gene-targeting applications, surpassing existing tools like ZFNs and TALENs.
+114. Kiran Musunuru's lab used CRISPR to correct the genetic mutation that causes sickle cell disease in human cells in a lab setting. They targeted and cut the mutated beta-globin gene and used a synthetic DNA replacement to repair the faulty sequence.
+115. A number of biotechnology companies were founded to commercialize CRISPR-based therapies, including Editas Medicine (2013), CRISPR Therapeutics (2014), and Intellia Therapeutics (2014), raising hundreds of millions of dollars for research and development.
+116. In our 2012 Science article, we reengineered the two natural RNA molecules (CRISPR RNA and tracrRNA) into a single-guide RNA, which simplified the CRISPR system for potential use as a gene-editing tool.
+IMG_URL crispr-clta.png
+117. We demonstrated that CRISPR could be used to edit human DNA in a line of embryonic kidney cells (HEK 293) by targeting and altering the CLTA gene.
+118. The Cas9 protein was "humanized" and fused with a nuclear localization signal to ensure it was directed to the cell's nucleus, where the DNA is located. It was also fused with green fluorescent protein (GFP) to visualize which cells successfully produced the CRISPR components.
+IMG_URL crispr-rnas.png
+119. In human cells, CRISPR-induced double-strand breaks in DNA are often repaired by the cell's own nonhomologous end joining (NHEJ) pathway. This repair process is error-prone, frequently resulting in small insertions or deletions (indels) at the site of the break, which can be used to detect successful gene editing.
+120. Over a dozen genes in various cell types and organisms were successfully edited with CRISPR in early 2013, including human leukemia cells, mouse neuroblastoma cells, and zebrafish embryos.
+IMG_URL crispr-mice.png
+121. In May 2013, Rudolf Jaenisch's lab used CRISPR to generate gene-edited mice in just one month, a process that previously took several months and extensive backcrossing.
+122. Jaenisch's team showed that multiplex gene editing could be performed in mice by injecting multiple single-guide RNAs into a single-cell embryo, allowing several DNA sequences to be edited simultaneously.
+123. The use of CRISPR for gene editing rapidly expanded to a wide range of species across the animal and plant kingdoms. By 2016, the list included rice, wheat, corn, mice, rats, pigs, goats, monkeys, and more.
+124. CRISPR can be used as a "designer molecular scissors" to cut DNA or as a "Swiss army knife" with diverse functionalities, including:
+     Deactivating genes.
+     Rearranging genetic code sequences.
+     Correcting single-letter mutations in DNA.
+125. The process of gene expression involves two key steps:
+     Transcription: A temporary copy of DNA, called messenger RNA (mRNA), is made in the nucleus.
+     Translation: The mRNA is exported from the nucleus to be read by the cell's machinery to create proteins.
+126. A simple analogy for CRISPR's function is a "designer molecular scissors" that cuts both strands of the DNA double helix at a specific 20-letter sequence.
+127. A more comprehensive analogy for CRISPR is a "Swiss army knife" because of its diverse functionalities, which include deactivating genes, rearranging sequences, and correcting single-letter mistakes.
+128. The simplest and most widely used application of CRISPR is to cut a gene and allow the cell's error-prone repair process (nonhomologous end joining or NHEJ) to mend the damage, often resulting in small insertions or deletions (indels).
+129. Gene expression is the process by which DNA information is converted into functional proteins.
+130. Gene expression follows the central dogma of molecular biology and involves two main stages:
+     Transcription: DNA is copied into a messenger RNA (mRNA) molecule in the nucleus.
+     Translation: The mRNA is read by a ribosome to create a protein.
+131. The genetic code is a cipher where every three-letter RNA combination, called a codon, specifies a single amino acid.
+132. Ribosomes must maintain the correct three-letter reading frame during translation. A single insertion or deletion of a letter can disrupt this frame, leading to a scrambled and non-functional protein.
+IMG_URL indel.png
+133. This disruption of the reading frame is the basis of a gene knockout (KO), where the CRISPR-induced indels prevent a gene from producing a functional protein, effectively "knocking it out."
+IMG_URL crispr-knockout.png
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[31/07/2025]
+IMG_URL crispr-knockout-removal.png
+134. Gene knockouts are a useful application of CRISPR, as demonstrated by an experiment where targeting the TYR gene (involved in melanin synthesis) in mice resulted in albino pups.
+135. Homologous recombination (also known as homology-directed repair) is a more precise DNA repair mechanism than nonhomologous end joining. It uses a provided repair template that is similar in sequence to the broken chromosome ends to accurately fix the DNA, allowing for the correction of specific genetic mutations.
+136. CRISPR can be programmed with two different RNA guides to make two cuts on a chromosome, enabling the deletion or inversion of large segments of DNA.
+137. Scientists can intentionally "break" the CRISPR tool to create a deactivated version of Cas9 (dCas9) that can still find specific DNA sequences but can no longer cut them.
+138. This deactivated CRISPR system can be used for purposes other than gene editing, such as gene-expression control.
+139. A deactivated CRISPR system can act as a "molecular packhorse," ferrying protein payloads to specific genes to turn them on, turn them off, or adjust their expression levels.
+140. Gene-expression control is powerful because different cell types (e.g., immune cells, heart cells, brain cells) have the same genome but express different sets of genes.
+141. The CRISPR toolkit has expanded to include fluorescent versions for visualizing genes, versions that target mRNA instead of DNA, and versions that introduce barcodes into the genome.
+142. The rapid adoption and widespread use of CRISPR are due to its low cost, ease of use, and versatility.
+143. Previous gene-editing tools like ZFNs and TALENs were difficult to design and prohibitively expensive. In contrast, CRISPR plasmids can be obtained for a low cost from a nonprofit organization called Addgene.
+144. Addgene is a plasmid repository and distribution service that functions like Netflix, making CRISPR tools easily accessible to academic and nonprofit labs around the world.
+145. Advanced algorithms and software have made CRISPR design even easier, enabling complex experiments like genome-wide screens.
+146. The democratization of CRISPR has led to its use by amateurs and "biohackers" and even in a crowdfunded DIY gene-editing kit, which raises concerns about the potential for unintended and uncontrolled applications.

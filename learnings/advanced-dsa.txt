@@ -1,0 +1,184 @@
+SOURCE: Cormen, Leiserson, Rivest, and Stein's Introduction to Algorithms; La Rocca's Advanced Algorithms and Data Structures; Goodrich, Tamassia, and Mount's Data Structures and Algorithms in C++; Weiss's Data Structures and Algorithm Analysis in C++; Drozdek's Data Structures and Algorithms in C++
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[23/09/2025]
+1. C++ is a general-purpose programming language that supports both procedural and object-oriented programming. It’s widely used for system software, games, embedded systems, and high-performance applications.
+2. Key Concepts
+	Variables: Store data (int, float, char, etc.)
+	Operators: Arithmetic (+, -, *, /), relational (==, !=), logical (&&, ||)
+	Control Structures: if, for, while, switch
+	Functions: Reusable blocks of code
+	Input/Output: cin and cout for console interaction
+Example:
+	#include <iostream>
+	using namespace std;
+	int main() {
+	    int age = 25;
+	    if (age > 18) {
+	        cout << "Adult" << endl;
+	    }
+	    return 0;
+	}
+3. C++ Snippets
+	1. Classes & Objects
+	Class: A blueprint for objects.
+	Object: An instance of a class.
+	#include <iostream>
+	using namespace std;
+	class Car {
+	public:
+	    string brand;
+	    int year;
+	    void display() {
+	        cout << brand << " - " << year << endl;
+	    }
+	};
+	int main() {
+	    Car myCar;         
+	    myCar.brand = "Toyota";
+	    myCar.year = 2020;
+	    myCar.display();   
+	}
+	2. Encapsulation
+	Keep data private and provide public methods to access or modify it.
+	#include <iostream>
+	using namespace std;
+	class BankAccount {
+	private:
+	    double balance;
+	public:
+	    void deposit(double amount) {
+	        if(amount > 0) balance += amount;
+	    }
+	    double getBalance() {
+	        return balance;
+	    }
+	};
+	int main() {
+	    BankAccount account;
+	    account.deposit(500);
+	    cout << "Balance: " << account.getBalance() << endl;
+	}
+	3. Inheritance
+	Child class inherits properties & methods from a parent class.
+	#include <iostream>
+	using namespace std;
+	class Vehicle {
+	public:
+	    void start() { cout << "Vehicle started" << endl; }
+	};
+	class Car : public Vehicle {
+	public:
+	    void honk() { cout << "Car honks" << endl; }
+	};
+	int main() {
+	    Car myCar;
+	    myCar.start(); 
+	    myCar.honk();  
+	}
+	4. Polymorphism
+	Compile-time polymorphism: Function overloading
+	Runtime polymorphism: Virtual functions
+	Runtime Example:
+	#include <iostream>
+	using namespace std;
+	class Animal {
+	public:
+	    virtual void speak() {
+	        cout << "Animal sound" << endl;
+	    }
+	};
+	class Dog : public Animal {
+	public:
+	    void speak() override {
+	        cout << "Bark" << endl;
+	    }
+	};
+	int main() {
+	    Animal* a = new Dog();
+	    a->speak(); 
+	    delete a;
+	}
+	5. Templates
+	Allow writing generic functions or classes.
+	#include <iostream>
+	using namespace std;
+	template <typename T>
+	T add(T a, T b) {
+	    return a + b;
+	}
+	int main() {
+	    cout << add<int>(5, 3) << endl;      
+	    cout << add<double>(5.5, 3.2) << endl;
+	}
+	6. Pointers
+	Store memory addresses and allow dynamic memory management.
+	#include <iostream>
+	using namespace std;
+	int main() {
+	    int x = 10;
+	    int* ptr = &x;   
+	    cout << *ptr << endl;
+	    int* y = new int;
+	    *y = 20;
+	    cout << *y << endl;
+	    delete y;           
+	}
+4. C++ in a nutshell
+	Memory Types: Stack vs Heap
+	Dynamic Allocation: new / delete
+	Pointers: Store memory addresses, used with dynamic memory
+	Smart Pointers: Automatic memory management (unique_ptr, shared_ptr)
+	STL Containers: vector, list, map, set, etc.
+	STL Iterators: Traverse containers like pointers
+	STL Algorithms: sort, find, accumulate, max_element, etc.
+	Functors: Objects behaving like functions
+5. Recursion
+	Recursion is when a function calls itself to solve a smaller instance of the same problem
+	returnType functionName(parameters) {
+	    if(base_condition) return value; 
+	    else return functionName(smaller_problem);
+	}
+6. Recursion Types
+	1. Tail Recursion: Recursive call is last operation. Compiler can optimize stack.
+	2. Non-Tail Recursion: Additional work after recursive call.
+	3. Indirect Recursion: Function A calls B, B calls A (can involve multiple functions)
+7. Backtracking
+	Problem-solving by building solution step by step and abandoning invalid paths early.
+8. Complexity
+	Time complexity – runtime
+	Space complexity – memory usage
+9. Asymptotic Analysis
+	Big-O (O) – Worst Case: Maximum steps an algorithm takes.
+	Big-Omega (Ω) – Best Case: Minimum steps.
+	Big-Theta (Θ) – Average Case: Tight bound when upper = lower.
+10. Indicator random variables
+	IA = { 1 if event A occurs, 0 if event A does not occur }
+	Used to count occurrences or simplify expected value calculations.
+	Example: Count heads flipping 3 times
+	Coin flips: H T H
+	X = number of heads
+	I1 = 1, I2 = 0, I3 = 1
+	X = I1 + I2 + I3 = 2
+	E[X] = E[I1] + E[I2] + E[I3] = 1.5
+11. Probabilistic Analysis
+	Analyze algorithms on average over random input.
+	Example: Linear Search
+	Expected comparisons = sum( i * 1/n ) for i = 1 to n = (n+1)/2
+12. Randomized Algorithms
+	Random choices to get good average performance
+	Example 1: Randomized QuickSort: pick random pivot, avoids worst-case O(n^2)
+	Example 2: Randomized Min: pick elements randomly until minimum found
+13. Advanced Arrays
+	- Sparse Arrays: Store only non-zero elements using map
+	- Dynamic Arrays: vector in C++ grows automatically
+14. How Cache Works
+	CPU cache stores blocks of consecutive memory (cache lines)
+	Sequential access → fast
+	Random access → slow
+15. Cache-Aware Structures
+	- Row-major traversal (cache-friendly)
+	- Blocking/tiling for large matrices
+	- Structure of Arrays (SoA) vs Array of Structures (AoS)
+16. Linked List Implementation
+	1. Singly Linked List: Node with data + next
+	2. Doubly Linked List: Node with data + next + prev
+	3. Circular Linked List: Last node points to head

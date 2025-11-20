@@ -1,0 +1,306 @@
+SOURCE: "A Taxonomy of Retrieval Augmented Generation" by Abhinav Kimothi
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[14/04/2025]
+1. RAG - Introduced by Dr.Patrick Lewis
+2. LLM Limitation
+	- Knowledge Cut-Off
+	- Bound to Public Information
+	- Hallucination: Lying with Confidence
+	- Context Problems
+		CONTEXT WINDOW = 5 TOKENS
+		MY DOG IS SASI
+		MY ~DOG IS?~
+		Where, the model forgets ~TOKENS~
+3. Parametric Memory
+	- The knowledge is stored within a Model's Parameters
+	- Recall and generate information without accessing external storage
+4. Non-Parametric Memory
+	- RAG System generate information, accessing external storage (DB)
+	- Knowledge Base of RAG
+5. Basic Components/Actions in RAG
+   Query - User Queries something
+   Retrieval - Fetched from Database based on Query
+   Augmentation - Query + Retrieved Information + Prompt*
+   Generation - LLM responds based on prompt/query
+6. Source Citation
+	- Ability of RAG System to point out to the information from KB
+7. Unlimited Memory
+	- Any number of documents can be added
+8. Indexing Pipeline
+	- Set of Processes employed to create the KB
+	- Non Real Time, Periodic
+9. Metadata: Data about Data
+	- Timestamp, Author, Topic, Summarization
+	- Enhances Search Ability
+	- Child to Parent Indexing where Children have specific detail (Metadata) and Parents have Actual Data
+10. Data Masking
+	- Obfuscation of Sensitive Information (Such as PII)
+11. Chunking: Splitting the corpus into meaningful pieces of information for effective search and overcoming context window problems
+	- Decontextualization: Separating pieces out of surroundings (corpus)
+12. Lost in The Middle
+	- The Tendency of LLMs to overlook or forget information placed in the middle of long context inputs, focusing more on the beginning and end
+13. Chunking Types
+	- Fixed Chunking (Fixed Size with Overlaps)
+	- Structured Chunking (JSON/XML/HTML)
+	- Agentic Chunking (Applying Neural Networks)
+	- Small to Big Chunking (Compact Small Units Merged)
+	- Context Enriched Chunking: Make each chunk self-contained (Semantic Meaning): Hero/Subject instead of pronouns such as It,He,She and so on
+	- Semantic Chunking
+14. Chunk Size: Number of Tokens to be in a Chunk
+15. Embeddings: Meaningful Numerical Representation of Data
+	Examples: Word2Vec, FastText, Glove, BERT, ElMO
+16. Cosine Similarity= A⋅B / ∣∣A∣∣⋅∣∣B∣∣
+17. Vector Databases
+	- To handle HIGH Dimensional Vectors
+	- Stores & Indexes'em Efficiently
+	- Examples: FAISS, Weaviate, Pinecone
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[15/04/2025]
+18. Generation Pipeline
+	- Set of Processes employed to search, retrieve and generate
+	- Real Time
+19. Information Retrieval
+	- Retriever: Component using an algorithm to search
+20. Retrieval Methods
+	- Boolean Retrieval: AND, NOT, OR Logic in Query to search a document
+	- TFID: Term Frequency Inverse Document Frequency
+	- BM25: Best Match 25; Probabilistic Extension of TFIDF (Longer Documents don't unfairly get HIGH Scores)
+	- Static Word Embeddings (Non Contextual; Eg: Word2Vec, Glove)
+	- Contextual Embeddings (BERT, OpenAI's Embeddings)
+	- Learned Sparse Retrieval (Accuracy)
+	- Dense Retrieval (Efficiency) 
+	- Hybrid Retrieval (Accuracy + Efficiency)
+	- Cross Encoder Retrieval (Uses Transformers to compare Query and Document)
+21. Augmentation: Combining User Query and Retrieved Documents
+22. Prompt Engineering: Giving Instructions to LLMs
+23. Prompting Types
+	- Contextual Prompting (Answer from the context)
+	- Controlled Generation Prompting (Say I don't know if the question isn't based on the context)
+	- Fewshot Prompting (Giving Example)
+	- Chain of Thought Prompting (Encouraging Single-Step-by-Step Thinking)
+	    Q: If John has 3 apples and he buys 4 more, how many apples does he have now?  
+	    A: Let's think step-by-step. John starts with 3 apples. He buys 4 more. So, 3 + 4 = 7. Final Answer: 7
+	    - - - - - - - - - - - - - - - - - - - - -  - - - - - - - - - 
+	    Q: Sarah has 12 candies. She eats 5 of them and then buys 3 more. How many candies does she have?  
+	    A: Let's think step-by-step. She starts with 12 candies. She eats 5, so 12 - 5 = 7. Then she buys 3 more: 7 + 3 = 10. Final Answer: 10
+	    NOTE: We can give multiple steps (Self Consistency)
+	- Generated Knowledge Prompting: A Support Knowledge is generated which helps in further generation
+	Q: Why do metal objects feel colder than wooden ones at the same temperature?
+	    Step 1 (Generated Knowledge):
+	    Metals are better conductors of heat than wood. They transfer heat away from your skin faster
+	    Step 2 (Answer):
+	    Since metal conducts heat away quickly, it draws heat from your hand faster than wood. That’s why it feels colder
+	    Final Answer: Because metal conducts heat faster, making it feel colder to the touch
+	- Tree of Thoughts Prompting: Generates multiple possible "thoughts"
+	    You have the numbers 4, 7, and 9. You can add or multiply them in any order. How can you get as close to 100 as possible?
+		Thought 1: (4 + 7) × 9 = 11 × 9 = 99 ✅
+		Thought 2: (4 × 7) + 9 = 28 + 9 = 37 ❌
+		Thought 3: (9 × 7) + 4 = 63 + 4 = 67 ❌
+		Thought 4: (7 + 9) × 4 = 16 × 4 = 64 ❌
+24. Automatic Prompt Engineer: An LLM to generate prompts based on demonstration
+25. Automatic Reasoning and Tool Use: Analyzing and Switch back and forth between thinking and using tools
+26. Active Prompting
+	1. The model tries a task
+	2. We analyze where it’s uncertain or confused
+	3. A human gives feedback or annotations
+	4. We use that to create better prompts for the model
+27. ReAct Prompting (Reason + Act)
+	Question: Who won the Nobel Peace Prize in 2022?
+	Thought: I need to find the latest information. Let me search for Nobel Peace Prize 2022
+	Action: Search("Nobel Peace Prize 2022")
+	Observation: Ales Bialiatski, Memorial, and Center for Civil Liberties won
+	Thought: Now I know who won. Let me answer clearly
+	Final Answer: Ales Bialiatski, Memorial, and the Center for Civil Liberties
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[16/04/2025]		
+28. Pretraining
+	- Training a large model on massive unlabeled data using self-supervised learning (like predicting the next word)
+	- To learn language, reasoning, and world knowledge, which makes it highly adaptable for many downstream tasks with minimal additional training
+29. Foundation models
+	- Large, pretrained neural networks trained on massive datasets
+	- To serve as a general-purpose base for a wide range of tasks
+	- Efficient fine-tuning and deployment across various applications
+30. Supervised FineTuning: Using Labeled Dataset
+31. Size Language Models
+	ModelSize		Parameters	Category
+	Tiny	  			  <100M		Micro / Edge models
+	Small				100M – 1B	SLM
+	Mid-size			1B – 10B		Still SLM or MSM
+	Large				10B – 100B	LLM
+	Very Large		>100B			Foundation Models (GPT-3, GPT-4)
+32. Evaluation Metrics: Accuracy, Precision, Recall, F1 Score
+	> Precision - Of all the documents that were retrieved, how many were actually relevant?
+	> Precision@k - Of all the top k documents that were retrieved, how many were actually relevant?
+	> Recall - Of all the relevant documents, how many were actually retrieved?
+	> Mean Reciprocal Rank - how high the first correct answer appears in a list of search results
+		Query 1: Right answer at position 1 → 1/1 = 1.0
+		Query 2: Right answer at position 3 → 1/3 = 0.33
+		MRR = (1.0 + 0.33) / 2 = 0.665
+	> Mean Average Precision - how well all the relevant answers are ranked, not just the first one
+		If many correct answers appear near the top, MAP is high
+		If correct answers are scattered lower down, MAP is low
+33. nDCG: Normalized Discounted Cumulative Gain
+	nDCG – Simple Example
+	You search: "Best programming languages"
+		The system returns 3 results with these relevance scores:
+			Rank 1: Python – relevance 3
+			Rank 2: Java – relevance 0
+			Rank 3: Rust – relevance 2
+	Step 1: DCG (Discounted Cumulative Gain)
+		DCG = rel₁ + rel₂ / log₂(2) + rel₃ / log₂(3)
+		DCG = 3 + 0 / 1 + 2 / 1.584 ≈ 3 + 0 + 1.26 = 4.26
+	Step 2: IDCG (Ideal DCG)
+		Best possible order: Python (3), Rust (2), Java (0)
+		IDCG = 3 + 2 / log₂(2) + 0 / log₂(3) = 3 + 2 / 1 + 0 = 5
+	Step 3: nDCG
+		nDCG = DCG / IDCG = 4.26 / 5 = 0.852
+	Conclusion:
+		nDCG = 0.852 → the ranking is pretty good, close to the ideal
+34. Context Relevance
+	- Percentage(Out of the retrieved sentences, how many are actually relevant)
+35. Answer Faithufulness
+	- Measures how much the model’s response stays factually true to the retrieved context
+	“What is the capital of France and who is the current president?”
+	Retrieved Context:
+		"Paris is the capital of France."
+		"As of 2025, the president of France is Emmanuel Macron."
+	Model Response:
+		"Paris is the capital of France, and Emmanuel Macron is the president."
+	Step-by-step Faithfulness Check:
+		Claims in the response:
+			Paris is the capital of France
+			Emmanuel Macron is the president of France
+		Are these claims in the context?
+			Claim 1: ✔️ Present
+			Claim 2: ✔️ Present
+		✅ Faithfulness = 2/2 = 100%
+36. Hallucination Rate
+	- Measures how many claims in the response are not found in the retrieved context
+	Context:
+		"Paris is the capital of France."
+		"The Eiffel Tower is a major tourist attraction."
+	Model Response:
+		"Paris is the capital of France and it hosted the 2024 Olympics."
+	Claims in Response:
+		Paris is the capital of France – ✔️ present
+		Paris hosted the 2024 Olympics – ❌ not in context
+	Hallucination Rate = 1 hallucinated / 2 total claims = 0.5 (50%)
+37. Coverage
+	- Measures how much relevant information from the context is included in the model’s response
+	Context (3 facts):
+		Python is used in AI and data science
+		Python has easy-to-read syntax
+		Python supports many libraries like NumPy and TensorFlow
+	Model Response:
+		"Python is used in AI and has easy syntax."
+	Relevant claims covered = 2 / 3 = 0.66 (66% coverage)
+38. Interesting: We can prepare, "QUERY-PROMPT-RESPONSE" for evaluating RAG
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[22/04/2025]
+39. Noise Robustness: The ability of The RAG System to answer relevantly although there are noises [Noises: Documents which are mostly out of Context/Query being asked]
+40. Negative Rejection: The ability of the RAG system to not give an answer when there is no relevant information in the document retrieved
+41. Information Integration: The generation part takes care of it; When there are high relevance in the retrieved claims, they will be integrated with the help of LLMs
+42. Counterfactual Robustness: If there exists inaccuracy in KB (False Information), The RAG should be able to detect and correct
+43. Frameworks for Evaluation
+	- LLMs as Judge
+	- RAGAS: RAG Assessment, ARES: Automated RAG Evaluation System
+	- Assesses the Retrieval, Generation Components
+	- Also aids in Synthetic Data Generation
+44. Benchmarks: Standardised Datasets and Fixed Tasks used to evaluate
+	Examples: Benchmarking Information Retrieval (BEIR), RAG Benchmark (RGB)
+				MultiHop RAG (The context is distributed)
+45. Naive RAG: Usual One where we have the conventional RETRIEVAL, AUGMENTATION, GENERATION
+46. Context Problems
+	- Disjointed Context: When the context exists in different documents
+	- Over-reliance on Context: LLM becomes over reliant on the context retrieved, forgetting the parametric memory
+47. Advanced RAG: Pipeline with interventions at Pre-Retrieval, Retrieval and Post-Retrieval (To overcome the limitations with Naive RAG)
+48. Rewrite-Retrieve-Rerank-Read
+	- Rewriting: Query Expansion (Enriching The Query with the aim of retrieving the most relevant)
+	- Query Decomposition
+49. Hypothetical Document Embedding: HyDE
+	- We generate A Hypothetical Answer to the query
+	- The retrieved documents are checked for similarity with the Hypothetical Answer
+50. Query Routing
+	- Directing to The Query
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[23/04/2025]
+51. Hybrid Retrieval: Combining Multiple Types of Retrieval together to get the best
+52. Iterative Retrieval: The Retrieval happens for n times; The Generated Response is used for further retrievals
+53. Recursive Retrieval: The Retrieval Query is moderated based on the generation
+54. Adaptive Retrieval: An Intelligent Way of Retrieval where The LLM is employed to decide when to retrieve; where to retrieve
+55. Contextual Suppression: Removing irrelevant parts in the retrieved information
+56. Re-Ranking: Retrieved information from different sources and techniques can further be ranked to determine the most relevant documents
+57. Modular RAG: The Monolithic Architecture gets broken down into Interchangeable Architecture; Brings modularity to all the components (Retrievar, Generator and so on)
+58. Reciprocal Ranking Fusion
+	QUERY (BEST RESTAURANT)
+	Consider: ARI, ANANTH and ANTO to be the different RETRIEVERS and REST_A, REST_B, REST_C are different documents
+			  ARI      ANANTH       ANTO
+	REST_A     1         3           1
+	REST_B     3         2           3
+	REST_C     2         1           2
+
+	For REST_A
+		1/1 + 1/3 + 1/1 = 2.34
+	For REST_B
+		1/3 + 1/2 + 1/3 = 1.16
+	For REST_C
+		1/2 + 1/1 + 1/2 = 2
+	Descending Order: 2.34 -> 2 -> 1.16
+		REST_A -> REST_C -> REST_B
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[24/04/2025]
+59. Routing: Navigates through diverse data sources, selecting the optimal pathway for a query
+60. Knowledge Graph: Compact, Effective Representation of KB
+  ENTITY ---- RELATIONSHIP
+  John --(WORKS_IN)--> Engineering
+  John --(PART_OF_TEAM)--> Team Alpha
+  John --(WORKS_ON)--> Project B
+  Anna --(WORKS_IN)--> Engineering
+  Anna --(PART_OF_TEAM)--> Team Alpha
+  Anna --(WORKS_ON)--> Project A
+  Luca --(WORKS_IN)--> Sales
+  Luca --(PART_OF_TEAM)--> Team Beta
+  Luca --(WORKS_ON)--> Project C
+  Olivia --(WORKS_IN)--> Marketing
+  Olivia --(PART_OF_TEAM)--> Team Beta
+  Olivia --(WORKS_ON)--> Project A
+  Olivia --(WORKS_ON)--> Project D
+  Team Alpha --(PROJECT_OF_TEAM)--> Project A
+  Team Alpha --(CLIENT_OF_TEAM)--> Client X
+  Team Beta --(PROJECT_OF_TEAM)--> Project C
+  Team Beta --(CLIENT_OF_TEAM)--> Client Y
+  Team Beta --(PROJECT_OF_TEAM)--> Project D
+  Team Beta --(CLIENT_OF_TEAM)--> Client Z
+  Client X --(PROJECT_OF_CLIENT)--> Project A
+  Client X --(PROJECT_OF_CLIENT)--> Project B
+  Client Y --(PROJECT_OF_CLIENT)--> Project C
+  Client Z --(PROJECT_OF_CLIENT)--> Project D
+  Project A --(HAS_COMPONENT)--> Chunk
+  Project B --(HAS_COMPONENT)--> Chunk
+  Project C --(HAS_COMPONENT)--> Chunk
+  Project D --(HAS_COMPONENT)--> Chunk
+61. Baseline RAG vs Knowledge Graph
+ - Baseline RAG struggles to connect the dots
+ - Baseline RAG performs poorly when being asked to holistically understand summarized semantic concepts over large data collections or even singular large documents
+62. GraphRAG: A framework by Microsoft to create Knowledge Graphs of Communities
+63. Community: Partitioning entities & relationships into groups
+In a knowledge graph about birds, you might identify a community centered around raptors (birds of prey). This community could include various entities (nodes) and their relationships (edges) as follows:
+Entities (Nodes):
+    Bald Eagle
+    Peregrine Falcon
+    Red-tailed Hawk
+    Golden Eagle
+    Barn Owl
+    Osprey
+Relationships (Edges):
+    Predation
+    Habitat
+    Migration Patterns
+    Conservation Status
+64. Community Summaries: LLM generated summaries for communities, providing insights into topical structure and semantics
+65. Local Search: Identifying a set of entities from the knowledge graph that are related to the user input
+Global Search: Similarity based search on community summaries
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[25/04/2025]
+66. Multimodal RAG: Using other modalities like Vision, Audio, etc,. in addition to text in both retrieval and generation
+67. CLIP: Contrastive Language Image Pre-Training; For Cross-Modal Retrieval
+68. Agentic RAG: LLM based Agent + Tools
+69. Routing Agent: Reasons + Understands + Delegates to appropriate TOOL
+70. Query Planning Agent: Breaks the complex query into subqueries and delegates them to apt tools and orchestrates the pipeline
+71. Corrective RAG: Generates -> Checks with Gold
+72. RAG with Active Learning: Improvises over time
+73. Personalized RAG: Personalizes based on interaction
+74. RAG Limitations: Handling Large Scale of Data, Inefficient Routing, Data Silos, Context Loss in Long Queries, Adversarial Attacks, Incoherent Generation, Relevance Mismatch

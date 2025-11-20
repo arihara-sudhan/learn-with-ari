@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learnings | Ariharasudhan</title>
+    <link rel="icon" href="data:,">
+    <style>
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            font-size: 0.8vw;
+            justify-content: center;
+            align-items: center;
+            border-radius: 0.4vw;
+            padding: 0.4vw;
+            margin: 0;
+            gap: 0.5rem;
+        }
+        .tags h2 {
+            margin: 0;
+            padding: 0.4vw;
+            border-radius: 0.4vw;
+            background-color: black;
+            color: lightgreen;
+            flex-shrink: 0;
+            white-space: nowrap;
+        }
+        .tags h2:hover {
+            cursor: pointer;
+        }
+        .tags h2:active {
+            background-color: lawngreen;
+            color: black;
+        }
+        #source {
+            font-size: 1vw;
+            margin: 0;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+        @media (max-width: 600px) {
+            .tags {
+                gap: 0.3rem;
+                padding: 0.5rem;
+            }
+            .tags h2 {
+                font-size: 3.5vw;
+                margin: 0;
+                padding: 1rem;
+                border-radius: 1.5vw;
+                background-color: black;
+                color: lightgreen;
+                flex: 1 1 auto;
+                min-width: 0;
+                text-align: center;
+            }
+            #source {
+                font-size: 3vw;
+            }            
+        }
+    </style>
+    <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+    <center><h1>Ari's Learnings ⨳ <a href="https://arihara-sudhan.github.io">Home</a></h1></center>
+    <div class="tags" id="tags">
+        <!-- Navigation buttons loaded dynamically from navigation.json -->
+    </div>
+    <div id="content">
+    </div>
+    <script src="./script.js" defer></script>
+</body>
+</html>

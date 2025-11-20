@@ -1,0 +1,31 @@
+[
+    {
+        "id": "nlp",
+        "label": "NLP"
+    },
+    {
+        "id": "classicalml",
+        "label": "Classical ML"
+    },
+    {
+        "id": "rag",
+        "label": "RAG"
+    },
+    {
+        "id": "linear-algebra",
+        "label": "Linear Algebra"
+    },
+    {
+        "id": "advanced-dsa",
+        "label": "Advanced DSA"
+    },
+    {
+        "id": "advanced-db",
+        "label": "Advanced Database"
+    },
+    {
+        "id": "crispr",
+        "label": "CRISPR"
+    }
+]
+

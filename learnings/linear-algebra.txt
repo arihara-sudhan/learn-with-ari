@@ -1,0 +1,135 @@
+SOURCE: Linear Algebra and Its Applications - Fourth Edition - A book by Gilbert Strang
+----------------------------------------------------------------------------------------------------[22/09/2025]
+
+1. Vector: Collection of Numbers with Direction
+"A vector is basically something that has both a magnitude (size) and a direction"
+
+            BIRD    VIOLET   CREST   FEATHER   CAT_FAMILY   ANIMAL
+Peacock      1       0.8     1       1         0            0
+Cockatoo     1       0.0     1       1         0            0
+Tiger        0       0       0       0         0.98         1
+Lion         0       0       0       0         0.88         1
+
+Vector Dimension - n:1
+Example: Peacock Vector
+Vectors of words of similar meaning tend to point in similar direction:
+
+1    1
+0.8  0.0
+1    1
+1    1
+0    0
+0    0
+
+2. Matrix
+If the vectors are v = (1,2,3) and w = (1,3,4), put them into the columns of a matrix:
+
+1  1
+2  3
+3  4
+
+3. Linear Combination
+A linear combination of vectors v1, v2, …, vk is any vector that can be written as:
+
+    c1*v1 + c2*v2 + … + ck*vk
+
+where c1, c2, …, ck are scalars (numbers).
+This means you take each vector, multiply it by a number, and then add them up.
+The result is called a linear combination.
+
+4. Scalar Multiplication on a Vector
+⭐ Positive scalar (like 2, 3, 0.5)
+   - Direction stays the same
+   - Length (magnitude) changes
+   - Example: If v = [2,1] and you multiply by 2 → [4,2]
+
+⭐ Negative scalar (like –1, –2)
+   - Length still changes
+   - Direction flips (points in the exact opposite direction)
+
+⭐ Zero scalar
+   - The vector becomes [0,0,...,0]
+   - It has no length, no direction (just disappears into a point)
+
+5. Column Space
+v1 = [1 2 3]
+v2 = [4 5 6]
+
+c*v1 + d*v2
+= c*[1, 2, 3] + d*[4, 5, 6]
+= [c, 2c, 3c] + [4d, 5d, 6d]
+= [c+4d, 2c+5d, 3c+6d]
+
+where c and d ∈ (… –2, –1.5, 0, 1, 2, 100, …)
+
+The column space of a matrix A is the set of all linear combinations of the columns of A.
+If A = [v1 v2 … vk] (where v1, v2, …, vk are the column vectors of A), then
+
+Col(A) = { c1*v1 + c2*v2 + … + ck*vk | c1, c2, …, ck are real numbers }
+In other words, Col(A) = span{v1, v2, …, vk}
+
+6. Column Span and Row Span
+- Column span = all vectors you can make by mixing the columns
+- Row span    = all vectors you can make by mixing the rows
+
+7. Vector Space
+A vector space is a collection of vectors that you can:
+- Add together
+- Multiply by scalars
+...and still stay inside that collection
+
+“Vectors” can be arrows, lists of numbers, functions, etc.
+“Scalars” are just numbers (real numbers, usually).
+
+Rules a Vector Space Must Follow (axioms):
+1. Addition is closed: If u and v are in the space, u+v is also in the space
+2. Additive identity exists: There is a zero vector 0 such that v+0=v
+3. Additive inverse exists: For every v, there is –v such that v+(–v)=0
+4. Addition is commutative: u+v = v+u
+5. Addition is associative: (u+v)+w = u+(v+w)
+6. Scalar multiplication is closed: For any c and v, c*v is in the space
+7. Multiplying by 1 works: 1*v = v
+8. Distributive properties hold: 
+   c*(u+v) = cu + cv
+   (c+d)*v = cv + dv
+
+8. Rank
+Take all columns v1, v2, ..., vn.
+Find the largest set of vectors where none can be written as a combination of the others.
+The number of vectors in that set = rank.
+
+Example 1:
+v1  v2  v3
+1   2   0
+2   4   1
+3   6  -1
+Here v2 = 2*v1
+→ rank = 2
+
+Example 2:
+A = [1 2 3
+     4 5 6
+     7 8 9]
+
+Pivot = A[0][0]
+row2 = row2 - 4*row1 = [4 5 6] - [4 8 12] = [0 -3 -6]
+row3 = row3 - 7*row1 = [7 8 9] - [7 14 21] = [0 -6 -12]
+
+Result-1:
+[1  2   3]
+[0 -3  -6]
+[0 -6 -12]
+
+Pivot = A[1][1]
+row3 = row3 - 2*row2 = [0 0 0]
+
+Result-2:
+[1  2  3]
+[0 -3 -6]
+[0  0  0]
+
+Stop when:
+- All rows below pivots are zero or can’t be reduced further
+- You’ve gone through all columns or rows
+
+Rank ρ = number of non-zero rows = 2

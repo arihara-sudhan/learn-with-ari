@@ -1,0 +1,1028 @@
+SOURCE: "Speech and Langauge Processing Book" by Daniel Jurafsky, James H. Martin
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[15/02/2025]
+1. rString vs bString vs uString vs fString
+2. bString alias Bytes Literal
+3. Code Point
+4. re: findall, search, match
+5. Metacharacters (., ^, $, [])
+6. Escape Characters (\d, \D, \w, \W, \s, \S, \n, \0, \t)
+7. Word Character (a-Z, A-Z, 0-9, _): \w
+8. Quantifiers (+, *, ?, {n,m})
+9. Grouping and Capturing ((), Back References \1: (\w+)\s+\1)
+10. Literal Characters / Concatenation
+11. Pattern & Corpus
+12. [] and | specifies Disjunction
+13. [ab]i means ai or bi
+14. Kleen *, Kleen +, Wildcard \.
+15. Boundary: \b, \B
+16. Anchors: ^, $, \b, \B
+17. Precedence: Gupp(y|ies)
+18. Greedy Matchers: *, +, {n,m}
+19. Lazy Matchers: *?, +?, {n,m}? 
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[16/02/2025]
+20. Substitution: s/REGEX/PATTERN
+21. Numbered Register: Back Reference: (.*)(.+)\1\2
+22. Non Capturing Group: (?:pattern)
+23. Positive Look-ahead PATTERN1(?=PATTERN2)
+24. Negative Look-ahead PATTERN1(?!PATTERN2)
+25. Corpora vs Utterance
+26. Utterances: Two types of Disfluencies
+27. Disfluencies: Fillers (Filled Pauses) - Fragments
+28. Speech Transcription System avoids Disfluencies
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[17/02/2025]
+31. Word Types @ Vocabulary Size |V|
+32. Word Instances | Total Words used (N)
+33. Herdan’s Law: Word Types slowly increases but instances increase fast
+34. Heap's Law: ∣V∣=kN^β
+35. Lemma: canonical form of a word (A type of Text Normalization)
+36. Word Forms: eat, ate, eaten
+37. Code Switching: Naan enna solrenaa, I am a good boy
+38. Data sheet / Data statement
+39. SOME UNIX COMMANDS: tr -sc ’A-Za-z’ ’\n’ < sh.txt
+40. tr -sc A-Za-z '\t' < sh.txt | tr a-z A-Z
+41. tr -sc 'A-Za-z' '\n' < 'sh.txt' | sort | uniq -c
+42. tr -sc 'A-Za-z' '\n' < sh.txt | tr A-Z a-z | sort | uniq -c | sort -n -r
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[18/02/2025]
+43. Tokenization: Segmentation of corpus
+44. Rogerian Psychotherapist
+45. Subword Tokenization (进入 = 进 + 入)
+46. Tokenization rely on Named Entity Recognition
+47. Penn Treebank Tokenization: Clitics and Punctuations as Tokens [doesn’t: does + n’t]
+48. Morpheme: Meaningful Segment of Word
+49. Hanzi forms Morpheme (姚 明 进 人 入 总 决 赛)
+50. Extended/Verbose Mode : (?x)
+51. nltk.regexp_tokenize(text, pattern)
+52. Token Learner and Token Segmenter
+53. Top-down Tokenization
+54. Bottom-up Tokenization
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[19/02/2025]
+55. Bottom-up Approach: LARGE COPUS ---> MODEL ---> [TOKENS]
+56. Bottom-up Approaches: Unigram Language Model, Byte Pair Encoding
+57. SentencePiece: Library to perform Unigram Language Model, Byte Pair Encoding
+58. Byte Pair Encoding (BPE) - Anto Bro's Marriage Edition 🎉💍
+59. BPE: (1) Splitting into Individual Characters | Making a Vocabulary
+56. BPE: (2) Grouping the adjacent pairs
+57. BPE: (3) Merging the most occuring pairs | Enlist in Vocabulary
+58. BPE: (4) Repeat (1), (2), (3) until VOCAB_LIMIT | TOKEN_LIMIT
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[20/02/2025]
+59. Normalization (Eg: Case Folding)
+60. Morphologically Different Words (Duck, Ducks | Come, Came | Went, Go)
+61. Surfacially Different but Same Root/Stem
+62. Lemma of (go, went, gone) = go
+63. Lemma of (He is reading detective stories) = He be read detective story.
+64. Two Broad Classes of Morphemes: Stem + Affix (cat = cat + s)
+65. Morpholigical Parser: splits into Stem + Affix
+66. Porter Stemmer Stemming: Rewrite Rules | Heuristic Rules
+67. ATIONAL → ATE (e.g., relational →relate) | ING → ϵ if the stem contains a vowel (e.g., motoring →motor) | SSES → SS (e.g., grasses →grass)
+68. Porter Stemmer Over-Generalizing: Policy→Police
+69. Porter Stemmer Under-Generalizing: Not European→Europe doesn't happen
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[21/02/2025]
+70. Sentence Segmentation: Delimeters-Punctuations: Period, Question Mark, Exclamation
+71. Unambiguous Delimeters: !, ?
+72. Ambiguous Delimeter: . (Mr., U.S.A.,)
+73. Coreference : [Stanford Arizona Cactus Garden, Stanford University Arizona Cactus Garden]
+74. Minimum Edit Distance measures Similarity of Two Strings
+75. Minimum Edit Distance @ Levenshtein Distance 
+76. Minimum Edit Distance: We perform Insertion, Deletion, Substitution to change INTENTION to EXECUTION
+77. Levenshtein Distance
+		Inserting a character costs 1
+		Deleting a character costs 1
+		Substituting one character for another costs 2 (unless the characters are the same, in which case it costs 0).
+78. D[i, j]: Edit distance b/w the first i chars of the SRC and the first j chars of TARGET
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[22/02/2025]
+79. Minimum Edit Distance: Table Intuition
+80. Minimum Edit Distance: (↖←↑)
+81. Optimal Distance: Minimum Operations and Minimum Cost
+82. Viterbi Algorithm: Probabilistic Extension of Minimum Edit Distance
+83. LMs : Language Models
+84. Language Models: Prediction of next Word or Sentence
+85. LMs can be used in Grammar Correction
+86. AAC: Augmented & Alternative Communication: Computer Vision + LLM
+87. Large Language Models are built on Probability/Next Word Prediction
+88. Gram: Single Word | n-gram is a sequence of n words | Bi-Gram is two words
+89. n-gram: Probabilistic Model estimating the probability of a word GIVEN the n-1 previous words
+90. I am in love with a ____
+[PERSON: 0.7, GHOST: 0.1, APPLE: 0.2]
+91. Joint Probability: P(Two Events Occuring Together)
+92. Mutually Exclusive Events: Both Events can't occur at a time
+93. Example: P(RAINY ∩ SUNNY)
+94. Joint Probability: P(A∩B)=P(B∣A)P(A)
+95. Conditional Probability: P(It is RAINY∣It is SUNNY)
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[23/02/2025]
+96. P(w|h) where, h is history, w is the word to predicted
+97. Language is creative
+98. P(w|h): Out of the times we saw the history h, how many times was it followed by the word w
+99. n-gram: w1:n−1
+100. P(w1,w2,...,wn) (or) P(X1 = w1, X2 = w2, X3 = w3,..., Xn = wn): Xi is random variable
+101. Joint Probability: P(X1=Ari, X2=good)
+102. P(X1...Xn) = P(X1)P(X2|X1)P(X3|X1:2)...P(Xn|X1:n−1)
+103. P("I","love","math")=P("love"∣"I")P("math"∣"I love")P("I")
+104. P(Jingle, Bells, Jingle, Bells, Jingle) = 60% [n-gram]
+P(Jingle, Bells, Jingle) = 58% [Markov Assumption]
+105. Unigram: P(wi∣w1:wi−1)=P(wi) | P("I love math") = P("I")×P("love")×P("math")
+106. Bigram: P(wi∣w1:wi−1)=P(wi∣wi−1):P("I love math")=P("I")×P("love"∣"I")×P("math"∣"love")
+107. P(wn|w1:n−1) ≈ P(wn|wm:n−1)
+108. A bigram is a 1st-order Markov model (depends on 1 previous word) | A trigram is a 2nd-order Markov model (depends on 2 previous words)
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[24/02/2025]
+109. Estimation
+110. Relative Frequency: P(wn|wn−N+1:n−1) = C(wn−N+1:n−1 wn)/C(wn−N+1:n−1)
+111. Unigram Count (Actual Count of Word in Corpus)
+112. Logarithm Property: Product: log(a⋅b) = loga+logb
+113. Logarithm Property: Quotient: log(a/b) = loga-logb
+114. Logarithm Property: Power: log(a^b) = b.loga
+115. Numerical Underflow
+116. Numerical Stability with Logarithm: p1×p2×p3×p4 = exp(logp1 + logp2 + logp3 + logp4)
+117. Infinigram: Any length can be used as history: Suffix Arrays
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[25/02/2025]
+118. Extrinsic Evaluation: End to End Evaluation: Embedding in an application and measuring how much the application improves
+119. Intrinsic Evaluation
+120. Training Set, Test Set (Held-out set of data)
+121. Test Set Sentences should be assigned higher probability is likely, lower probability if non-likely
+122. Training on The Test Set: Existences of a sentence of Training Set in Test Set
+123. DevSet: All our testing on this until the very end, and then we test on the test set once to see how good our model is.
+124. Less Surprised: Assigns High Probability 
+125. P(sentence): Longer The Sentence: Lower The Probability 
+126. Raw Probability: Favors Shorter Sentences (Fair Comparison Needed for Evaluation: Perplexity)
+127. Perplexity: Inverse Probability of The Test Set, Normalized by The Number of Words
+128. Lower The Peplexity; Better The Model
+129. Branching Factor: Number of possible next words that can follow any given word
+130. In Deterministic Language Model: Branching factor is simply the size of the vocabulary.
+131. In Probabilistic Language Model: Weighted branching factor because the likelihood of certain words "branches" more heavily than others
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[26/02/2025]
+132. Sampling Sentences from Language Models
+133. Visualizing: Unigram, Bigram | We plot the frequency as a band with appropriate width
+134. More the value of N; More the performance of N-gram
+135. The longer the context, the more coherent the sentences
+136. Without Domain-Specific Training, "Dogs are juicy and sweet"
+137. Unseen sequences lead to underestimating probabilities, reducing model performance, and causing 0 probabilities that make perplexity computation impossible | JOINT PROBABILITY = 0 | Zero probabilities break our model!
+138. Smoothing or Discounting: To deal with zero probability n-grams
+139. Smoothing: Shaves off a bit of probability mass from some more frequent events and
+give it to unseen events
+140. Laplace Smoothing (Add-1 Smoothing): P(W) = 0+1/N+V
+141. Discounting: The ratio between smoothed and unsmoothed
+142. Add-k Smoothing: P(W) = 0+K/N+KV
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[27/02/2025]
+143. To overcome Zero Frequency n-grams, we go for Smoothing, Interpolation, Stupid Back-Off
+144. Linear Interpolation
+145. P(wn|wn−2wn−1) = λ1P(wn) + λ2P(wn|wn−1) + λ3P(wn|wn−2wn−1)
+146. Interpolation of Trigram: weighting and adding unigram, bigram, and trigram probabilities | Interpolation Weight (λ)
+147. Interpolation uses Held-out Corpus to find optimal values for lambdas
+148. Back-Off: We step down to n-1 grams if ZERO Evidence found
+149. Back-Off: Higher Order to Lower Order: P(W1.W2.W3...WN) = P(W1.W2.W3...WN-1)
+150. Stupid Back-Off: P(W1.W2.W3...WN) = λP(W1.W2.W3...WN-1)
+151. Naive Bayes: Text Categorization
+152. Text Categorization Usecases: Spam Detection, Sentiment Analysis and so on
+153. Probabilistic Classifier: Predicts the probability of the observation being in the class
+154. Bag of Words: Unordered Words with Frequency (Like HashMap)
+155. Argmax: Selects the most likely class from multiple options [argmax P(c|d), c∈C]
+156. Baye's Rule: P(x|y) = P(y|x)P(x) / P(y) : Simply extra features
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[28/03/2025]
+157. P(A∣B) = P(B∣A).P(B) / P(A)
+158. P(A∣B) is Posterior Probability
+     P(B∣A) is Likelihood
+     P(A) is Prior Probability
+     P(B) is the Marginal Probability
+159. Baye's Rule: More Evidence we have, More Accurate The Probability is
+160. P(RAINING/PEACOCK DANCES) = P(PEACOCK DANCES/RAINING)*P(RAINING) / P(PEACOCK DANCES)
+161. P(A=🦇|B=🙃) ∝ P(B=🙃|A=🦇).P(A=🦇)
+162. P(B=🙃|A=🦇) = P(F1, F2, F3, ..., FN / A=🦇); F1 = Folds it's wings
+163. Naive Bayes assumption: P(F1, F2, F3, ..., FN / A=🦇) = P(F1/A=🦇).P(F2/A=🦇).P(F3/A=🦇)....P(FN/A=🦇)
+164. Naive Bayes assumption: the presence of each FEATURE is independent of the others
+166. P(Spam∣"free","money","offer")∝P("free","money","offer"∣Spam)×P(Spam)
+167. For Independent Events: P(A∩B)=P(A)P(B)
+     For Dependent Events: P(A∩B)= P(A/B)P(B) (or) P(B/A)P(A)
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[01/03/2025]
+168. P(A/B) = C1/C2 : Frequentist Probability
+     P(A/B) = P(B/A).P(A)/P(B) : Bayesian Probability
+169. Document ---> Sentence
+170. Naive Baye's Assumption:
+    P(A=Bat|MAMMAL) = P(f1, f2|MAMMAL)
+                = P(Stimulate Milk, Eats fruits | MAMMAL)
+                = P(Stimulate Milk|MAMMAL).P(Eat fruits|MAMMAL)
+                = 0.8*0.5
+                = 0.4
+                = 40%
+171. P(D|C) = P(W1, W2, W3, W4|MEDICAL)
+       = P(HEART, KIDNEY, PULSE, FEVER | MEDICAL)
+       = 90%
+172. P(HEART|MEDICAL) = C(HEART IN MEDICAL CLASS)/C(WORDS IN MEDICAL CLASS)
+173. P(W1, W2, W3, W4|C) = P(W1|C).P(W2|C).P(W3|C).P(W4|C) : If any of these values is 0, just ignore
+174. Stop Words: a, is, at, the, and, or : Can be removed
+175. P(C=+|S) = P(+)P(S|+) ; P(C=-|S) = P(-)P(S|-)
+176. Binary Naive Bayes: Comparing the frequency, Presence of a word is important
+177. Sentiment Analysis Optimizations
+        1. Repeated Words should be clipped to 1 as they make the sentiment intensive
+        2. Dealing with messy negations (I don't like; Don't miss the movie, it nevers set you bored)
+178. Sentiment Lexicons: Positive and Negative Words Listed
+179. Gold Label: Target, Human defined Label
+180. If Predicted and Actual are same, prepend True
+        If predicted class is positive, It is True Positive
+        If predicted class is negative, It is True Negative
+     If Predicted and Actual are not same, prepend False
+        If predicted class is positive, It is False Positive
+        If predicted class is negative, It is False Negative
+181. ACCURACY: (TP+TN)/(TP+TN+FP+FN)
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[02/03/2025]
+182. Precision: Out of total datapoints classified as positive, how many are actually positive
+    Precision = TP / (TP+FP)
+183. Negative Predictive Value: Out of total datapoints classified as negative, how many are actually negative
+          NPV = TN / (TN+FN)
+184. Recall (Sensitivity): Out of the positive classes, how many are classified as positive
+        RECALL = TP / (TP+FN)
+185. High Recall → Reduce False Negatives (FN) → Important when missing a positive case is costly | High Precision → Reduce False Positives (FP) → Important when a false positive is costly
+186. The Fβ-score is a generalization of the F1-score, where the β parameter controls the trade-off between Precision (P) and Recall (R):
+               Fβ Score = (1+β^2)⋅P⋅R / (β^2.P+R)
+187. When β = 1, this reduces to the F1-score, which equally weights precision and recall.
+    When β > 1, recall is given more importance.
+    When β < 1, precision is given more importance.
+188. F1 Score = 2PR / (P + R)
+189. A Microaverage is dominated by the more frequent class (in
+this case spam), since the counts are pooled.
+            MicroPrecision=∑(TP+FP)/∑TP
+190. The  Macroaverage better reflects the statistics of the smaller classes, and so is more appropriate when performance on all the classes is equally important
+            MacroPrecision= (1/N)∑Pi
+191. In cross-validation, we split our data into k equal parts called folds. Pick one fold as the test set. Train the model on the remaining k-1 folds. Test the model on the chosen fold and record the error. Repeat this process k times, using a different fold as the test set each time.
+192. Statistical Significance Testing: When comparing two systems (like two classifiers), we need to determine if one is genuinely better or if the difference in performance is just due to chance
+193. Effect Size (δ): Performance between systems A and B on a test set (e.g., F1 score). If δ is large, A seems much better than B; if small, A is only slightly better.
+194. Statistical Hypothesis Testing
+    Null Hypothesis (H₀): A is not better than B (δ ≤ 0)
+    Alternative Hypothesis (H₁): A is better than B (δ > 0)
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[03/03/2025]
+195. Bootstrapping: Randomly samples with replacement from the original dataset to create multiple "pseudo-datasets" for estimating confidence intervals or variances
+196. Paired Bootstrap Test: If A consistently outperforms B in these resamples, we conclude A is truly better.
+197. Harms in Classification: Silencing, Representational Harm, 
+198. Model Card, documents a machine learning model with information like:
+• training algorithms and parameters • training data sources, motivation, and preprocessing
+• evaluation data sources, motivation, and preprocessing
+• intended use and users
+• model performance across different demographic or other groups and environmental situations
+199. Logit: Weighted Sum: z = w·x + b 
+200. Sigmoid Activation: σ(z)= 1/(1+e^−z)
+201. Sigmoid Property: 1−σ(x)=σ(−x)
+202. P(y=1)=σ(w⋅x+b) and P(y=0)=σ(−(w⋅x+b))
+203. Odds: How much more likely success is compared to failure,
+    Odds = Probability of Success/Probability of Failure = P/Q = P/1-P
+204. Odd speaks about: success is odd times more likely than failure
+205. Classification using Logistic Regression: Decision Boundary (Threshold: 0.5)
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[05/03/2025]
+206. defaultdict(datatype, {"drona": 23}): Datatype is a callable that returns 0 by default when a key is missing | print(a["ari"]) #0 | No KeyError
+207. Disadvantage in BOW: Doesn't know of context
+208. Document --> Feature Extraction ---> Assigning values in a vector based on some attributes: [x1 x2 x3 x4 x5 x6 x7 ...... xn]
+209. Feature can be: Count(Positive Words), Count(Negative Words) and so on
+210. P(y= 1|x) = σ(w·x + b) and P(y= 0|x) = 1 - σ(w·x + b)
+211. Any Useful Property of The Input can be a feature
+212. Features can be DESIGNED, LEARNED
+213. Feature Interactions: We can consider (feature interactions), complex features that are combinations of more primitive features (Haversine Distance is a combo of Latitude, Longitude)
+214. Period Disambiguation: Whether a period (.) marks the end of a sentence (EOS) or not
+215. Feature Template: Example: Bigram Template
+216. Representation Learning: Ways to learn features automatically in an unsupervised way from the input
+217. Common Standardization: Zero Mean and One Standard Deviation
+218. Min-Max Normalization: x = i−min(xi)/max(xi)−min(xi)
+219. Logistic regression is more reliable than Naïve Bayes as it handles correlated features better by distributing weights instead of overestimating probabilities due to independence assumptions and multiplications
+220. Multinomial Logistic Regression: For more than two classes
+221. Other Names for Multinomial Logistic Regression: Softmax Regression, Maxent Classifier
+222. IMG --> NN --> [0 0 1]          : Hard Classification (single class with certainty)
+     IMG --> NN --> [0.1 0.1 0.8]    : Soft Classification (uncertainty allowed)
+223. Input of Softmax: Logits [Z1, Z2, Z3, ...., ZN]
+224. ŷk = e^(zk) / Σ(e^(zj)) for j = 1 to K
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[06/03/2025]
+225. y= softmax(Wx + B)
+226. Each row wk as a Prototype of class k
+    r1 : w1 ..... w33         : Prototype of Class1
+    r2 : w34 ...... w66       : Prototype of Class2
+    r3 : w67 ....... w99      : Prototype of Class3
+227. Logistic regression is thus learning an EXEMPLAR representation for each class, such
+that incoming vectors are assigned the class k they are most similar to from the K
+classes
+228. f(x, y): Feature weights are dependent both on the input text and the output
+class
+229. Binary Logistic Regression
+        Input x → Weighted Sum (w^T x) → Sigmoid σ(w^T x) → Binary Output (0/1)
+    Multinomial Logistic Regression
+        Input x → Weighted Sum (W^T x) → Softmax → Probability Distribution (Positive, Neutral, Negative)
+230. Maximum Likelihood Estimation: Correct Class Probability should be MAXIMIZED
+    P(Class=Cat/ImageCat) = 0.9
+    P(Class=Dog/ImageCat) = 0.1
+231. Bernoulli distribution: Probability Distribution that models an event with only two possible outcomes: success (1) and failure (0)
+232. X ∼ Bernoulli(p), where P(X=1) = p, P(X=0) = 1−p
+233. Die Rolling: Success as rolling a 6
+        P(X=1) is 1/6
+        P(X=0) is 5/6
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[07/03/2025]
+234. Expected Value: E[X]: Long-term average of possible outcomes, considering how often each outcome occurs
+235. E[X]= 1×P + 0×Q [P: P(Success), Q: P(Failure)]
+236. If E[X] is closer to 1, there is high likelihood for the success
+     If E[X] is closer to 0, there is low likelihood for the success
+237. Variance measures the spread of the distribution
+     Var(X) = E[X^2]−(E[X])^2
+     Var(X) = p(1−p) [Since 𝑋^2 = 𝑋 for a Bernoulli variable]
+238. Variance: how much the outcome values (0 and 1) deviate from the mean
+239. Likelihood: p(y∣x)= y🧢^y(1−y🧢)^(1−y) (or) P(Success)^y.P(Failure)^(1-y)
+    Log Likelihood: logp(y∣x) = ylogy🧢+(1−y)log(1−y🧢)
+240. Likelihood should be Increased
+    Negative Likelihood should decreased
+245. LBCE: -logp(y∣x) = - [ylogy🧢+(1−y)log(1−y🧢)]
+246. Optimization Algorithms
+    1. (Batch) Gradient Descent: Selects all datapoints and adjusts all the weights based on them
+    2. Stochastic Gradient Descent: Selects one random datapoint and adjusts all the weights
+    3. Mini-Batch Gradient Descent: Selects one random batch of datapoints and adjusts all the weights
+247. Parameter Update: wt+1 = wt − η∇wL(f(x;w),y)
+248. Regularization: Lasso and Ridge
+    Lasso: Adds abs(Weight) with Loss
+    Ridge: Adds square(Weight) with Loss
+249. Ridge Regularization: L2 Regularization
+    We use L2 norm, ||Parameter||2
+    L2 norm: Euclidean Distance from Origin
+250. Lasso Regularization: L1 Regularization
+    We use L1 norm, ||Parameter||1
+    L1 norm: Manhattan(City-Block) distance from Origin
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[08/03/2025]
+251. Smilodon and Thylacosmilus: Parallel or Convergent Evolution which particular contexts or environments lead to the evolution of very similar structures in different species 🦆🦢🐸🐧
+252. Similar Context(Environment: Water) --> Similar Features(Interdigital Webbing)
+253. Distributional Hypothesis: Words in similar context tend to convey similar meaning
+    Sentence 1: "The cat is sleeping on the sofa."
+    Sentence 2: "The cat is sleeping on the couch."
+    Sofa and Couch convey nearly similar meaning as they appear in similar context.
+254. Distributional Hypothesis: Words in different context tend to convey different meaning
+    Sentence 1: "I ate an apple for breakfast." (Fruit)
+    Sentence 2: "I bought an Apple iPhone." (Company)
+    Apple (Fruit) and Apple (Company) convey different meanings as they appear in different contexts.
+255. Embeddings: Numerical representations of (The Meaning of) Words
+256. Types of Embeddings
+        1. Static Embeddings
+            Apple🍎 --> [1 2 3]
+            Apple📱 --> [1 2 3]
+            Examples: Word2Vec, GloVe
+        2. Dynamic (Contextualized) Embeddings
+            Apple🍎 --> [1 2 3]
+            Apple📱 --> [4 5 6]
+            Example: BERT
+257. Hypernym: General (Animal)
+     Hyponym: Specific (Tiger)
+     Co-Hyponyms: Hyponyms in same hierarchy (Tiger, Lion, Cheetah)
+258. Lemma: Basic Dictionary Form [sing is the lemma for sing, sang, sung]
+259. Word Sense: The different meanings a lemma can have [Mouse can mean a rodent or a computer device] | Word Sense Disambiguation
+260. Semantic Fields of The Topic, Theatre: Movie, Actor, IMDB Rating, Audience, Snacks
+267. Topic Modeling Model: TMM
+    TMM(Movie, Actor, IMDB Rating, Audience, Snacks) = Theatre
+    Example: Latent Dirichlet Allocation: LDA
+268. Lexical Relations in Linguistics
+    Hypernymy (General category) → Animal is a hypernym of dog, cat, and elephant.
+    Hyponymy (Specific type) → Dog is a hyponym of animal.
+    Meronymy (Part of something) → Wheel is a meronym of car (because a wheel is part of a car).
+    Holonymy (Whole of something) → Car is a holonym of wheel, engine, and door (because they are parts of a car).
+    Synonymy (Same meaning) → Happy and Joyful are synonyms.
+    Antonymy (Opposite meaning) → Hot and Cold are antonyms.
+    Troponymy (Specific way of doing an action) → Whisper is a troponym of speak (because whispering is a specific way of speaking).
+    Polysemy (Word with multiple related meanings) → Head can mean body part or leader of a team.
+    Homonymy (Word with multiple unrelated meanings) → Bat can mean a flying animal or a cricket bat.
+    Paronymy (Words that sound alike but differ in meaning) → Affect and Effect sound similar but have different meanings.
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[09/03/2025]
+269. Semantic Frame: A set of words that denote perspectives
+    - Words can be Semantic Roles [Money Transaction --> Buyer, Seller, Money, Goods]
+270. Perspectives: Drono bought apples from Anto <-> Anto sold Apples to Drona
+    Semantic Frames --> Helps in Question Answering (Twisting)
+271. Connotation is the emotional or cultural meaning associated with a word, beyond its literal definition
+    Positive connotation: "Youthful" (suggests energy and vitality)
+    Negative connotation: "Childish" (suggests immaturity)
+    Neutral connotation: "Young" (just states age without extra meaning)
+278. Principle of Contrast: If two words have different forms, they must have different meanings
+    👨🏻‍🍳 "Chef" suggests a professional, highly trained person.
+    👨🏻‍🍳 "Cook" can refer to anyone who prepares food, professionally or at home.
+279. SimLex-999 Dataset: Hand-Labeled Similarity between Words
+280. Word Relatedeness: Cup, Coffee, Restaurant, Tea ☕️
+281. Similar Meaning Words: Eggplant, Aubergine, Brinjal 🍆
+282. One common kind of relatedness between words is if they belong to the same
+Semantic Field: Cup, Coffee, Restaurant, Tea
+283. VAD Model: Emotion Analysis
+    Valence – Measures how positive or negative an emotion is.
+        Positive valence: Happiness, love, excitement
+        Negative valence: Sadness, anger, fear
+    Arousal – Measures the intensity of the emotion (high or low energy).
+        High arousal: Anger, excitement, fear (strong emotions)
+        Low arousal: Calmness, sadness, boredom (weaker emotions)
+    Dominance – Measures the level of control or power a person feels in the situation.
+        High dominance: Confidence, pride, anger (sense of control)
+        Low dominance: Fear, sadness, helplessness (feeling powerless)
+284. VAD Table
+                 Valence    Arousel Dominance
+    - - - - - - - - - - - - - - - - - - - - -              
+    Joy 😊       Positive    High    High
+    Fear 😨      Negative    High    Low
+    Anger 😡     Negative    High    High
+    Sadness 😢   Negative    Low     Low
+    Relaxation😌 Positive    Low     High
+285. Vector Semantics: To represent a word as a point in a multidimensional semantic space that is derived from the distributions of embeddings word neighbors | Vectors for representing words are called embeddings
+286. Vector Types: Sparse (Mostly Zero Presence) and Dense (Mostly Non-Zero Presence)
+    Examples: Sparse: TF-IDF | Dense: Word2Vec
+287. Term Document Matrix: Represents how many times terms occur in documents
+    Document is represented as a count vector
+    For The Document: "Twelfth Night"
+        battle      0
+        good        80
+        fool        58
+        wit         15
+    Usecase: Document Information Retrieval
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[10/03/2025]
+288. Term Document Matrix
+    - Doc2Vec: Column Vector
+    - Word2Vec: Row Vector
+289. Word-Word Co-Occurence Matrix
+    Example: The cat sat on the mat. The dog sat on the rug
+    Window Size: 2
+    Dimensionality: |V|x|V|
+        the cat sat on  mat dog rug
+    the 0   1   1   1   0   1   0
+    cat 1   0   1   0   0   0   0
+    sat 1   1   0   1   0   0   0
+    on  1   0   1   0   1   0   1
+    mat 0   0   0   1   0   0   0
+    dog 1   0   1   0   0   0   1
+    rug 0   0   0   1   0   1   0
+290. Dot Product is also called Inner Product
+291. Dot Product(v, w) = v·w = v1w1 + v2w2 +... + vNwN
+    HIGH DP --> v and w are similar
+    LOW DP  --> v and w are dissimilar
+    DP: 1   --> v and w are same
+292. Orthogonal: Vectors that have zeros in different dimensions
+    Dot Product of Any Two Vectors is "ZERO"
+    A=(1,0,0)
+    B=(0,2,0)
+    C=(0,0,1)
+293. Dot Product Limitation: Favours Large Vectors with High Value
+294. Vector Length: ||v|| = sqrt(x1^2 + x2^2 + x3^2 + ... + xN^2) 
+295. Longer Vectors: More chance for more co-occurences although the words are not similar
+    Frequent Words co-occurs multiple times
+    So, we normalize as a·b/(|a||b|)
+    This normalized value is equal to COSINE of angle between two vectors
+    cosθ = a·b/(|a||b|)
+296. Raw frequency is very skewed and not very discriminative
+297. It's a paradox: words that often appear together (like 'pie' near 'cherry') are important, while rare words matter less. Yet, overly common words (like 'the' or 'good') are unimportant. How do we balance these? There are two common solutions
+298. TF-IDF Weighting: Dimensions are Documents
+     PPMI algorithm: Dimensions are Words
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[11/03/2025]
+299. Term Frequency: Count of particular word in a document
+        Not raw count!
+        TF(t, d) = 1+ logCount(t,d) If Count(t,d)>0
+        TF(t, d) = 0 If Count(t,d)=0
+300. Terms that are limited to a few documents are useful for discriminating those documents from the rest of the collection; terms that occur frequently across the entire collection aren’t as helpful
+301. Document Frequency: Count of documents where a particular word is present
+302. Collection Frequency: Count of words in entire collection of documents
+303. COLLECTION
+    DOC1: DOG CAT DOG
+    DOC2: DOG BAT DOG
+    DOC3: BAT CAT BAT
+TERM FREQUENCY          : Count(T=DOG, D=DOC1)      = 2
+DOCUMENT FREQUENCY      : Count(T=BAT, COLLECTION)  = 2
+COLLECTION FREQUENCY    : Count(T=DOG, COLLECTION)  = 4
+304. Words that are specific to a document is helpful to discriminate it.
+                CFreq        DFreq
+Mitochondria    113            1        [CONTEXT SPECIFIC: Only in Biology Book]
+action          113            31       [CONTEXT FREE: Present in all books]
+305. Weightage
+    Lower Weight  ----> Words that occur in multiple documents
+    Higher Weight ----> Words that occur in specific, relevant documents
+306. We emphasize discriminative words like Romeo via the inverse document frequency or idf term weight
+    IDF = log(N/DF) 
+    ⭐️ The lowest weight of 1 is assigned to terms that occur in all the documents
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[12/03/2025]
+307. TFID: Term Frequency x Inverse Document Frequency
+    TFID = TF x IDF
+308. Just using Term Frequency (Not log-space)
+*********************************
+        As You Like It  Twelfth Night
+battle      1               0
+good        114             80
+
+Using TFIDF
+*********************************
+        As You Like It  Twelfth Night
+battle      0.246           0
+good        0               0
+
+309. Words correspond to Documents: TF-IDF
+    Words correspond to Words:      PMI
+310. Mutual Information (MI): How much knowing one thing reduces uncertainty about another | Dependency b/w two random variables (X,Y)
+311. MI Helps in,
+    I(X,Y) = 0.27 ---> Where X=Sunny, Y=Carrying Umbrella
+    I(X,Y) = 0.87 ---> Where X=Rainy, Y=Carrying Umbrella
+Conclusion: MI helps in feature selection
+312. MI in Word Relatedness
+    ⭐️ PMI favors rare words
+        If two rare words co-occur even a few times, PMI gives a high value
+        If two frequent words co-occur often, PMI gives a low or even negative value
+313. PPMI(w, c) = max(log2(P(w, c) / (P(w) * P(c))), 0)
+    > PMI tends to inflate scores for rare words, even if they co-occur only a few times.
+    > PMI can be misleading for rare words, making them seem highly associated even with a few co-occurrences
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[17/03/2025]
+314. Embedding: "Short Dense Vector" representing The Meaning of The Word
+315. Representing words as 300-dimensional dense vectors requires our classifiers to learn far fewer weights than if we represented words as 50,000-dimensional vectors, and the smaller parameter space possibly helps with generalization and avoiding overfitting
+316. Embeddings: Helps in Synonymy
+    - Automobile and Car are nearer to eachother
+317. Word2Vec: It's a software package
+    - For Static Embeddings (Non-Contextual)
+318. Word2Vec is an example for Representation Learning
+319. Word2Vec in Action
+    Example: "An apricot is a small, orange-colored fruit that is sweet and juicy."
+    We Train!
+    (Target, Context pairs) → (Positive Samples)
+    - (apricot, small)
+    - (apricot, orange-colored)
+    - (apricot, fruit)
+    - (apricot, sweet)
+    - (apricot, juicy)
+    (Target, Context pairs) → (Negative Samples)
+    - (apricot, laptop)
+    - (apricot, concrete)
+    - (apricot, bicycle)
+    The model learns embeddings by adjusting weights such that:
+    - Positive pairs have HIGHER similarity  
+    - Negative pairs have LOWER similarity
+320. The Training,
+    - The model maximizes the probability of real context words.
+    - The model minimizes the probability of random noise words.
+    - Loss Function: Binary Cross Entropy
+321. Positive and Negative Classes
+    P(+ | w, c) = 1 / (1 + exp(-w ⋅ c))
+    P(- | w, c) = 1 - P(+ | w, c) = 1 / (1 + exp(w ⋅ c))
+322. Context Window: Range of words considered around a Target Word
+        For Example: ±2 words
+            "The cat sat on the mat"
+            Context(sat) = {The, cat, on, the}
+323. Skip Gram: The model skips between a target word and its surrounding context words, learning their relationships 🐸 (within a defined window 🐸-->😤)
+324. Skip Gram: Target Word   → Context Word
+     CBOW:      Context Words → Target Word
+325. CBOW  {CAT: 23, THE: 25, ON: 30, MAT: 31} → SAT
+326. Problem with Word2Vec: Unknown Words
+     FastText solves this by using Subword Tokenization
+327. GloVe combines count-based (PPMI) and predictive (Word2Vec) methods
+328.⭐️Two words have first order co-occurrence if they frequently
+    appear next to each other in sentences
+    Example: The word "bark" appears with "dog" (e.g., The dog barked loudly)
+    ⭐️Two words have second order co-occurrence if they share similar neighboring words, even if they don't directly appear together often.
+    Example: The word "wrote" and the word "said"
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[18/03/2025]
+329. Sentence Classification
+    - Each Word is converted into Embeddings
+    - And ALL the embeddings are averaged (element-wise)
+    - Fed to Neural Net
+330. Language is a Temporal Phenomenon
+331. Recurrent neural network (RNN): Any network with a cycle
+    - Value of some unit is directly, or indirectly, dependent on its own earlier outputs as an input
+332. Simple RNN is also called, Elman Network
+333. Window Based Approach -> Fixed Window of Sequence
+     As Input Layer Size is FIXED
+334. RNN Computation
+    hₜ = g(U.hₜ₋₁ + W.xₜ)
+    yₜ = f(V.hₜ) [f can be softmax]
+335. RNN has FEEDBACK Loops
+336. We recurrently process the input
+    - Risk of Vanishing/Exploding Gradient Problems
+335. RNN Training happens in, TWO PASSES
+1. Forward Pass (Inference)
+    We compute the hidden states and outputs for each time step.
+    Given:
+    Input sequence: x₁ = 1, x₂ = 2, x₃ = 3
+    Initial hidden state: h₀ = 0
+    Weights:
+    W = 0.5 (input weight)
+    U = 0.8 (recurrent weight)
+    V = 1.0 (output weight)
+    Activation function: g(x) = x (identity function for simplicity)
+    Loss function: Squared Error
+
+    Step 1 (t = 1)
+    h₁ = U h₀ + W x₁ = (0.8 × 0) + (0.5 × 1) = 0.5
+    y₁ = V h₁ = 1.0 × 0.5 = 0.5
+    Target: ŷ₁ = 2
+    Loss: L₁ = (2 - 0.5)² = 2.25
+
+    Step 2 (t = 2)
+    h₂ = U h₁ + W x₂ = (0.8 × 0.5) + (0.5 × 2) = 0.4 + 1 = 1.4
+    y₂ = V h₂ = 1.0 × 1.4 = 1.4
+    Target: ŷ₂ = 3
+    Loss: L₂ = (3 - 1.4)² = 2.56
+
+    Step 3 (t = 3)
+    h₃ = U h₂ + W x₃ = (0.8 × 1.4) + (0.5 × 3) = 1.12 + 1.5 = 2.62
+    y₃ = V h₃ = 1.0 × 2.62 = 2.62
+    Target: ŷ₃ = 4
+    Loss: L₃ = (4 - 2.62)² = 1.89
+
+    Total Loss:
+    L = L₁ + L₂ + L₃ = 2.25 + 2.56 + 1.89 = 6.7
+
+2. Backward Pass (Gradient Computation - BPTT)
+    Now, we propagate the loss backward through time.
+
+    Step 3 (t = 3)
+    Error:
+    e₃ = ∂L₃/∂y₃ = 2(y₃ - ŷ₃) = 2(2.62 - 4) = -2.76
+    Gradient for V:
+    ∂L₃/∂V = e₃ × h₃ = (-2.76) × (2.62) = -7.22
+    Backpropagate error to h₃:
+    eₕ₃ = e₃ × V = (-2.76) × 1.0 = -2.76
+
+    Step 2 (t = 2)
+    Error contribution from next step:
+    eₕ₂ = eₕ₃ × U = (-2.76) × 0.8 = -2.21
+    Compute gradient for U:
+    ∂L₂/∂U = eₕ₂ × h₁ = (-2.21) × (0.5) = -1.11
+
+    Step 1 (t = 1)
+    Error contribution from next step:
+    eₕ₁ = eₕ₂ × U = (-2.21) × 0.8 = -1.76
+    Compute gradient for W:
+    ∂L₁/∂W = eₕ₁ × x₁ = (-1.76) × 1 = -1.76
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[20/03/2025]
+336. In RNN, all the preceding words are considered
+337. At each position t, the model takes the correct word wt and the hidden state ht-1, which encodes past words w1:w(t-1). It then predicts the next word's probability distribution to compute the loss for w(t+1). Moving forward, the model ignores its own predictions and instead uses the correct word w(t+1) to estimate w(t+2).
+338. Teacher Forcing: Ignoring own predictions and instead using the correct word history
+    🧑🏻‍🏫 Teacher - Training Data
+339. Equation for Word Embedding Retrieval
+340. Forward Pass - Mathematically
+⭐️ We retrieve the word embedding by multiplying the one hot vector xₜ with the embedding matrix E.
+    > eₜ = E × xₜ
+    > E has shape (d × |V|)
+    > xₜ is a one-hot vector of shape (|V| × 1)
+    > The result eₜ is a dense vector of shape (d × 1)
+⭐️ Equation for Hidden State Update in RNN
+The hidden state at time step t is computed as:
+    > hₜ = g(U × hₜ₋₁ + W × eₜ)
+    > hₜ₋₁ is the previous hidden state (d × 1)
+    > eₜ is the embedding vector (d × 1)
+    > U is the hidden state weight matrix (d × d)
+    > W is the input weight matrix (d × d)
+    > g(⋅) is an activation function (like tanh or ReLU)
+⭐️ Equation for Next Word Prediction
+    > ŷₜ = softmax(Eᵀ × hₜ)
+    > Eᵀ has shape (|V| × d) (transposed embedding matrix)
+    > hₜ is the hidden state (d × 1)
+    > The result ŷₜ is a probability distribution over all words in the vocabulary (|V| × 1)
+341. Example Calculation=
+    ŷₜ = Eᵀ × hₜ =
+        ⎡ (0.2 × 0.1) + (0.8 × 0.4) ⎤
+        ⎢ (0.5 × 0.1) + (0.3 × 0.4) ⎥
+        ⎢ (0.4 × 0.1) + (0.7 × 0.4) ⎥
+        ⎣ (0.6 × 0.1) + (0.9 × 0.4) ⎦
+    =
+        ⎡ 0.34 ⎤
+        ⎢ 0.17 ⎥
+        ⎢ 0.32 ⎥
+        ⎣ 0.42 ⎦
+    > Softmax is applied
+342. Weight Tying: 🎀 Technique of reusing the embedding matrix E as the output projection matrix V (i.e., V = Eᵀ) to reduce model parameters.
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[25/03/2025]
+343. Sequence Labeling: Assigning labels to each elements of a sequence
+    We go for RNN to capture the context
+Examples: I watch Ari - S V O
+          Ari plays cricket - S V O
+344. In Sequence labeling,
+        - Embedding is activated with some weights (h)
+        - Using h, Tag Vocabulary is weighed
+        - Softmax Applied
+345. Three sets of Weights in RNN:
+    U - To weigh the activated output
+    V - Vocabulary 
+    W - To weigh the input
+346. Sentence Classification
+    x1  ---> [ ] ---> [ ] ---> [ ] ---> [ ] ---> FFN ---> Softmax
+    Example: Sentiment Classification
+347. End-To-End Training
+       - The loss function is only on the last layer.
+       - No loss computed inbetween
+348. Pooling: Instead of using just last hidden state to represent the whole sequence, some sort of pooling function of all the hidden states hi for each word i in the sequence can be used.
+349. Autoregressive Generation/Causal LM Generation: Repeatedly sampling the next word conditioned on our previous choices
+    - "Regressive" refers to this backward-looking dependency: the model "regresses" to past data to predict the next step
+    - "Auto-Regressive" uses its own previous outputs as inputs for the next step
+349. Causal refers to Cause-and-Effect relationships
+    Past Words "Cause" the Future "Effects"
+Glory
+Glory Lily
+Glory Lily is
+Glory Lily is a
+Glory Lily is a beautiful
+Glory Lily is a beautiful flower.
+Glory Lily is a beautiful flower. It
+Glory Lily is a beautiful flower. It grows
+Glory Lily is a beautiful flower. It grows in
+Glory Lily is a beautiful flower. It grows in tropical
+Glory Lily is a beautiful flower. It grows in tropical regions.
+350. Stacked RNNs
+    Layer 1: Captures character/word-level features
+    Layer 2: Understands word relationships
+    Layer 3: Recognizes sentence structure and meaning
+355. Bidirectional RNNs: Capture both past and future context when processing a sequence
+356. Problems with RNNs
+    - RNNs focus more on recent words and struggle to remember distant ones
+    Example: In "The flights the airline was canceling were full," predicting "were" is hard because "flights" is far away.
+    - During training, errors are passed backward through many steps
+    - This leads to vanishing gradients, making it hard to learn long-term patterns
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[26/03/2025]
+357. RNN favours Recent Information and Forgets Distant Information
+358. How Recent Information Dominates The Vector?
+    The apples the shop was selling were fresh 🍎
+    - Recent words have dominant features which are enough to distor the historical representation
+359. RNN does two tasks
+    - Providing information useful for the current decision
+    - Carrying forward information required for future decisions
+360. Gradient Problems with RNNs
+    - Vanishing Gradient
+    - Exploding Gradient
+361. LSTMS: Long Short Term Memory
+362. LSTM Working
+    Through Training,
+        - Forgets information irrelevant to the context
+        - Gains information needed for the context
+363. LSTM uses GATES for forgetting and gaining
+    - Forget Gate
+    - Gain Gate
+367. Binary Mask 😷
+    - Used to filter out filter out relevant information
+    - [1 2 3]x[1 0 1] = [1 0 3]
+368. Binary Mask in Gates
+    - Forget Gate: Uses Binary Mask to remove unwanted portions
+    - Gain Gate: Uses Binary Mask to gain needed portions
+> Forgetting irrelevant details → Prevents memory overload
+> Gaining relevant details → Ensures long-term retention
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[29/04/2025]
+369. A General GATE in LSTM
+    -> Feed Forward Neural Network
+    -> Sigmoid Activation
+    -> Pointwise Multiplication (Hadamard Product)
+370. Gate Function: SIGMOID(FFNN(HIDDEN_STATE)) ⊙ CONTEXT
+    ft = σ(Uf.ht−1 +Wf.xt)
+    kt = ct−1 ⊙ ft
+371. Forget Gate
+    Previous cell state vector, ct−1 =[0.8,0.2,0.6]
+    Forget gate vector (output of sigmoid): ft =[1.0,0.0,0.5]
+    Hadamard Product, ct−1⊙ft =[0.8,0.2,0.6]⊙[1.0,0.0,0.5]=[0.8,0.0,0.3]
+        First element: 0.8 × 1.0 = 0.8 → fully retained
+        Second: 0.2 × 0.0 = 0.0 → fully forgotten
+        Third: 0.6 × 0.5 = 0.3 → partially remembered
+372. Add Gate
+    Candidate memory vector (from tanh), gt = [0.7, -0.4, 0.6]
+    Add (input) gate vector (from sigmoid), it = [0.9, 0.1, 0.5]
+    Hadamard Product (new info to add), gt ⊙ it = [0.7, -0.4, 0.6] ⊙ [0.9, 0.1, 0.5] = [0.63, -0.04, 0.3]
+        First element: 0.7 × 0.9 = 0.63 → mostly added
+        Second element: -0.4 × 0.1 = -0.04 → very little added, even a bit negative
+        Third element: 0.6 × 0.5 = 0.3 → half added
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[06/05/2025]
+373. RNN Architectures
+    - Many to Many (Eg: Sequence Labeling)
+    - Many to One (Eg: Sequence Classification)
+374. Encoder-Decoder Architecture
+    - Encoder (Accepts Input Sequence and Generates corresponding Contextualized Representation)
+    - Context Vector (Essence of Input Sequence)
+    - Decoder (Generates an arbitrary length sequence of hidden states)
+375. Encoder-Decoder Applications: Summarization, Machine Translation
+376. Translating a single sentence (inference time) in the basic RNN version of encoder-decoder approach to machine translation: Source and target sentences are concatenated with a separator token in between, and the decoder uses context information from the encoder’s last hidden state.
+377. A more formal version of translating a sentence at inference time in the basic RNN-based encoder-decoder architecture:  The final hidden state of the encoder RNN, serves as the context for the decoder in its role as in the decoder RNN, and is also made available to each decoder hidden state
+378. Teacher forcing is a training technique used in sequence models like RNNs, where the model is given the correct output from the previous time step as the next input instead of using its own prediction. This helps the model learn faster and more accurately by keeping it on the right path during training, especially in the early stages when its own predictions may be poor
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[08/05/2025]
+379. Bottleneck: The last hidden state of the last time step of the source text; Encoder Output
+380. RNN Time Steps: Impacted By Recent Token (Recency Bias)
+    Step 1:
+    h₁ = tanh(x₁ + 0.5 * h₀)
+       = tanh([1, 0, 0])
+       ≈ [0.76, 0, 0]
+
+    Step 2:
+    h₂ = tanh(x₂ + 0.5 * h₁)
+       = tanh([0, 1, 0] + 0.5 * [0.76, 0, 0])
+       = tanh([0.38, 1, 0])
+       ≈ [0.36, 0.76, 0]
+
+    Step 3:
+    h₃ = tanh(x₃ + 0.5 * h₂)
+       = tanh([0, 0, 1] + 0.5 * [0.36, 0.76, 0])
+       = tanh([0.18, 0.38, 1])
+       ≈ [0.18, 0.36, 0.76]
+
+    Step 4:
+    h₄ = tanh(x₄ + 0.5 * h₃)
+       = tanh([1, 1, 1] + 0.5 * [0.18, 0.36, 0.76])
+       = tanh([1.09, 1.18, 1.38])
+       ≈ [0.80, 0.83, 0.86]
+    Conclusion: Recent Token x₄ affects the output (Last Hidden State)
+381. Bottle-Neck Problem: Requiring the context c to be only the encoder’s final hidden state forces all the information from the entire source sentence to pass through this representational bottleneck
+382. Attention Mechanism: Allowing the decoder to get information from all the hidden states of the encoder, not just the last hidden state
+383. Attention Mechanism: It’s a weighted average of all the hidden states of the decoder
+384. Self Attention
+- - - - - - - - - -
+    I    live   in    TamilNadu
+   [1]    [2]   [3]      [4]
+DOT Product of I with all: [1 0.2 0.3 0.7]
+Softmax(Result): [0.6 0.1 0.1 0.2]
+Weighted Sum: 1(0.6) + 2(0.1) + 3(0.1) + 4(0.2) = [1.9]
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[09/05/2025]
+385. “The true art of memory is the art of attention”
+386. Left to Right Language Modeling: Causal or Autoregressive Modeling
+387. We are given a sequence of input tokens and predict output tokens one by one by conditioning on the prior context
+388. Attention: To build contextual representations of a token’s meaning by attending to and integrating information from surrounding tokens; Helps the model learn how tokens relate to each other over large spans
+389. Need of Attention
+	1. The chicken didn’t cross the road because it was too tired.
+	2. The chicken didn’t cross the road because it was too wide.
+	In (1) it is the chicken, while in (2) it is the road; The word "it" should be context-sensitive
+390. We say that in the first example "it" corefers with the "chicken", and in the second "it" corefers with the road
+391. In Transformer, layer by layer, we build up richer and richer contextualized representations of the meanings of input tokens.
+392. At each layer, we compute the representation
+of a token i by combining information about i from the previous layer with information about the neighboring tokens
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[10/05/2025]
+393. Causal Modeling: The context is any of the prior words. i.e, when processing xi, the model has access to xi as well as the representations of all the prior tokens in the context window but no tokens after i
+x1 → attends to:        x1
+x2 → attends to:     x1  x2
+x3 → attends to:  x1  x2  x3
+x4 → attends to:  x1  x2  x3  x4
+x5 → attends to:  x1  x2  x3  x4  x5
+394. Attention Mask
+|    | x1 | x2 | x3 | x4 | x5 |
+| -- | -- | -- | -- | -- | -- |
+| x1 | 1  | 0  | 0  | 0  | 0  |
+| x2 | 1  | 1  | 0  | 0  | 0  |
+| x3 | 1  | 1  | 1  | 0  | 0  |
+| x4 | 1  | 1  | 1  | 1  | 0  |
+| x5 | 1  | 1  | 1  | 1  | 1  |
+This triangular attention mask ensures no information leakage from the future
+395. At its core, attention is a weighted sum of past and current input representations, where the output at position i is computed as aᵢ = Σⱼ≤ᵢ αᵢⱼ · xⱼ, with weights αᵢⱼ indicating how much each xⱼ contributes to aᵢ
+396. In attention, we weigh each prior embedding proportionally to how similar it is to the current token xᵢ
+397. The more similar the vectors xᵢ and xⱼ, the larger their score, which is computed as score(xᵢ, xⱼ) = xᵢ · xⱼ, and then normalized with a softmax over all j ≤ i to produce the attention weights αᵢⱼ = softmax(score(xᵢ, xⱼ))
+398. We compute a₃ by calculating three scores—x₃ · x₁, x₃ · x₂, and x₃ · x₃—then normalizing them with a softmax to produce weights that reflect the PROPORTIONAL RELEVANCE of each xⱼ (for j ≤ 3) to the current position i = 3
+399. Attention Head: Each Individual Attention Calculation
+400. Query-Key-Value Definitions
+	Query: The current element being compared to the preceding inputs to determine similarity. We refer to this role as the query
+	Key: A preceding input that is being compared to the current element (query) to determine a similarity weight. We refer to this role as the key
+	Value: The value of a preceding element that gets weighted and summed up to compute the output for the current element. We refer to this role as the value
+401. Query-Key-Value
+	qᵢ = xᵢ.Wq
+	kᵢ = xᵢ.Wᵏ
+	vᵢ = xᵢ.Wᵥ
+	Needs for these weigets: ROLE BASED TUNING
+402. ROLES OF Q,K,V
+In attention, we need to ask questions (“queries”), supply answers (“values”), and judge relevance (“keys”)
+403.  Variance normalization: Scaling by sqrt(dk) ensures the dot product has a controlled variance, making it easier to train
+	Scaled Dot Product Attention(Q, K, V) = softmax((QK^T) / √dk).V
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[12/05/2025]
+404. Modular Architecture: Having everything be the same dimensionality makes the transformer very modular | The output hi of each transformer block, as well as the intermediate vectors inside the transformer block also have the same dimensionality [1×d]
+405. In a transformer, the input and output shapes are both [1 × d] 
+	Queries and keys are [1 × dk], and their dot product gives a scalar.
+	Values are [1 × dv].
+	The projection matrices have shapes:
+		WQ: [d × dk], WK: [d × dk], WV: [d × dv].
+	The head output is [1 × dv], and to get back to [1 × d], we use WO: [dv × d].
+406. Model Dimensionality: The input to attention xi and the output from attention ai both have the same dimensionality [1 × d]
+407. Wq, Wk, Wv, Wo helps in Projection to The Dimensions of Query, Key, Value and Output
+     Eg: Wq, [4 × 2] → projects from d=4 to dk=2
+408. Transformers use multiple attention heads. The intuition is that each head might be attending to the context for different purposes: heads might be specialized to represent different linguistic relationships between context elements and the current token, or to look for particular kinds of patterns in the context
+409. Multi-head attention: "A (Number of Heads per Layer)" Separate attention heads that reside in parallel layers at the same depth in a model, each with its "own set of parameters" that allows the head to model different aspects of the relationships among inputs
+410. Multi-head attention: The output of each head is the weighted sum of values, and the results from all heads are concatenated and passed through a linear layer. This process allows the model to capture diverse patterns and dependencies in the data.
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[14/05/2025]
+411. Transformer Block = Self Attention Layer + Feed Forward Layer + Residual Connections + Normalizing Layers (LayerNorm)
+412. Attention and Feedforward Layers are preceded by LayerNorm
+413. Block 	
+	- Layers
+	   - LayerNorm
+	   - Attention Layer
+		 - Attention Heads
+	   - FeedForward Layer
+414. Flow: Initial Input Vector -> LayerNorm -> Attention Layer -> Result is added back to the Residual-Stream (ResidualStreamInformation + Result = Summed Vector) -> LayerNorm -> FeedForward Layer -> Result is added back to the Residual-Stream -> LayerNorm -> Attention Layer -> AND ON AND ON
+415. Residual Stream: In a transformer block, the residual stream represents a continuous flow of d-dimensional token representations, where each component processes and enhances the input while maintaining a direct connection to the original input vector
+416. FeedForward Layer: The feedforward layer in a transformer is a two-layer fully-connected network with shared weights across token positions, typically having a hidden layer dimensionality larger than the model dimensionality, as shown in the equation: FFN(xi) = ReLU(xiW1 + b1)W2 + b2
+417. LayerNorm: Layer normalization in a transformer block normalizes the embedding vector of a single token by adjusting its mean to zero and standard deviation to one, using learnable parameters for gain and offset, which enhances training performance in deep neural networks
+	1. Calculate the Mean (µ):
+		Mean (µ) is the average of the elements in the vector:
+		µ = (1/d) * sum(xi) for i from 1 to d
+	2. Calculate the Standard Deviation (σ):
+		Standard deviation (σ) measures the spread of the elements:
+		σ = sqrt((1/d) * sum((xi - µ)²)) for i from 1 to d
+	3. Normalize the Vector (x̂):
+		The normalized vector (x̂) is obtained by adjusting each element:
+		x̂ = (x - µ) / σ
+	4. Apply Gain (γ) and Offset (β):
+		LayerNorm(x) = γ * x̂ + β
+418. The Sequence of Operations in A Transformer Block
+	1. Layer Normalization:
+		t1_i = LayerNorm(x_i)
+	2. Multi-Head Attention:
+		t2_i = MultiHeadAttention(t1_i, t1_1, ..., t1_N)
+	3. Residual Connection:
+		t3_i = t2_i + x_i
+	4. Layer Normalization:
+		t4_i = LayerNorm(t3_i)
+	5. Feedforward Network:
+		t5_i = FFN(t4_i)
+	6. Residual Connection:
+		h_i = t5_i + t3_i
+419. In a Transformer layer, the input matrix X is multiplied by the query, key, and value matrices WQ, WK, and WV to produce Q = XWQ, K = XWK, and V = XWV, then the attention scores are computed as Attention = softmax(QK^T / sqrt(dk)) * V, and the final output is A = Attention * WO, all of which are computed in parallel
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[16/05/2025]
+420. Need for Masking: The calculation of QK results in a score for each query value to every key value, "including those that follow the query". This is inappropriate in the setting of language modeling: "guessing the next word is pretty simple if you already know it!"
+421. In language modeling, a mask matrix M is added to the attention score matrix QKᵗ to prevent attention to future tokens by setting scores to -∞ for all positions where the key is ahead of the query (j > i), like this:
+	QKᵗ + M =
+		[ q1•k1    -∞      -∞      -∞     ]
+		[ q2•k1   q2•k2    -∞      -∞     ]
+		[ q3•k1   q3•k2   q3•k3    -∞     ]
+		[ q4•k1   q4•k2   q4•k3   q4•k4   ]
+	Mij = −∞ ∀ j > i (i.e. for the upper-triangular portion) and Mi j = 0
+422. Attention is quadratic in the length of the input, since at each layer we need to compute dot products between each pair of tokens in the input
+423. Transformer Block - Mathematically
+	O = X+MultiHeadAttention(LayerNorm(X)) (9.37)
+	H = O+FFN(LayerNorm(O))
+424. One-Hot Encoding for Multiplying one-hot token vectors with the embedding matrix simply selects the corresponding row embeddings for each token in the sequence
+425. Positional Embeddings
+X = E_tok + E_pos, where E_tok is the word embedding matrix and E_pos is the positional embedding matrix, both of shape [N × d]; this sum gives position-aware input representations for the transformer
+426. Types of Positional Embeddings
+	1. Absolute Positional Embeddings
+		Assign unique vectors to each position | Added to token embeddings | Can be learned or fixed (e.g., sinusoidal) | Simple and effective | May not generalize well to unseen sequence lengths
+	2. Relative Positional Embeddings
+		Represent distance between tokens | Integrated into attention mechanism | Capture local dependencies better | Generalize well to varying sequence lengths | Used in models like Transformer-XL and DeBERTa
+427. Language Modeling Head
+	Final hidden vector h is mapped to vocabulary scores using the transpose of the embedding matrix:
+	u = h × E^T
+	Then softmax is applied to get probabilities:
+	y = softmax(u)
+	Here, E has shape [|V| × d], so E^T is [d × |V|], and h is [1 × d], making u [1 × |V|]. The word at index k with highest y[k] is chosen as the next token.
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[17/05/2025]
+428. Why Transformers in Language Modeling?
+	The ability to incorporate the entirety of the earlier context and generated outputs at each time step is the key to the power of large language models built from transformers
+429. Next Word Prediction: Many practical NLP tasks can be cast as word prediction
+430. Casting Sentiment Analyzis as Next Word Prediction
+	P(positive|The sentiment of the sentence ‘‘I like Jackie Chan" is:)
+	P(negative|The sentiment of the sentence ‘‘I like Jackie Chan" is:)
+431. Casting Question Answering as Next Word Prediction
+	If we ask a language model to compute the probability distribution over possible next words given this prefix:
+	  P(w|Q: Who wrote the book ‘‘The Origin of Species"? A:)
+	and look at which words w have high probabilities, we might expect to see that Charles is very likely, and then if we choose Charles and continue and ask
+	  P(w|Q: Who wrote the book ‘‘The Origin of Species"? A: Charles)
+	we might now see that Darwin is the most probable token, and select it
+432. Casting Summarization as Next Word Prediction
+	We use tl;dr delimeter to separate the summary from the original text. The language model is trained in such a way, it starts predicting words of summary one by one; autoregressive
+433. Greedy Decoding: We solely rely on the maximum probability; So deterministic; always end up with same predictions of words
+444. Random Sampling: Sampling from a model’s distribution over words means to choose random words according to their probability assigned by the model. Since we choose words randomly, it can lead to unlikely sentence generation.
+445. Top-K-Sampling: A simple generalization of greedy decoding. Instead of choosing the single most probable word to generate, we first truncate the distribution to the top k most likely words, renormalize to produce a legitimate probability distribution | We do random sampling
+Note: When k = 1, top-k sampling is identical to greedy decoding
+446. Top-P-Sampling: Nucleus Sampling: Given a probability distribution for the next word based on previous words, we sort all possible next words from most to least likely. Then we pick the smallest set of top words whose total probability adds up to at least p (like 0.9). This set is called the top-p vocabulary, and it's used to sample from only the most likely words while keeping some variation
+447. Softmax Smoothens/Flattens (No Peaks) when the value proportion is reduced
+	input = torch.Tensor([7, 3, 2])
+	softmax(input) # [0.9756, 0.0179, 0.0066]
+	input = torch.Tensor([3.5, 1.5, 1])
+	softmax(input) # [0.8214, 0.1112, 0.0674]
+448. Temperature Sampling: We leverage this property of Softmax to include rare words when τ>1 and include only the most probable words when τ≤1
+	y = softmax(u/τ)
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[20/05/2025]
+449. Pretraining and Finetuning: A pre-trained model can be finetuned to a particular domain, dataset, or task. There are many different ways to finetune, depending on exactly which parameters are updated from the finetuning data: 
+	1. All the parameters
+	2. Some of the parameters
+	3. Only the parameters of specific extra circuitry
+450. Continued Pre-training: We retrain all the parameters of the model on this new data, using the same method (Eg: word prediction) and loss function as for pretraining
+451. Parameter-Efficient Fine-Tuning (PEFT): We can freeze some of the parameters (i.e., leave them unchanged from their pretrained value) and train only a subset of parameters on the new data
+452. Supervised Finetuning (SFT): Often used for Instruction Finetuning, in which we want a pretrained language model to learn to follow text instructions, for example to answer questions or follow a command to write something. Here we create a dataset of prompts and desired responses (for example questions and their answers, or commands and their fulfillments), and we train the language model using the normal cross-entropy loss to
+predict each token in the instruction prompt iteratively, essentially training it to produce the desired response from the command in the prompt
+453. Post Training: Everything that happens after pretraining is lumped together as post-training
+454. Raw probability is not ideal for evaluating language models because it decreases with sequence length and is hard to interpret. Perplexity fixes this by normalizing over word count, measuring the model’s average uncertainty per word. Defined as exp(- (1/n) \* log P(w1, ..., wn)), perplexity offers a clear, length-independent score, lower values mean better predictions, making it the standard metric for language model evaluation
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[22/05/2025]
+455. Scale of a Model: Transformer model scale is influenced by three key factors: Model Size | Dataset Size | Compute Used
+456. Parameters to Consider for Performance: Model Parameters (excluding embeddings): # of transformer layers × parameters per layer | Training Tokens: Number of unique tokens seen during training | FLOPs: Estimate using architecture-specific formulas
+457. Attention Parameter Count
+	3 projections: Q, K, V: 3𝑑×𝑑
+	1 final output projection: d×d
+	Total attention params: 4𝑑^2
+458. Full Self-Attention Mechanism (Per Layer)
+Three projection matrices:
+	W_Q (Query): shape d × d
+	W_K (Key): shape d × d
+	W_V (Value): shape d × d
+	One output projection matrix:
+	W_O: shape d × d
+	So the total number of parameters is:
+	3 × d × d (for Q, K, V) + d × d (for output) = 4 × d² parameters
+459. What Actually Happens in Real Transformers (Multi-Head Attention)
+In real implementations (like in PyTorch or TensorFlow):
+Q, K, and V share a single matrix each of shape d × d. There are no separate weight matrices per head. The attention heads only split the output vectors, not the weights.
+Example:
+	Model dimension d = 256
+	Number of heads h = 4
+	Per-head dimension d_attn = d / h = 64
+	Then:
+	Q, K, and V each use one matrix of shape 256 × 256
+	Output projection is also 256 × 256
+	Total parameters in self-attention block:
+	= 4 × 256² = 262,144 parameters
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[23/05/2025]
+460. KV Cache: Used during inference to store the key and value vectors of previously generated tokens to reuse them instead of recomputing at each step  
+461. Parameter Efficient Fine Tuning (PEFT): We efficiently select a subset of parameters for fine tuning by freezing some parameters and only updating a particular subset  
+462. LoRA, Low-Rank Adaptation: Instead of updating dense layers like WQ, WK, WV, WO during finetuning, we freeze them and update a low-rank approximation with fewer parameters  
+463. LoRA Example: A matrix W of dimensionality [N×d] that needs to be updated is frozen, and instead a low-rank decomposition ∆W ≈ BA is updated where h = xW + xBA  
+464. Masked Language Modeling: Instead of predicting the next word, we mask a word in the middle and ask the model to guess it using surrounding context  
+465. Bidirectional Encoders Focus: Compute contextualized representations of input tokens and are not used for generation  
+466. How Bidirectional Transformer-based Language Models Differ:  
+     - Not causal (token i can attend to future tokens)  
+     - Predicts tokens in the middle rather than at the end  
+467. Cloze Task: A fill-in-the-blank prediction task where the model learns to infer missing tokens  
+468. During Training: The model predicts missing tokens from corrupted input using cross-entropy loss over the vocabulary  
+469. Denoising: Add noise to the input (e.g., masking, wrong word), and train the model to recover the original input  
+470. Masking in BERT Model – 15% Strategy:  
+     - 80%: Replace with [MASK]  
+     - 10%: Replace with random word  
+     - 10%: Keep original word  
+471. Training MLM: All input tokens participate in self-attention, but only masked tokens are predicted using cross-entropy loss to update model parameters  
+472. Gradient Calculation in MLM: Gradients are computed based on the average loss from the masked tokens, which are only 15% of the input samples in a sequence or batch
