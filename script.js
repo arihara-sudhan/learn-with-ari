@@ -20,7 +20,7 @@ const getBaseUrl = () => {
     // Local development
     return './learnings/';
 };
-const RAW_GITHUB_URL = "https://raw.githubusercontent.com/arihara-sudhan/arihara-sudhan.github.io/main/ari-learns/learnings/";
+const RAW_GITHUB_URL = "https://raw.githubusercontent.com/arihara-sudhan/learn-with-ari/refs/heads/main/learnings/";
 
 // Base URL for images
 const getImageBaseUrl = () => {
