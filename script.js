@@ -43,12 +43,43 @@ const SEPARATOR_REGEX = /- - - - - - - - - - - - - - - - - - - - - - - - - - - -
 const DASH_LINE_REGEX = /^[- ]+$/;
 const SOURCE_LINE_REGEX = /^SOURCE:/i;
 const IMG_URL_REGEX = /^IMG_URL\s*@?\s*(.+)$/i; // Case-insensitive, handles optional @ and whitespace
-const COLORIZE_REGEX = /<(\w+)>(.*?)<\/\1>/g;
+// Only match valid color tag names to avoid matching code like <int,int>
+const VALID_COLOR_NAMES = ['pink', 'yellow', 'blue', 'green', 'red', 'orange', 'purple', 'cyan', 'gray', 'grey', 'white', 'black', 'lightblue', 'lightgreen', 'lightyellow', 'lightpink', 'lightcyan', 'lightgray', 'lightgrey', 'darkblue', 'darkgreen', 'darkred', 'darkorange', 'darkpurple', 'brown', 'gold', 'silver', 'magenta', 'lime', 'aqua', 'navy', 'teal', 'maroon', 'olive', 'coral', 'salmon', 'violet', 'indigo', 'turquoise', 'tan', 'beige', 'khaki', 'plum', 'orchid', 'crimson', 'azure'];
+const COLORIZE_REGEX = new RegExp(`<(${VALID_COLOR_NAMES.join('|')})>(.*?)</\\1>`, 'gi');
+
+function escapeAngleBrackets(text) {
+    // Escape < and > that are not part of valid color tags
+    // First, replace color tags with placeholders
+    const placeholders = [];
+    let placeholderIndex = 0;
+    
+    // Reset regex lastIndex to ensure we start from beginning
+    COLORIZE_REGEX.lastIndex = 0;
+    
+    let processed = text.replace(COLORIZE_REGEX, (match, color, innerText) => {
+        const placeholder = `__COLOR_PLACEHOLDER_${placeholderIndex}__`;
+        placeholders.push({ color: color.toLowerCase(), innerText: innerText });
+        placeholderIndex++;
+        return placeholder;
+    });
+    
+    // Escape remaining angle brackets
+    processed = processed.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    
+    // Restore color tags and convert them to HTML spans
+    placeholders.forEach((placeholderData, index) => {
+        const placeholder = `__COLOR_PLACEHOLDER_${index}__`;
+        // Escape angle brackets in inner text
+        const escapedInnerText = placeholderData.innerText.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        const replacement = `<span style="color:${placeholderData.color}">${escapedInnerText}</span>`;
+        processed = processed.replace(placeholder, replacement);
+    });
+    
+    return processed;
+}
 
 function colorizeText(text) {
-    return text.replace(COLORIZE_REGEX, (match, color, innerText) => {
-        return `<span style="color:${color}">${innerText}</span>`;
-    });
+    return escapeAngleBrackets(text);
 }
 
 async function loadLearnings(fileName) {
