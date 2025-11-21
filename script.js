@@ -47,11 +47,13 @@ const IMG_URL_REGEX = /^IMG_URL\s*@?\s*(.+)$/i; // Case-insensitive, handles opt
 // Support both old syntax <color>text</color> and new syntax [color]text[/color]
 const VALID_COLOR_NAMES = ['pink', 'yellow', 'blue', 'green', 'red', 'orange', 'purple', 'cyan', 'gray', 'grey', 'white', 'black', 'lightblue', 'lightgreen', 'lightyellow', 'lightpink', 'lightcyan', 'lightgray', 'lightgrey', 'darkblue', 'darkgreen', 'darkred', 'darkorange', 'darkpurple', 'brown', 'gold', 'silver', 'magenta', 'lime', 'aqua', 'navy', 'teal', 'maroon', 'olive', 'coral', 'salmon', 'violet', 'indigo', 'turquoise', 'tan', 'beige', 'khaki', 'plum', 'orchid', 'crimson', 'azure'];
 // Match both bracket syntax [color]text[/color] and angle bracket syntax <color>text</color>
-const BRACKET_COLOR_REGEX = new RegExp(`\\[(${VALID_COLOR_NAMES.join('|')})\\](.*?)\\[/\\1\\]`, 'gi');
+const BRACKET_COLOR_REGEX = new RegExp(`\\[(${VALID_COLOR_NAMES.join('|')})\\](.*?)\\[/\\1\\]`, 'gis');
 const ANGLE_COLOR_REGEX = new RegExp(`<(${VALID_COLOR_NAMES.join('|')})>(.*?)</\\1>`, 'gi');
 
 function colorizeText(text) {
     // First, handle bracket syntax [color]text[/color] - this is preferred and won't conflict
+    // Reset regex lastIndex to ensure it works correctly
+    BRACKET_COLOR_REGEX.lastIndex = 0;
     let processed = text.replace(BRACKET_COLOR_REGEX, (match, colorName, innerText) => {
         // Escape any angle brackets in the inner text
         const escapedInnerText = innerText.replace(/</g, '&lt;').replace(/>/g, '&gt;');
