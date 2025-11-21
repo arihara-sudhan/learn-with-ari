@@ -1246,9 +1246,9 @@ courses_fall ∩ courses_spring
 - Prevents outdated or inconsistent data  
 
 95. View Definition  
-𖦹 Defined using <pink>create view</pink> command  
-• Syntax: <pink>create view</pink> <yellow>v as <query expression></yellow>;  
-• Example: <pink>create view</pink> <yellow>faculty as</yellow> <pink>select</pink> <yellow>ID, name, dept_name</yellow> <pink>from</pink> <yellow>instructor</yellow>;  
+𖦹 Defined using [pink]create view[/pink] command  
+• Syntax: [pink]create view[/pink] [yellow]v as <query expression>[/yellow];  
+• Example: [pink]create view[/pink] [yellow]faculty as[/yellow] [pink]select[/pink] [yellow]ID, name, dept_name[/yellow] [pink]from[/pink] [yellow]instructor[/yellow];  
 
 96. Example of Course Section View  
 𖦹 Can define view for Physics Fall 2017 sections  
@@ -1257,11 +1257,11 @@ courses_fall ∩ courses_spring
 
 97. Persistence of Views  
 𖦹 Views remain available until explicitly dropped  
-𖦹 Unlike <pink>with</pink> clause which is local to a single query  
+𖦹 Unlike [pink]with[/pink] clause which is local to a single query  
 
 98. Using Views in Queries  
 𖦹 View name used like a table name  
-• Example: <pink>select</pink> <yellow>course_id</yellow> <pink>from</pink> <yellow>physics_fall_2017</yellow> <pink>where</pink> <yellow>building = 'Watson'</yellow>;  
+• Example: [pink]select[/pink] [yellow]course_id[/yellow] [pink]from[/pink] [yellow]physics_fall_2017[/yellow] [pink]where[/pink] [yellow]building = 'Watson'[/yellow];  
 𖦹 Attribute names can be explicitly set in view definition  
 
 99. Views Recomputed Automatically  
@@ -1286,83 +1286,83 @@ courses_fall ∩ courses_spring
 𖦹 Some desired updates cannot be correctly performed through the view  
 
 103. Conditions for Updatable Views (with examples)  
-𖦹 <pink>FROM</pink> clause references only one base relation  
+𖦹 [pink]FROM[/pink] clause references only one base relation  
 • Example (Updatable):  
-  <pink>create view</pink> <yellow>cs_instructors as</yellow>  
-  <pink>select</pink> <yellow>ID, name, dept_name</yellow>  
-  <pink>from</pink> <yellow>instructor</yellow>  
-  <pink>where</pink> <yellow>dept_name = 'Comp. Sci'</yellow>;  
+  [pink]create view[/pink] [yellow]cs_instructors as[/yellow]  
+  [pink]select[/pink] [yellow]ID, name, dept_name[/yellow]  
+  [pink]from[/pink] [yellow]instructor[/yellow]  
+  [pink]where[/pink] [yellow]dept_name = 'Comp. Sci'[/yellow];  
 - Only one base table is used: instructor  
 • Example (Not Updatable):  
-  <pink>create view</pink> <yellow>instructor_info as</yellow>  
-  <pink>select</pink> <yellow>instructor.ID, name, building</yellow>  
-  <pink>from</pink> <yellow>instructor, department</yellow>  
-  <pink>where</pink> <yellow>instructor.dept_name = department.dept_name</yellow>;  
+  [pink]create view[/pink] [yellow]instructor_info as[/yellow]  
+  [pink]select[/pink] [yellow]instructor.ID, name, building[/yellow]  
+  [pink]from[/pink] [yellow]instructor, department[/yellow]  
+  [pink]where[/pink] [yellow]instructor.dept_name = department.dept_name[/yellow];  
 - Uses two tables, so updates cannot be done directly  
-𖦹 <pink>SELECT</pink> clause has only attribute names (no aggregates or expressions)  
+𖦹 [pink]SELECT[/pink] clause has only attribute names (no aggregates or expressions)  
 • Example (Updatable):  
-  <pink>create view</pink> <yellow>history_instructors as</yellow>  
-  <pink>select</pink> <yellow>ID, name, dept_name, salary</yellow>  
-  <pink>from</pink> <yellow>instructor</yellow>  
-  <pink>where</pink> <yellow>dept_name = 'History'</yellow>;  
+  [pink]create view[/pink] [yellow]history_instructors as[/yellow]  
+  [pink]select[/pink] [yellow]ID, name, dept_name, salary[/yellow]  
+  [pink]from[/pink] [yellow]instructor[/yellow]  
+  [pink]where[/pink] [yellow]dept_name = 'History'[/yellow];  
 - Only attribute names are selected  
 • Example (Not Updatable):  
-  <pink>create view</pink> <yellow>dept_salary_total as</yellow>  
-  <pink>select</pink> <yellow>dept_name, sum(salary)</yellow>  
-  <pink>from</pink> <yellow>instructor</yellow>  
-  <pink>group by</pink> <yellow>dept_name</yellow>;  
-- Uses aggregate <pink>sum</pink><yellow>(salary)</yellow>, so cannot be updated  
+  [pink]create view[/pink] [yellow]dept_salary_total as[/yellow]  
+  [pink]select[/pink] [yellow]dept_name, sum(salary)[/yellow]  
+  [pink]from[/pink] [yellow]instructor[/yellow]  
+  [pink]group by[/pink] [yellow]dept_name[/yellow];  
+- Uses aggregate [pink]sum[/pink][yellow](salary)[/yellow], so cannot be updated  
 𖦹 Attributes not shown must allow nulls and not be part of primary key  
 • Example (Updatable if missing attributes allow nulls):  
-  <pink>create view</pink> <yellow>instructor_basic as</yellow>  
-  <pink>select</pink> <yellow>ID, name</yellow>  
-  <pink>from</pink> <yellow>instructor</yellow>;  
+  [pink]create view[/pink] [yellow]instructor_basic as[/yellow]  
+  [pink]select[/pink] [yellow]ID, name[/yellow]  
+  [pink]from[/pink] [yellow]instructor[/yellow];  
 - Allowed only if dept_name and salary accept nulls and are not primary key components  
 • Example (Not Updatable if missing attributes are NOT NULL or part of key):  
-  <pink>create view</pink> <yellow>instructor_without_id as</yellow>  
-  <pink>select</pink> <yellow>name, dept_name</yellow>  
-  <pink>from</pink> <yellow>instructor</yellow>;  
+  [pink]create view[/pink] [yellow]instructor_without_id as[/yellow]  
+  [pink]select[/pink] [yellow]name, dept_name[/yellow]  
+  [pink]from[/pink] [yellow]instructor[/yellow];  
 - Cannot insert because ID is primary key and required, so missing attribute breaks rule  
-𖦹 No <pink>GROUP BY</pink> or <pink>HAVING</pink>  
+𖦹 No [pink]GROUP BY[/pink] or [pink]HAVING[/pink]  
 • Example (Updatable):  
-  <pink>create view</pink> <yellow>bio_instructors as</yellow>  
-  <pink>select</pink> <yellow>*</yellow>  
-  <pink>from</pink> <yellow>instructor</yellow>  
-  <pink>where</pink> <yellow>dept_name = 'Biology'</yellow>;  
+  [pink]create view[/pink] [yellow]bio_instructors as[/yellow]  
+  [pink]select[/pink] [yellow]*[/yellow]  
+  [pink]from[/pink] [yellow]instructor[/yellow]  
+  [pink]where[/pink] [yellow]dept_name = 'Biology'[/yellow];  
 - Simple selection, no grouping  
 • Example (Not Updatable):  
-  <pink>create view</pink> <yellow>building_instructor_count as</yellow>  
-  <pink>select</pink> <yellow>building, count(ID)</yellow>  
-  <pink>from</pink> <yellow>department, instructor</yellow>  
-  <pink>where</pink> <yellow>instructor.dept_name = department.dept_name</yellow>  
-  <pink>group by</pink> <yellow>building</yellow>;  
-- <pink>GROUP BY</pink> used, view is not updatable  
+  [pink]create view[/pink] [yellow]building_instructor_count as[/yellow]  
+  [pink]select[/pink] [yellow]building, count(ID)[/yellow]  
+  [pink]from[/pink] [yellow]department, instructor[/yellow]  
+  [pink]where[/pink] [yellow]instructor.dept_name = department.dept_name[/yellow]  
+  [pink]group by[/pink] [yellow]building[/yellow];  
+- [pink]GROUP BY[/pink] used, view is not updatable  
 
 104. With Check Option  
 𖦹 Ensures inserted/updated tuples still satisfy view conditions  
 𖦹 If not satisfied, modification is rejected  
 
 105. Alternative: Using Triggers  
-𖦹 <pink>Instead of</pink> clause in triggers can handle custom update actions on views  
+𖦹 [pink]Instead of[/pink] clause in triggers can handle custom update actions on views  
 𖦹 Allows more controlled and logical view-based modifications  
 
 106. Definition of a Transaction  
 𖦹 A transaction is a sequence of SQL query and/or update statements  
 𖦹 A transaction starts automatically when an SQL statement runs  
-𖦹 The transaction ends only when <pink>commit</pink> or <pink>rollback</pink> is issued  
+𖦹 The transaction ends only when [pink]commit[/pink] or [pink]rollback[/pink] is issued  
 
 107. Commit Work  
-𖦹 <pink>commit work</pink> makes all updates permanent  
-𖦹 After <pink>commit</pink>, a new transaction starts automatically  
+𖦹 [pink]commit work[/pink] makes all updates permanent  
+𖦹 After [pink]commit[/pink], a new transaction starts automatically  
 • Similar to saving changes in a document  
 
 108. Rollback Work  
-𖦹 <pink>rollback work</pink> cancels all updates done in the current transaction  
+𖦹 [pink]rollback work[/pink] cancels all updates done in the current transaction  
 𖦹 Restores the database to state before transaction began  
 • Similar to closing a document without saving  
 
 109. Transaction Safety on Failures  
-𖦹 If a failure occurs before <pink>commit</pink>, the system rolls back the transaction  
+𖦹 If a failure occurs before [pink]commit[/pink], the system rolls back the transaction  
 𖦹 Failures may include power loss, errors, or crashes  
 • Ensures database does not remain in a partial or inconsistent state  
 
@@ -1383,25 +1383,25 @@ courses_fall ∩ courses_spring
 
 113. Program Ending Without Commit or Rollback  
 𖦹 Behavior depends on implementation  
-𖦹 Some systems <pink>commit</pink>, some <pink>roll back</pink>  
+𖦹 Some systems [pink]commit[/pink], some [pink]roll back[/pink]  
 • Not standardized in SQL  
 
 114. Autocommit Behavior  
-𖦹 Many systems (e.g., MySQL, PostgreSQL) automatically <pink>commit</pink> each statement  
+𖦹 Many systems (e.g., MySQL, PostgreSQL) automatically [pink]commit[/pink] each statement  
 𖦹 Must turn autocommit off to group multiple statements into a transaction  
-• Command often: <pink>set autocommit off</pink>  
+• Command often: [pink]set autocommit off[/pink]  
 
 115. SQL:1999 Transaction Block Syntax  
-𖦹 <pink>begin atomic</pink> … <pink>end</pink> encloses multiple statements as one transaction  
+𖦹 [pink]begin atomic[/pink] … [pink]end[/pink] encloses multiple statements as one transaction  
 𖦹 Only some databases (e.g., SQL Server) support this syntax  
 
 116. Alternative Transaction Control Syntax  
-𖦹 Some systems support <pink>begin</pink> to start a transaction  
-𖦹 Must explicitly end with <pink>commit work</pink> or <pink>rollback work</pink>  
+𖦹 Some systems support [pink]begin[/pink] to start a transaction  
+𖦹 Must explicitly end with [pink]commit work[/pink] or [pink]rollback work[/pink]  
 
 117. Oracle Commit Behavior  
 𖦹 Oracle does not autocommit DML statements by default  
-𖦹 If <pink>commit</pink> is not issued, changes are rolled back when disconnecting  
+𖦹 If [pink]commit[/pink] is not issued, changes are rolled back when disconnecting  
 • Local configuration may override default behavior  
 
 118. Integrity Constraints  
@@ -1413,65 +1413,65 @@ courses_fall ∩ courses_spring
 • Every course's department name must match an existing department.  
 • A department’s budget must be greater than 0.  
 𖦹 In principle, an integrity constraint can be any logical condition on the database, but systems restrict them to efficiently testable constraints.  
-𖦹 Integrity constraints are usually defined during schema design and included in <pink>create table</pink> statements.  
-𖦹 Constraints can be added later using: <pink>alter table</pink> <yellow>table-name add constraint constraint-definition</yellow>.  
+𖦹 Integrity constraints are usually defined during schema design and included in [pink]create table[/pink] statements.  
+𖦹 Constraints can be added later using: [pink]alter table[/pink] [yellow]table-name add constraint constraint-definition[/yellow].  
 - The DBMS checks whether current data satisfies the constraint before adding.  
 
 119. Constraints on a Single Relation  
-𖦹 <pink>create table</pink> can include integrity-constraint statements alongside attribute definitions.  
+𖦹 [pink]create table[/pink] can include integrity-constraint statements alongside attribute definitions.  
 𖦹 Common constraints available:  
-• <pink>not null</pink>  
-• <pink>unique</pink>  
-• <pink>check</pink><yellow>(predicate)</yellow>  
+• [pink]not null[/pink]  
+• [pink]unique[/pink]  
+• [pink]check[/pink][yellow](predicate)[/yellow]  
 𖦹 These constraints restrict allowed values for attributes and maintain correctness.  
 
 120. Not Null Constraint  
 𖦹 By default, SQL allows null for any attribute unless restricted.  
-𖦹 <pink>not null</pink> disallows null values for an attribute.  
-• Example: <yellow>name varchar(20) not null</yellow>  
-• Example: <yellow>budget numeric(12,2) not null</yellow>  
+𖦹 [pink]not null[/pink] disallows null values for an attribute.  
+• Example: [yellow]name varchar(20) not null[/yellow]  
+• Example: [yellow]budget numeric(12,2) not null[/yellow]  
 𖦹 Attempting to insert null into such attributes results in an error.  
-𖦹 Primary keys automatically disallow null values; they need not be explicitly marked <pink>not null</pink>.  
+𖦹 Primary keys automatically disallow null values; they need not be explicitly marked [pink]not null[/pink].  
 
 121. Unique Constraint  
-𖦹 <pink>unique</pink><yellow>(A1, A2, ..., Am)</yellow> specifies that these attributes together must form a superkey.  
+𖦹 [pink]unique[/pink][yellow](A1, A2, ..., Am)[/yellow] specifies that these attributes together must form a superkey.  
 𖦹 No two tuples can have the same combination of values for the listed attributes.  
-𖦹 Attributes under <pink>unique</pink> may still contain null unless also declared <pink>not null</pink>.  
+𖦹 Attributes under [pink]unique[/pink] may still contain null unless also declared [pink]not null[/pink].  
 
 122. Check Clause  
-𖦹 <pink>check</pink><yellow>(predicate)</yellow> ensures that every tuple satisfies the given logical condition.  
-• Example: <pink>check</pink><yellow>(budget > 0)</yellow> ensures department budgets are positive.  
+𖦹 [pink]check[/pink][yellow](predicate)[/yellow] ensures that every tuple satisfies the given logical condition.  
+• Example: [pink]check[/pink][yellow](budget > 0)[/yellow] ensures department budgets are positive.  
 • Example with enumerated behavior:  
-  <yellow>semester varchar(6)</yellow> <pink>check</pink> <yellow>(semester in ('Fall', 'Winter', 'Spring', 'Summer'))</yellow>  
-𖦹 If a <pink>check</pink> expression evaluates to unknown due to null values, the tuple is allowed.  
-𖦹 Constraints applying to single attributes are usually placed beside attribute declarations; complex ones appear at the end of <pink>create table</pink>.  
+  [yellow]semester varchar(6)[/yellow] [pink]check[/pink] [yellow](semester in ('Fall', 'Winter', 'Spring', 'Summer'))[/yellow]  
+𖦹 If a [pink]check[/pink] expression evaluates to unknown due to null values, the tuple is allowed.  
+𖦹 Constraints applying to single attributes are usually placed beside attribute declarations; complex ones appear at the end of [pink]create table[/pink].  
 
 123. Referential Integrity  
 𖦹 Ensures that a value in one relation (referencing relation) must exist in another relation (referenced relation).  
-𖦹 Declared using <pink>foreign key</pink> clauses.  
-• Example: <pink>foreign key</pink> <yellow>(dept name)</yellow> <pink>references</pink> <yellow>department</yellow>  
-𖦹 Referenced attributes must form a primary key or <pink>unique</pink> key.  
+𖦹 Declared using [pink]foreign key[/pink] clauses.  
+• Example: [pink]foreign key[/pink] [yellow](dept name)[/yellow] [pink]references[/pink] [yellow]department[/yellow]  
+𖦹 Referenced attributes must form a primary key or [pink]unique[/pink] key.  
 𖦹 Actions on violation:  
-• <pink>on delete cascade</pink>: deleting the referenced tuple deletes referencing tuples.  
-• <pink>on update cascade</pink>: updates propagate to referencing relations.  
-• <pink>set null</pink> or <pink>set default</pink> may be used instead of cascade.  
+• [pink]on delete cascade[/pink]: deleting the referenced tuple deletes referencing tuples.  
+• [pink]on update cascade[/pink]: updates propagate to referencing relations.  
+• [pink]set null[/pink] or [pink]set default[/pink] may be used instead of cascade.  
 𖦹 Foreign key attributes may be null unless explicitly forbidden.  
 
 124. Assigning Names to Constraints  
-𖦹 Constraints can be named using <pink>constraint</pink> <yellow>constraint-name</yellow> before the constraint definition.  
-• Example: <pink>constraint</pink> <yellow>minsalary</yellow> <pink>check</pink><yellow>(salary > 29000)</yellow>  
+𖦹 Constraints can be named using [pink]constraint[/pink] [yellow]constraint-name[/yellow] before the constraint definition.  
+• Example: [pink]constraint[/pink] [yellow]minsalary[/yellow] [pink]check[/pink][yellow](salary > 29000)[/yellow]  
 𖦹 Named constraints can later be dropped using:  
-• <pink>alter table</pink> <yellow>table-name drop constraint constraint-name</yellow>  
+• [pink]alter table[/pink] [yellow]table-name drop constraint constraint-name[/yellow]  
 
 125. Constraint Checking During Transactions  
 𖦹 Some transactions temporarily violate constraints before later steps restore correctness.  
 𖦹 Constraints may be declared initially deferred so they are checked only at the end of the transaction.  
-𖦹 Constraints may also be deferrable, meaning they can be switched between immediate and deferred checking using <pink>set constraints</pink>.  
+𖦹 Constraints may also be deferrable, meaning they can be switched between immediate and deferred checking using [pink]set constraints[/pink].  
 
 126. Complex Check Conditions and Assertions  
-𖦹 <pink>check</pink> predicates can theoretically contain subqueries, but most systems do not support this.  
+𖦹 [pink]check[/pink] predicates can theoretically contain subqueries, but most systems do not support this.  
 𖦹 Assertions express global database conditions:  
-• <pink>create assertion</pink> <yellow>name</yellow> <pink>check</pink><yellow>(predicate)</yellow>  
+• [pink]create assertion[/pink] [yellow]name[/yellow] [pink]check[/pink][yellow](predicate)[/yellow]  
 𖦹 Assertions are tested at creation and on all updates.  
 𖦹 Assertions may impose high performance costs, so few systems support them.  
 𖦹 Equivalent behavior can be implemented using triggers.  
@@ -1481,94 +1481,94 @@ courses_fall ∩ courses_spring
 𖦹 Additional date/time types, type conversion, default values, large objects, user-defined types, and key generation are included.  
 
 128. Date and Time Types in SQL  
-𖦹 <yellow>date</yellow> stores year, month, and day.  
-𖦹 <yellow>time</yellow> stores hour, minute, and second.  
- • <yellow>time(p)</yellow> allows specifying fractional seconds.  
- • <yellow>time with timezone</yellow> stores time-zone data.  
-𖦹 <yellow>timestamp</yellow> stores date and time together.  
- • <yellow>timestamp(p)</yellow> allows fractional seconds.  
- • <yellow>timestamp with timezone</yellow> stores time-zone data.  
+𖦹 [yellow]date[/yellow] stores year, month, and day.  
+𖦹 [yellow]time[/yellow] stores hour, minute, and second.  
+ • [yellow]time(p)[/yellow] allows specifying fractional seconds.  
+ • [yellow]time with timezone[/yellow] stores time-zone data.  
+𖦹 [yellow]timestamp[/yellow] stores date and time together.  
+ • [yellow]timestamp(p)[/yellow] allows fractional seconds.  
+ • [yellow]timestamp with timezone[/yellow] stores time-zone data.  
 𖦹 Example values:  
- • <yellow>date '2018-04-25'</yellow>  
- • <yellow>time '09:30:00'</yellow>  
- • <yellow>timestamp '2018-04-25 10:29:01.45'</yellow>  
-𖦹 <pink>extract</pink><yellow>(field from d)</yellow> retrieves parts like year, month, hour, etc.  
+ • [yellow]date '2018-04-25'[/yellow]  
+ • [yellow]time '09:30:00'[/yellow]  
+ • [yellow]timestamp '2018-04-25 10:29:01.45'[/yellow]  
+𖦹 [pink]extract[/pink][yellow](field from d)[/yellow] retrieves parts like year, month, hour, etc.  
 𖦹 Functions:  
- • <pink>current date</pink> returns current date.  
- • <pink>current time</pink> returns time with timezone.  
- • <pink>localtime</pink> returns time without timezone.  
- • <pink>current timestamp</pink> and <pink>localtimestamp</pink> return date plus time.  
-𖦹 Some systems offer <yellow>datetime</yellow> without timezone.  
+ • [pink]current date[/pink] returns current date.  
+ • [pink]current time[/pink] returns time with timezone.  
+ • [pink]localtime[/pink] returns time without timezone.  
+ • [pink]current timestamp[/pink] and [pink]localtimestamp[/pink] return date plus time.  
+𖦹 Some systems offer [yellow]datetime[/yellow] without timezone.  
 𖦹 SQL supports arithmetic and comparison on date/time.  
-𖦹 <yellow>interval</yellow> type supports calculations like:  
- • <yellow>x - y</yellow> returns days between dates.  
+𖦹 [yellow]interval[/yellow] type supports calculations like:  
+ • [yellow]x - y[/yellow] returns days between dates.  
  • Adding/subtracting interval modifies date or time.  
 
 129. Type Conversion and Formatting Functions  
-𖦹 Automatic type conversion sometimes occurs; explicit conversion uses <pink>cast</pink><yellow>(e as t)</yellow>.  
+𖦹 Automatic type conversion sometimes occurs; explicit conversion uses [pink]cast[/pink][yellow](e as t)[/yellow].  
 𖦹 Casting helps achieve correct ordering or calculations.  
- • Example: <pink>cast</pink><yellow>(ID as numeric(5))</yellow> ensures numeric sorting.  
+ • Example: [pink]cast[/pink][yellow](ID as numeric(5))[/yellow] ensures numeric sorting.  
 𖦹 Formatting functions change output display but not stored data.  
- • MySQL: <pink>format</pink>  
- • Oracle/PostgreSQL: <pink>to char</pink>, <pink>to number</pink>, <pink>to date</pink>  
- • SQL Server: <pink>convert</pink>  
-𖦹 <pink>coalesce</pink> returns first non-null value.  
- • Example: <pink>coalesce</pink><yellow>(salary, 0)</yellow> displays 0 instead of null.  
-𖦹 <pink>decode</pink> (Oracle) replaces values based on matching patterns.  
+ • MySQL: [pink]format[/pink]  
+ • Oracle/PostgreSQL: [pink]to char[/pink], [pink]to number[/pink], [pink]to date[/pink]  
+ • SQL Server: [pink]convert[/pink]  
+𖦹 [pink]coalesce[/pink] returns first non-null value.  
+ • Example: [pink]coalesce[/pink][yellow](salary, 0)[/yellow] displays 0 instead of null.  
+𖦹 [pink]decode[/pink] (Oracle) replaces values based on matching patterns.  
  • Can replace null with 'N/A' when needed.  
 
 130. Default Values  
 𖦹 Attributes can have default values in table definitions.  
 𖦹 Example:  
- • <yellow>tot cred numeric(3,0) default 0</yellow>  
+ • [yellow]tot cred numeric(3,0) default 0[/yellow]  
 𖦹 Inserting without specifying tot cred assigns default value automatically.  
 
 131. Large-Object Types  
-𖦹 <yellow>clob</yellow> stores large character data.  
-𖦹 <yellow>blob</yellow> stores large binary data (images, video, etc.).  
+𖦹 [yellow]clob[/yellow] stores large character data.  
+𖦹 [yellow]blob[/yellow] stores large binary data (images, video, etc.).  
 𖦹 Example:  
- • <yellow>book review clob(10KB)</yellow>  
- • <yellow>image blob(10MB)</yellow>  
- • <yellow>movie blob(2GB)</yellow>  
+ • [yellow]book review clob(10KB)[/yellow]  
+ • [yellow]image blob(10MB)[/yellow]  
+ • [yellow]movie blob(2GB)[/yellow]  
 𖦹 Large objects are usually accessed through locators rather than loading all data at once.  
 
 132. User-Defined Types (Distinct Types)  
-𖦹 <pink>create type</pink> defines custom types separate from built-in types.  
+𖦹 [pink]create type[/pink] defines custom types separate from built-in types.  
 𖦹 Example:  
- • <pink>create type</pink> <yellow>Dollars as numeric(12,2) final</yellow>;  
+ • [pink]create type[/pink] [yellow]Dollars as numeric(12,2) final[/yellow];  
 𖦹 Used to prevent errors, such as mixing currency types.  
-𖦹 Operations between different distinct types require explicit <pink>cast</pink>.  
-𖦹 <pink>drop type</pink> and <pink>alter type</pink> modify or remove user-defined types.  
+𖦹 Operations between different distinct types require explicit [pink]cast[/pink].  
+𖦹 [pink]drop type[/pink] and [pink]alter type[/pink] modify or remove user-defined types.  
 
 133. Domains  
-𖦹 <pink>create domain</pink> defines new domains with constraints.  
+𖦹 [pink]create domain[/pink] defines new domains with constraints.  
 𖦹 Example:  
- • <pink>create domain</pink> <yellow>DDollars as numeric(12,2) not null</yellow>;  
+ • [pink]create domain[/pink] [yellow]DDollars as numeric(12,2) not null[/yellow];  
 𖦹 Domains support constraints and default values.  
 𖦹 Domains are not strictly typed; compatible types may mix.  
 𖦹 Example constraint:  
- • <pink>create domain</pink> <yellow>YearlySalary numeric(8,2)</yellow>  
-   <pink>check</pink><yellow>(value >= 29000.00)</yellow>;  
-𖦹 Domains can also restrict values using <pink>in</pink> clause.  
+ • [pink]create domain[/pink] [yellow]YearlySalary numeric(8,2)[/yellow]  
+   [pink]check[/pink][yellow](value >= 29000.00)[/yellow];  
+𖦹 Domains can also restrict values using [pink]in[/pink] clause.  
 
 134. Generating Unique Key Values  
 𖦹 Automatically assigns unique numeric identifiers.  
 𖦹 Example syntax:  
- • <yellow>ID number(5) generated always as identity</yellow>  
-𖦹 <pink>always</pink> means user cannot manually insert value.  
-𖦹 <pink>by default</pink> allows manual insertion or automatic generation.  
+ • [yellow]ID number(5) generated always as identity[/yellow]  
+𖦹 [pink]always[/pink] means user cannot manually insert value.  
+𖦹 [pink]by default[/pink] allows manual insertion or automatic generation.  
 𖦹 Equivalent features:  
- • PostgreSQL: <yellow>serial</yellow>  
- • MySQL: <yellow>auto increment</yellow>  
- • SQL Server: <yellow>identity</yellow>  
-𖦹 <pink>create sequence</pink> generates unique values for multiple tables.  
+ • PostgreSQL: [yellow]serial[/yellow]  
+ • MySQL: [yellow]auto increment[/yellow]  
+ • SQL Server: [yellow]identity[/yellow]  
+𖦹 [pink]create sequence[/pink] generates unique values for multiple tables.  
 
 135. Create Table Extensions  
-𖦹 <pink>create table</pink> ... <pink>like</pink> duplicates schema.  
- • Example: <pink>create table</pink> <yellow>temp instructor like instructor</yellow>;  
-𖦹 <pink>create table</pink> ... <pink>as</pink> stores query results into a new table.  
+𖦹 [pink]create table[/pink] ... [pink]like[/pink] duplicates schema.  
+ • Example: [pink]create table[/pink] [yellow]temp instructor like instructor[/yellow];  
+𖦹 [pink]create table[/pink] ... [pink]as[/pink] stores query results into a new table.  
  • Example:  
-   <pink>create table</pink> <yellow>t1 as (</yellow><pink>select</pink> <yellow>*</yellow> <pink>from</pink> <yellow>instructor</yellow> <pink>where</pink> <yellow>dept name = 'Music')</yellow> <pink>with data</pink>;  
+   [pink]create table[/pink] [yellow]t1 as ([/yellow][pink]select[/pink] [yellow]*[/yellow] [pink]from[/pink] [yellow]instructor[/yellow] [pink]where[/pink] [yellow]dept name = 'Music')[/yellow] [pink]with data[/pink];  
 𖦹 Table created with data stores current results; views reflect dynamic data.  
 136. Schemas, Catalogs, and Environments  
 𖦹 SQL uses a hierarchy: catalogs contain schemas, schemas contain tables and objects.  
@@ -1578,10 +1578,10 @@ courses_fall ∩ courses_spring
 137. Authorization  
 𖦹 Users can be given specific rights called privileges.  
 𖦹 Data privileges include:  
-• Read data (<pink>select</pink>)  
-• Insert new data (<pink>insert</pink>)  
-• Update data (<pink>update</pink>)  
-• Delete data (<pink>delete</pink>)  
+• Read data ([pink]select[/pink])  
+• Insert new data ([pink]insert[/pink])  
+• Update data ([pink]update[/pink])  
+• Delete data ([pink]delete[/pink])  
 𖦹 A user may receive any combination of privileges on specific relations or views.  
 𖦹 When a query or update is submitted, the system checks if the user has proper authorization.  
 𖦹 Users may also be granted schema permissions to create, modify, or drop relations.  
@@ -1589,20 +1589,20 @@ courses_fall ∩ courses_spring
 𖦹 The database administrator has full authority over all users and schema objects.  
 
 138. Granting and Revoking of Privileges  
-𖦹 SQL privileges include <pink>select</pink>, <pink>insert</pink>, <pink>update</pink>, and <pink>delete</pink>.  
-𖦹 <pink>all privileges</pink> can be used to grant all allowed privileges at once.  
+𖦹 SQL privileges include [pink]select[/pink], [pink]insert[/pink], [pink]update[/pink], and [pink]delete[/pink].  
+𖦹 [pink]all privileges[/pink] can be used to grant all allowed privileges at once.  
 𖦹 A user who creates a relation automatically gets all privileges on it.  
 𖦹 Privileges are granted using:  
-• <pink>grant</pink> <yellow><privileges> on <relation/view> to <user/role list></yellow>;  
+• [pink]grant[/pink] [yellow]<privileges> on <relation/view> to <user/role list>[/yellow];  
 𖦹 Example:  
-• <pink>grant select on</pink> <yellow>department to Amit, Satoshi</yellow>; (allows reading)  
-𖦹 <pink>update</pink> privilege can be given on all attributes or specific attributes:  
-• <pink>grant update</pink><yellow>(budget)</yellow> <pink>on</pink> <yellow>department to Amit, Satoshi</yellow>;  
-𖦹 <pink>insert</pink> privilege may specify attributes; missing attributes get default or null values.  
-𖦹 <pink>delete</pink> privilege allows removal of tuples.  
-𖦹 <yellow>public</yellow> refers to all users.  
+• [pink]grant select on[/pink] [yellow]department to Amit, Satoshi[/yellow]; (allows reading)  
+𖦹 [pink]update[/pink] privilege can be given on all attributes or specific attributes:  
+• [pink]grant update[/pink][yellow](budget)[/yellow] [pink]on[/pink] [yellow]department to Amit, Satoshi[/yellow];  
+𖦹 [pink]insert[/pink] privilege may specify attributes; missing attributes get default or null values.  
+𖦹 [pink]delete[/pink] privilege allows removal of tuples.  
+𖦹 [yellow]public[/yellow] refers to all users.  
 𖦹 To revoke privileges:  
-• <pink>revoke</pink> <yellow><privileges> on <relation/view> from <user/role list></yellow>;  
+• [pink]revoke[/pink] [yellow]<privileges> on <relation/view> from <user/role list>[/yellow];  
 
 139. Roles  
 𖦹 Roles allow grouping privileges and assigning them to multiple users.  
@@ -1610,12 +1610,12 @@ courses_fall ∩ courses_spring
 𖦹 Users are assigned roles; roles store the actual privileges.  
 𖦹 Roles prevent security issues caused by shared user accounts.  
 𖦹 Roles are created using:  
-• <pink>create role</pink> <yellow>instructor</yellow>;  
+• [pink]create role[/pink] [yellow]instructor[/yellow];  
 𖦹 Privileges are granted to roles like users:  
-• <pink>grant select on</pink> <yellow>takes to instructor</yellow>;  
+• [pink]grant select on[/pink] [yellow]takes to instructor[/yellow];  
 𖦹 Roles can be granted to users or other roles:  
-• <pink>grant</pink> <yellow>instructor to dean</yellow>;  
-• <pink>grant</pink> <yellow>dean to Satoshi</yellow>;  
+• [pink]grant[/pink] [yellow]instructor to dean[/yellow];  
+• [pink]grant[/pink] [yellow]dean to Satoshi[/yellow];  
 𖦹 A user’s effective privileges include:  
 • Privileges granted directly  
 • Privileges from assigned roles (including indirectly inherited roles)  
@@ -1625,38 +1625,38 @@ courses_fall ∩ courses_spring
 𖦹 The system checks authorization before expanding a view into its underlying relations.  
 𖦹 A user must already have required privileges on base relations to receive certain privileges on a view.  
 𖦹 Example: View for Geology department faculty:  
-• <pink>create view</pink> <yellow>geo_instructor as (</yellow><pink>select</pink> <yellow>*</yellow> <pink>from</pink> <yellow>instructor</yellow> <pink>where</pink> <yellow>dept_name = 'Geology'</yellow>);  
-𖦹 If the user lacks <pink>select</pink> on <yellow>instructor</yellow>, the system denies creation of such a view.  
-𖦹 Functions and procedures can also have <pink>execute</pink> privilege.  
-𖦹 <pink>sql security invoker</pink> causes a function to run under the caller’s privileges instead of the creator’s.  
+• [pink]create view[/pink] [yellow]geo_instructor as ([/yellow][pink]select[/pink] [yellow]*[/yellow] [pink]from[/pink] [yellow]instructor[/yellow] [pink]where[/pink] [yellow]dept_name = 'Geology'[/yellow]);  
+𖦹 If the user lacks [pink]select[/pink] on [yellow]instructor[/yellow], the system denies creation of such a view.  
+𖦹 Functions and procedures can also have [pink]execute[/pink] privilege.  
+𖦹 [pink]sql security invoker[/pink] causes a function to run under the caller’s privileges instead of the creator’s.  
 
 141. Authorization on Schema  
 𖦹 Schema modifications such as creating or deleting relations are allowed only by the schema owner.  
-𖦹 <pink>references</pink> privilege is required to declare foreign keys referencing another relation.  
+𖦹 [pink]references[/pink] privilege is required to declare foreign keys referencing another relation.  
 • Example:  
-<pink>grant references</pink><yellow>(dept_name)</yellow> <pink>on</pink> <yellow>department to Mariano</yellow>;  
-𖦹 Foreign keys and <pink>check</pink> constraints referencing another relation may limit updates, so <pink>references</pink> privilege is needed.  
+[pink]grant references[/pink][yellow](dept_name)[/yellow] [pink]on[/pink] [yellow]department to Mariano[/yellow];  
+𖦹 Foreign keys and [pink]check[/pink] constraints referencing another relation may limit updates, so [pink]references[/pink] privilege is needed.  
 
 142. Transfer of Privileges  
 𖦹 A user granted a privilege may or may not be allowed to grant it further.  
-𖦹 To allow granting to others, use <pink>with grant option</pink>:  
-• <pink>grant select on</pink> <yellow>department to Amit with grant option</yellow>;  
+𖦹 To allow granting to others, use [pink]with grant option[/pink]:  
+• [pink]grant select on[/pink] [yellow]department to Amit with grant option[/yellow];  
 𖦹 Privileges can be represented as an authorization graph showing who granted privileges to whom.  
 
 143. Revoking of Privileges  
 𖦹 Revocation may cause others to lose privileges if those privileges were passed on.  
 𖦹 This behavior is called cascading revocation.  
 𖦹 Example:  
-• <pink>revoke select on</pink> <yellow>department from Amit, Satoshi</yellow>;  
-𖦹 If <pink>restrict</pink> is specified, <pink>revoke</pink> fails if cascading is required:  
-• <pink>revoke select on</pink> <yellow>department from Amit restrict</yellow>;  
-𖦹 <pink>grant option</pink> can be revoked without removing the privilege itself.  
+• [pink]revoke select on[/pink] [yellow]department from Amit, Satoshi[/yellow];  
+𖦹 If [pink]restrict[/pink] is specified, [pink]revoke[/pink] fails if cascading is required:  
+• [pink]revoke select on[/pink] [yellow]department from Amit restrict[/yellow];  
+𖦹 [pink]grant option[/pink] can be revoked without removing the privilege itself.  
 
 144. Row-Level Authorization  
 𖦹 Some systems allow controlling access to specific tuples.  
 𖦹 Oracle VPD attaches a predicate to a relation so only permitted rows are returned.  
 𖦹 Example predicate:  
-• <yellow>ID = sys_context('USERENV','SESSION_USER')</yellow>  
+• [yellow]ID = sys_context('USERENV','SESSION_USER')[/yellow]  
 𖦹 This ensures users see only their own rows.  
 𖦹 May change meaning of queries if not carefully designed (for example, aggregates apply only to visible rows).  
 
@@ -1679,93 +1679,93 @@ courses_fall ∩ courses_spring
 
 147. JDBC Overview  
 𖦹 JDBC allows Java programs to connect to database servers.  
-𖦹 Requires importing <yellow>java.sql.*</yellow>.  
+𖦹 Requires importing [yellow]java.sql.*[/yellow].  
 𖦹 Steps to use JDBC:  
-• Connect to database using <yellow>DriverManager.getConnection()</yellow>.  
-• Use <yellow>Statement</yellow> object to send SQL statements.  
-• Retrieve results via <yellow>ResultSet</yellow>.  
+• Connect to database using [yellow]DriverManager.getConnection()[/yellow].  
+• Use [yellow]Statement[/yellow] object to send SQL statements.  
+• Retrieve results via [yellow]ResultSet[/yellow].  
 • Handle exceptions and manage resources.  
 
 148. Connecting to the Database  
-𖦹 <yellow>getConnection()</yellow> parameters:  
+𖦹 [yellow]getConnection()[/yellow] parameters:  
 • URL of the server, protocol, port, and database name.  
 • Database user identifier (string).  
 • Password (string).  
-𖦹 <yellow>Connection</yellow> object handle is created for interaction.  
+𖦹 [yellow]Connection[/yellow] object handle is created for interaction.  
 𖦹 JDBC driver must be loaded to translate JDBC calls to database-specific calls.  
 
 149. Shipping SQL Statements  
-𖦹 Use <yellow>Statement</yellow> object to execute SQL.  
-• <yellow>executeQuery()</yellow> for queries returning <yellow>ResultSet</yellow>.  
-• <yellow>executeUpdate()</yellow> for <pink>insert</pink>, <pink>update</pink>, <pink>delete</pink>, <pink>create table</pink>; returns number of affected tuples.  
+𖦹 Use [yellow]Statement[/yellow] object to execute SQL.  
+• [yellow]executeQuery()[/yellow] for queries returning [yellow]ResultSet[/yellow].  
+• [yellow]executeUpdate()[/yellow] for [pink]insert[/pink], [pink]update[/pink], [pink]delete[/pink], [pink]create table[/pink]; returns number of affected tuples.  
 𖦹 DDL statements return zero.  
 
 150. Exceptions and Resource Management  
-𖦹 Use <yellow>try-catch</yellow> to handle <yellow>SQLExceptions</yellow> and general <yellow>Exceptions</yellow>.  
+𖦹 Use [yellow]try-catch[/yellow] to handle [yellow]SQLExceptions[/yellow] and general [yellow]Exceptions[/yellow].  
 𖦹 Resources like connections and statements must be closed to avoid exhaustion.  
-𖦹 Prefer <yellow>try-with-resources</yellow> in Java to automatically close resources.  
+𖦹 Prefer [yellow]try-with-resources[/yellow] in Java to automatically close resources.  
 
 151. Retrieving Query Results  
-𖦹 <yellow>ResultSet</yellow> fetches tuples one at a time.  
-• <yellow>next()</yellow> method checks and retrieves next tuple.  
-• <yellow>getString()</yellow>, <yellow>getFloat()</yellow>, etc., retrieve attribute values by name or position.  
+𖦹 [yellow]ResultSet[/yellow] fetches tuples one at a time.  
+• [yellow]next()[/yellow] method checks and retrieves next tuple.  
+• [yellow]getString()[/yellow], [yellow]getFloat()[/yellow], etc., retrieve attribute values by name or position.  
 
 152. Prepared Statements  
-𖦹 <yellow>PreparedStatement</yellow> allows parameterized queries with “?” placeholders.  
-𖦹 Parameters set using methods like <yellow>setString()</yellow> and <yellow>setInt()</yellow>.  
+𖦹 [yellow]PreparedStatement[/yellow] allows parameterized queries with “?” placeholders.  
+𖦹 Parameters set using methods like [yellow]setString()[/yellow] and [yellow]setInt()[/yellow].  
 𖦹 Advantages:  
 • Efficient execution of repeated queries.  
 • Prevents SQL injection by escaping user input.  
 𖦹 Never concatenate user input directly into SQL statements.  
 
 153. Callable Statements  
-𖦹 <yellow>CallableStatement</yellow> invokes SQL stored procedures and functions.  
-𖦹 <yellow>registerOutParameter()</yellow> registers return types and out parameters.  
-𖦹 <yellow>get</yellow> methods retrieve results similar to <yellow>ResultSet</yellow>.  
+𖦹 [yellow]CallableStatement[/yellow] invokes SQL stored procedures and functions.  
+𖦹 [yellow]registerOutParameter()[/yellow] registers return types and out parameters.  
+𖦹 [yellow]get[/yellow] methods retrieve results similar to [yellow]ResultSet[/yellow].  
 154. Metadata Features  
-𖦹 <yellow>ResultSetMetaData</yellow> provides info about result sets:  
+𖦹 [yellow]ResultSetMetaData[/yellow] provides info about result sets:  
 • Number of columns, column names, types.  
-𖦹 <yellow>DatabaseMetaData</yellow> provides info about database and system:  
+𖦹 [yellow]DatabaseMetaData[/yellow] provides info about database and system:  
 • Tables, columns, primary keys, foreign keys, authorizations, limits.  
 𖦹 Metadata allows writing generic programs without hard-coded schema.  
 
 155. Other JDBC Features  
 𖦹 Updatable result sets allow updating tuples in database via result sets.  
 𖦹 Transaction control:  
-• <yellow>setAutoCommit(false)</yellow> disables automatic commit.  
-• <yellow>commit()</yellow> and <yellow>rollback()</yellow> control transactions manually.  
+• [yellow]setAutoCommit(false)[/yellow] disables automatic commit.  
+• [yellow]commit()[/yellow] and [yellow]rollback()[/yellow] control transactions manually.  
 𖦹 Handling large objects:  
-• <yellow>getBlob()</yellow>, <yellow>getClob()</yellow> fetch locators to large objects.  
-• <yellow>setBlob()</yellow>, <yellow>setClob()</yellow> store data from streams.  
+• [yellow]getBlob()[/yellow], [yellow]getClob()[/yellow] fetch locators to large objects.  
+• [yellow]setBlob()[/yellow], [yellow]setClob()[/yellow] store data from streams.  
 𖦹 Row sets can be collected, shipped, scanned, and modified.  
 
 156. Database Access from Python  
-𖦹 Python can access databases using drivers like <yellow>psycopg2</yellow> for PostgreSQL.  
-𖦹 Prepared statements in Python use <yellow>"%s"</yellow> for parameters and require <yellow>commit()</yellow> to save updates.  
+𖦹 Python can access databases using drivers like [yellow]psycopg2[/yellow] for PostgreSQL.  
+𖦹 Prepared statements in Python use [yellow]"%s"[/yellow] for parameters and require [yellow]commit()[/yellow] to save updates.  
 • Parameter values are provided as a list.  
-- Updates are not committed automatically; <yellow>commit()</yellow> must be called.  
-𖦹 Exceptions are caught using <yellow>try-except</yellow> blocks.  
+- Updates are not committed automatically; [yellow]commit()[/yellow] must be called.  
+𖦹 Exceptions are caught using [yellow]try-except[/yellow] blocks.  
 • Provides information about errors.  
-𖦹 Query results can be iterated using a <yellow>for</yellow> loop.  
+𖦹 Query results can be iterated using a [yellow]for[/yellow] loop.  
 • Individual row attributes can be accessed via indexing.  
-𖦹 Different drivers exist for different databases: <yellow>MySQLdb</yellow> for MySQL, <yellow>cx_Oracle</yellow> for Oracle, <yellow>pyodbc</yellow> for ODBC.  
-• Minor differences exist across drivers in the <yellow>connect()</yellow> function parameters.  
+𖦹 Different drivers exist for different databases: [yellow]MySQLdb[/yellow] for MySQL, [yellow]cx_Oracle[/yellow] for Oracle, [yellow]pyodbc[/yellow] for ODBC.  
+• Minor differences exist across drivers in the [yellow]connect()[/yellow] function parameters.  
 
 157. ODBC  
 𖦹 ODBC defines an API to connect to databases, send queries, and receive results.  
 𖦹 Each database provides a library that communicates with the server when API calls are made.  
 𖦹 Steps to use ODBC in C:  
-• Allocate SQL environment (<yellow>HENV</yellow>), then connection handle (<yellow>HDBC</yellow>).  
-• Open connection using <yellow>SQLConnect</yellow> with server, user, and password.  
-• Send SQL commands using <yellow>SQLExecDirect</yellow>.  
-• Bind C variables to query attributes using <yellow>SQLBindCol</yellow>.  
-• Fetch result tuples using <yellow>SQLFetch</yellow> in a loop.  
+• Allocate SQL environment ([yellow]HENV[/yellow]), then connection handle ([yellow]HDBC[/yellow]).  
+• Open connection using [yellow]SQLConnect[/yellow] with server, user, and password.  
+• Send SQL commands using [yellow]SQLExecDirect[/yellow].  
+• Bind C variables to query attributes using [yellow]SQLBindCol[/yellow].  
+• Fetch result tuples using [yellow]SQLFetch[/yellow] in a loop.  
 • Free statement handle, disconnect, and free environment at the end.  
-𖦹 SQL statements can use placeholders <yellow>"?"</yellow> for parameters.  
+𖦹 SQL statements can use placeholders [yellow]"?"[/yellow] for parameters.  
 • Statements can be prepared and executed multiple times with different values.  
 𖦹 Automatic commit is on by default.  
-• Turn off with <yellow>SQLSetConnectOption(conn, SQL_AUTOCOMMIT, 0)</yellow>.  
-• Transactions can be committed with <yellow>SQLTransact(conn, SQL_COMMIT)</yellow> or rolled back with <yellow>SQLTransact(conn, SQL_ROLLBACK)</yellow>.  
+• Turn off with [yellow]SQLSetConnectOption(conn, SQL_AUTOCOMMIT, 0)[/yellow].  
+• Transactions can be committed with [yellow]SQLTransact(conn, SQL_COMMIT)[/yellow] or rolled back with [yellow]SQLTransact(conn, SQL_ROLLBACK)[/yellow].  
 𖦹 ODBC defines conformance levels:  
 • Core: basic functionality.  
 • Level 1: fetch catalog info like relations and attribute types.  
@@ -1775,11 +1775,11 @@ courses_fall ∩ courses_spring
 158. Embedded SQL  
 𖦹 SQL can be embedded in host languages like C, C++, Java, COBOL, Pascal, PL/I, and Fortran.  
 𖦹 A preprocessor converts embedded SQL into host-language code before compilation.  
-• <yellow>EXEC SQL <statement>;</yellow> identifies embedded SQL.  
-𖦹 Host language variables can be used in SQL with a colon prefix (<yellow>:</yellow>).  
+• [yellow]EXEC SQL <statement>;[/yellow] identifies embedded SQL.  
+𖦹 Host language variables can be used in SQL with a colon prefix ([yellow]:[/yellow]).  
 𖦹 Cursors allow iteration over query results.  
 • Fetch rows into host language variables.  
-• Updates can be performed using cursors with optional <pink>WHERE</pink> clauses.  
+• Updates can be performed using cursors with optional [pink]WHERE[/pink] clauses.  
 𖦹 Embedded SQL allows some SQL errors to be caught at preprocessing.  
 𖦹 Queries in embedded SQL are easier to read than dynamic SQL.  
 𖦹 Disadvantages:  
@@ -1809,34 +1809,34 @@ courses_fall ∩ courses_spring
 
 161. Declaring and Invoking SQL Functions and Procedures  
 𖦹 Functions can return values or tables and be used in SQL queries.  
-• Example: <yellow>dept_count</yellow> function returns the number of instructors in a department.  
+• Example: [yellow]dept_count[/yellow] function returns the number of instructors in a department.  
 • Table functions return a set of rows like parameterized views.  
 𖦹 Complex user-defined functions can cause performance issues if applied to many tuples.  
-𖦹 Procedures can have <pink>IN</pink> and <pink>OUT</pink> parameters.  
-• <pink>IN</pink>: input values; <pink>OUT</pink>: values returned by the procedure.  
+𖦹 Procedures can have [pink]IN[/pink] and [pink]OUT[/pink] parameters.  
+• [pink]IN[/pink]: input values; [pink]OUT[/pink]: values returned by the procedure.  
 𖦹 Procedures can be called from SQL, embedded SQL, or dynamic SQL (e.g., JDBC).  
 𖦹 SQL supports multiple procedures/functions with the same name if argument number or types differ.  
 
 162. Language Constructs for Procedures and Functions  
 𖦹 SQL supports general-purpose programming constructs in procedures/functions.  
-𖦹 Variables declared using <pink>declare</pink>, assigned with <pink>set</pink>.  
-𖦹 Compound statements: <pink>begin</pink> … <pink>end</pink>; <pink>begin atomic</pink> … <pink>end</pink> ensures single transaction.  
-𖦹 Loops: <pink>while</pink>, <pink>repeat</pink>, <pink>for</pink> over query results.  
-• <pink>Leave</pink> exits loop; <pink>iterate</pink> moves to next tuple.  
-𖦹 Conditional statements: <pink>if-then-elseif-else</pink>, <pink>case</pink> statements.  
+𖦹 Variables declared using [pink]declare[/pink], assigned with [pink]set[/pink].  
+𖦹 Compound statements: [pink]begin[/pink] … [pink]end[/pink]; [pink]begin atomic[/pink] … [pink]end[/pink] ensures single transaction.  
+𖦹 Loops: [pink]while[/pink], [pink]repeat[/pink], [pink]for[/pink] over query results.  
+• [pink]Leave[/pink] exits loop; [pink]iterate[/pink] moves to next tuple.  
+𖦹 Conditional statements: [pink]if-then-elseif-else[/pink], [pink]case[/pink] statements.  
 𖦹 Exception handling:  
-• <pink>Declare</pink> conditions and handlers.  
-• <pink>signal</pink> raises exceptions; handlers specify actions (<pink>exit</pink> or <pink>continue</pink>).  
-• Predefined conditions: <pink>sqlexception</pink>, <pink>sqlwarning</pink>, <pink>not found</pink>.  
-𖦹 Example: <yellow>registerStudent</yellow> function registers a student in a course section, checks capacity, returns success/error codes.  
+• [pink]Declare[/pink] conditions and handlers.  
+• [pink]signal[/pink] raises exceptions; handlers specify actions ([pink]exit[/pink] or [pink]continue[/pink]).  
+• Predefined conditions: [pink]sqlexception[/pink], [pink]sqlwarning[/pink], [pink]not found[/pink].  
+𖦹 Example: [yellow]registerStudent[/yellow] function registers a student in a course section, checks capacity, returns success/error codes.  
 
 163. External Language Routines  
 𖦹 SQL procedural features vary across databases; syntax is not standardized.  
 𖦹 Alternative: define procedures/functions in an external language (Java, C#, C, C++).  
 • More efficient; can perform computations not possible in SQL.  
-𖦹 Syntax example: <pink>create procedure/function in C with external file path</pink>.  
+𖦹 Syntax example: [pink]create procedure/function in C with external file path[/pink].  
 𖦹 External routines must handle null values, return values, exceptions.  
-• Extra parameters like <yellow>sqlstate</yellow>, return value indicators may be needed.  
+• Extra parameters like [yellow]sqlstate[/yellow], return value indicators may be needed.  
 𖦹 Risks of external routines:  
 • Compiled outside database may corrupt internal structures or bypass access control.  
 𖦹 Execution strategies:  
@@ -1864,34 +1864,34 @@ courses_fall ∩ courses_spring
 
 166. Triggers in SQL  
 𖦹 SQL standard defines triggers; most databases have nonstandard syntax.  
-𖦹 Triggers ensure referential integrity using <pink>after insert</pink>, <pink>delete</pink>, or <pink>update</pink> events.  
-• Transition variables (<yellow>referencing new row/old row</yellow>) store affected row values.  
-• <pink>when</pink> clause specifies the condition for trigger execution.  
-• <pink>begin atomic</pink> … <pink>end</pink> groups multiple SQL statements.  
-𖦹 Example: <pink>rollback transaction</pink> if inserted time slot id is invalid.  
+𖦹 Triggers ensure referential integrity using [pink]after insert[/pink], [pink]delete[/pink], or [pink]update[/pink] events.  
+• Transition variables ([yellow]referencing new row/old row[/yellow]) store affected row values.  
+• [pink]when[/pink] clause specifies the condition for trigger execution.  
+• [pink]begin atomic[/pink] … [pink]end[/pink] groups multiple SQL statements.  
+𖦹 Example: [pink]rollback transaction[/pink] if inserted time slot id is invalid.  
 𖦹 Triggers can execute on updates to specific attributes.  
-• Example: <pink>update</pink> <yellow>student tot_cred</yellow> when grade changes from null or 'F' to a passing grade.  
-𖦹 Triggers can be <pink>before</pink> or <pink>after</pink> events.  
-• <pink>Before</pink> triggers can correct or prevent invalid actions.  
-• Example: replace blank grades with null using <pink>set</pink> statement.  
+• Example: [pink]update[/pink] [yellow]student tot_cred[/yellow] when grade changes from null or 'F' to a passing grade.  
+𖦹 Triggers can be [pink]before[/pink] or [pink]after[/pink] events.  
+• [pink]Before[/pink] triggers can correct or prevent invalid actions.  
+• Example: replace blank grades with null using [pink]set[/pink] statement.  
 𖦹 Statement-level triggers operate once per SQL statement; row-level triggers operate for each affected row.  
 𖦹 Triggers can be enabled, disabled, or dropped.  
 
 167. Inventory Replenishment Example  
-𖦹 Relations: <yellow>inventory(item, level)</yellow>, <yellow>minlevel(item, level)</yellow>, <yellow>reorder(item, amount)</yellow>, <yellow>orders(item, amount)</yellow>.  
+𖦹 Relations: [yellow]inventory(item, level)[/yellow], [yellow]minlevel(item, level)[/yellow], [yellow]reorder(item, amount)[/yellow], [yellow]orders(item, amount)[/yellow].  
 𖦹 Trigger placed to reorder when inventory falls below minimum level.  
 • Ensures order placed only when level falls from above minimum to below minimum.  
 𖦹 SQL-based systems widely use triggers; standard syntax varies across systems (pre-SQL:1999 triggers were not standard).  
 
 168. When Not to Use Triggers  
 𖦹 Some tasks are better handled by other techniques than triggers.  
-• Example: <pink>on delete cascade</pink> feature is simpler with foreign-key cascade than with triggers.  
+• Example: [pink]on delete cascade[/pink] feature is simpler with foreign-key cascade than with triggers.  
 𖦹 Materialized views can be maintained automatically by the database, reducing need for triggers.  
 𖦹 Triggers can be used for database replication, but modern systems provide built-in replication features.  
 
 169. Special Considerations for Triggers  
 𖦹 Triggers may cause unintended execution during data loading or replication.  
-• Can be disabled during backup load or use <yellow>"not for replication"</yellow> options.  
+• Can be disabled during backup load or use [yellow]"not for replication"[/yellow] options.  
 𖦹 Triggers must be written carefully to avoid runtime errors and infinite chains of triggers.  
 • Some databases limit chain length (e.g., 16 or 32 triggers) or flag errors when a trigger references its own table.  
 𖦹 Triggers are useful but should be avoided when alternatives exist.  
@@ -1904,37 +1904,37 @@ courses_fall ∩ courses_spring
 
 171. Transitive Closure Using Iteration  
 𖦹 Iterative approach finds direct prerequisites, then prerequisites of those courses, until no new courses are added.  
-𖦹 Function <yellow>findAllPrereqs(cid)</yellow> computes all prerequisites for a given course.  
-• Uses three temporary tables: <yellow>c_prereq (results)</yellow>, <yellow>new_c_prereq (previous iteration)</yellow>, <yellow>temp (intermediate storage)</yellow>.  
-• Inserts direct prerequisites into <yellow>new_c_prereq</yellow>, then repeats:  
-  - Add <yellow>new_c_prereq</yellow> to <yellow>c_prereq</yellow>.  
-  - Find prerequisites of courses in <yellow>new_c_prereq</yellow> not already in <yellow>c_prereq</yellow> and store in <yellow>temp</yellow>.  
-  - Replace <yellow>new_c_prereq</yellow> with <yellow>temp</yellow> and clear <yellow>temp</yellow>.  
-• Loop ends when <yellow>new_c_prereq</yellow> is empty.  
-𖦹 The <pink>except</pink> clause prevents duplicates and handles cycles in prerequisites.  
+𖦹 Function [yellow]findAllPrereqs(cid)[/yellow] computes all prerequisites for a given course.  
+• Uses three temporary tables: [yellow]c_prereq (results)[/yellow], [yellow]new_c_prereq (previous iteration)[/yellow], [yellow]temp (intermediate storage)[/yellow].  
+• Inserts direct prerequisites into [yellow]new_c_prereq[/yellow], then repeats:  
+  - Add [yellow]new_c_prereq[/yellow] to [yellow]c_prereq[/yellow].  
+  - Find prerequisites of courses in [yellow]new_c_prereq[/yellow] not already in [yellow]c_prereq[/yellow] and store in [yellow]temp[/yellow].  
+  - Replace [yellow]new_c_prereq[/yellow] with [yellow]temp[/yellow] and clear [yellow]temp[/yellow].  
+• Loop ends when [yellow]new_c_prereq[/yellow] is empty.  
+𖦹 The [pink]except[/pink] clause prevents duplicates and handles cycles in prerequisites.  
 • Applicable to other recursive relationships like flight reachability.  
 
 172. Recursion in SQL  
 𖦹 Recursive views define direct and indirect prerequisites in a single query.  
-• Example: <pink>with recursive</pink> <yellow>rec_prereq(course_id, prereq_id) as (base query union recursive query)</yellow> <pink>select</pink> <yellow>*</yellow> <pink>from</pink> <yellow>rec_prereq</yellow>.  
-𖦹 Base query selects direct prerequisites; recursive query joins <yellow>rec_prereq</yellow> with <yellow>prereq</yellow> to find indirect prerequisites.  
+• Example: [pink]with recursive[/pink] [yellow]rec_prereq(course_id, prereq_id) as (base query union recursive query)[/yellow] [pink]select[/pink] [yellow]*[/yellow] [pink]from[/pink] [yellow]rec_prereq[/yellow].  
+𖦹 Base query selects direct prerequisites; recursive query joins [yellow]rec_prereq[/yellow] with [yellow]prereq[/yellow] to find indirect prerequisites.  
 𖦹 Recursive view iteratively adds tuples until a fixed point is reached (no new tuples).  
-𖦹 To find prerequisites of a specific course, add a <pink>where</pink> clause to filter <yellow>course_id</yellow>.  
-𖦹 Database systems may optimize execution without computing full <yellow>rec_prereq</yellow> first.  
+𖦹 To find prerequisites of a specific course, add a [pink]where[/pink] clause to filter [yellow]course_id[/yellow].  
+𖦹 Database systems may optimize execution without computing full [yellow]rec_prereq[/yellow] first.  
 
 173. Restrictions on Recursive Queries  
 𖦹 Recursive queries must be monotonic.  
 • Result on a larger view instance must include all results from a smaller instance.  
 𖦹 Nonmonotonic constructs are not allowed:  
 • Aggregation on recursive view.  
-• <pink>not exists</pink> on a subquery using recursive view.  
-• Set difference (<pink>except</pink>) with right-hand side using recursive view.  
+• [pink]not exists[/pink] on a subquery using recursive view.  
+• Set difference ([pink]except[/pink]) with right-hand side using recursive view.  
 𖦹 Nonmonotonic queries make the meaning of the view hard to define; SQL requires monotonic queries.  
 
 174. Additional Notes on Recursive Queries  
-𖦹 SQL supports permanent recursively defined views using <pink>create recursive view</pink>.  
-𖦹 Some databases use alternative syntax for recursion (e.g., Oracle <pink>start with</pink> / <pink>connect by prior</pink> for hierarchical queries).  
-• Oracle 12.c supports standard syntax with <pink>union all</pink> and <pink>recursive</pink> keyword omitted.  
+𖦹 SQL supports permanent recursively defined views using [pink]create recursive view[/pink].  
+𖦹 Some databases use alternative syntax for recursion (e.g., Oracle [pink]start with[/pink] / [pink]connect by prior[/pink] for hierarchical queries).  
+• Oracle 12.c supports standard syntax with [pink]union all[/pink] and [pink]recursive[/pink] keyword omitted.  
 
 175. Advanced Aggregation Features  
 𖦹 SQL aggregation is powerful but basic features can be inefficient for some tasks.  
@@ -1942,53 +1942,53 @@ courses_fall ∩ courses_spring
 
 176. Ranking  
 𖦹 Ranking finds the position of a value within a set, e.g., student GPA ranks.  
-• <pink>rank()</pink> assigns the same rank to equal values and skips ranks for ties.  
-• <pink>dense_rank()</pink> assigns consecutive ranks without gaps.  
-• <pink>nulls first/last</pink> controls how nulls are ranked.  
-• SQL example: <pink>select</pink> <yellow>ID,</yellow> <pink>rank()</pink> <yellow>over (order by GPA desc)</yellow> <pink>as</pink> <yellow>s_rank</yellow> <pink>from</pink> <yellow>student_grades</yellow> <pink>order by</pink> <yellow>s_rank</yellow>;  
+• [pink]rank()[/pink] assigns the same rank to equal values and skips ranks for ties.  
+• [pink]dense_rank()[/pink] assigns consecutive ranks without gaps.  
+• [pink]nulls first/last[/pink] controls how nulls are ranked.  
+• SQL example: [pink]select[/pink] [yellow]ID,[/yellow] [pink]rank()[/pink] [yellow]over (order by GPA desc)[/yellow] [pink]as[/pink] [yellow]s_rank[/yellow] [pink]from[/pink] [yellow]student_grades[/yellow] [pink]order by[/pink] [yellow]s_rank[/yellow];  
 𖦹 Ranking can be done within partitions (e.g., department):  
-• Use <pink>partition by</pink>: <pink>select</pink> <yellow>ID, dept_name,</yellow> <pink>rank()</pink> <yellow>over (partition by dept_name order by GPA desc)</yellow> <pink>as</pink> <yellow>dept_rank</yellow> <pink>from</pink> <yellow>dept_grades</yellow> <pink>order by</pink> <yellow>dept_name, dept_rank</yellow>;  
-𖦹 Top n ranking can be obtained using a containing query with <pink>where</pink> clause.  
+• Use [pink]partition by[/pink]: [pink]select[/pink] [yellow]ID, dept_name,[/yellow] [pink]rank()[/pink] [yellow]over (partition by dept_name order by GPA desc)[/yellow] [pink]as[/pink] [yellow]dept_rank[/yellow] [pink]from[/pink] [yellow]dept_grades[/yellow] [pink]order by[/pink] [yellow]dept_name, dept_rank[/yellow];  
+𖦹 Top n ranking can be obtained using a containing query with [pink]where[/pink] clause.  
 𖦹 Nonstandard SQL syntax exists for top n queries but may break ties arbitrarily.  
 𖦹 Other ranking functions:  
-• <pink>percent_rank</pink> = <yellow>(r-1)/(n-1)</yellow>  
-• <pink>cume_dist</pink> = <yellow>p/n</yellow> (cumulative distribution)  
-• <pink>row_number</pink> = unique number for each row  
-𖦹 <pink>ntile(n)</pink> divides tuples into n equal buckets.  
+• [pink]percent_rank[/pink] = [yellow](r-1)/(n-1)[/yellow]  
+• [pink]cume_dist[/pink] = [yellow]p/n[/yellow] (cumulative distribution)  
+• [pink]row_number[/pink] = unique number for each row  
+𖦹 [pink]ntile(n)[/pink] divides tuples into n equal buckets.  
 
 177. Windowing  
 𖦹 Window queries compute aggregates over ranges of tuples.  
 • Useful for trend analysis and moving averages.  
 𖦹 Example with fixed range:  
-• <pink>select</pink> <yellow>year, avg(num_credits)</yellow> <pink>over (order by year rows 3 preceding)</pink> <pink>as</pink> <yellow>avg_total_credits</yellow> <pink>from</pink> <yellow>tot_credits</yellow>;  
+• [pink]select[/pink] [yellow]year, avg(num_credits)[/yellow] [pink]over (order by year rows 3 preceding)[/pink] [pink]as[/pink] [yellow]avg_total_credits[/yellow] [pink]from[/pink] [yellow]tot_credits[/yellow];  
 𖦹 Example with all prior years:  
-• <pink>select</pink> <yellow>year, avg(num_credits)</yellow> <pink>over (order by year rows unbounded preceding)</pink> <pink>as</pink> <yellow>avg_total_credits</yellow> <pink>from</pink> <yellow>tot_credits</yellow>;  
+• [pink]select[/pink] [yellow]year, avg(num_credits)[/yellow] [pink]over (order by year rows unbounded preceding)[/pink] [pink]as[/pink] [yellow]avg_total_credits[/yellow] [pink]from[/pink] [yellow]tot_credits[/yellow];  
 𖦹 Windows can start and end before or after current row:  
-• <yellow>rows between 3 preceding and 2 following</yellow>  
+• [yellow]rows between 3 preceding and 2 following[/yellow]  
 𖦹 Partitioning allows separate windows for each group:  
-• <pink>select</pink> <yellow>dept_name, year, avg(num_credits)</yellow> <pink>over (partition by dept_name order by year rows between 3 preceding and current row)</pink> <pink>as</pink> <yellow>avg_total_credits</yellow> <pink>from</pink> <yellow>tot_credits_dept</yellow>;  
-𖦹 <pink>range</pink> keyword covers all tuples with a specific sort attribute value.  
+• [pink]select[/pink] [yellow]dept_name, year, avg(num_credits)[/yellow] [pink]over (partition by dept_name order by year rows between 3 preceding and current row)[/pink] [pink]as[/pink] [yellow]avg_total_credits[/yellow] [pink]from[/pink] [yellow]tot_credits_dept[/yellow];  
+𖦹 [pink]range[/pink] keyword covers all tuples with a specific sort attribute value.  
 
 178. Pivoting  
 𖦹 Pivoting transforms rows into columns (cross-tabulation).  
-• Example: <yellow>sales(item_name, color, clothes_size, quantity)</yellow> → pivot on color.  
+• Example: [yellow]sales(item_name, color, clothes_size, quantity)[/yellow] → pivot on color.  
 𖦹 SQL pivot example:  
-• <pink>select</pink> <yellow>*</yellow> <pink>from</pink> <yellow>sales</yellow> <pink>pivot</pink> <yellow>(sum(quantity) for color in ('dark','pastel','white'))</yellow>;  
+• [pink]select[/pink] [yellow]*[/yellow] [pink]from[/pink] [yellow]sales[/yellow] [pink]pivot[/pink] [yellow](sum(quantity) for color in ('dark','pastel','white'))[/yellow];  
 𖦹 Pivot attributes are renamed to values of another attribute.  
-𖦹 Aggregate functions handle multiple tuples per cell (e.g., <pink>sum</pink>).  
+𖦹 Aggregate functions handle multiple tuples per cell (e.g., [pink]sum[/pink]).  
 
 179. Rollup and Cube  
 𖦹 Rollup generates hierarchical aggregates for multiple groupings.  
-• Example: <pink>group by</pink> <yellow>rollup(item_name, color)</yellow> → groupings: (item_name,color), (item_name), ()  
+• Example: [pink]group by[/pink] [yellow]rollup(item_name, color)[/yellow] → groupings: (item_name,color), (item_name), ()  
 • Nulls represent missing attributes in higher-level groupings.  
 𖦹 Cube generates all combinations of groupings.  
-• Example: <pink>group by</pink> <yellow>cube(item_name,color,clothes_size)</yellow> → 8 groupings including empty.  
+• Example: [pink]group by[/pink] [yellow]cube(item_name,color,clothes_size)[/yellow] → 8 groupings including empty.  
 𖦹 Multiple rollups and cubes can be combined.  
 𖦹 For custom groupings, use grouping sets:  
-• <pink>group by</pink> <yellow>grouping_sets((color,clothes_size),(clothes_size,item_name))</yellow>;  
-𖦹 Distinguish rollup/cube-generated nulls using <pink>grouping()</pink> function:  
-• <pink>case</pink> <pink>when</pink> <pink>grouping</pink><yellow>(item_name)=1</yellow> <pink>then</pink> <yellow>'all'</yellow> <pink>else</pink> <yellow>item_name</yellow> <pink>end</pink>  
-𖦹 <pink>coalesce</pink> cannot differentiate rollup/cube nulls from normal nulls.
+• [pink]group by[/pink] [yellow]grouping_sets((color,clothes_size),(clothes_size,item_name))[/yellow];  
+𖦹 Distinguish rollup/cube-generated nulls using [pink]grouping()[/pink] function:  
+• [pink]case[/pink] [pink]when[/pink] [pink]grouping[/pink][yellow](item_name)=1[/yellow] [pink]then[/pink] [yellow]'all'[/yellow] [pink]else[/pink] [yellow]item_name[/yellow] [pink]end[/pink]  
+𖦹 [pink]coalesce[/pink] cannot differentiate rollup/cube nulls from normal nulls.
 
 180. Overview of the Design Process
 𖦹 Creating a database application involves designing the database schema, programs that access/update data, and a security scheme.
@@ -2686,7 +2686,7 @@ IMG_URL tree-index.png
 𖦹 Clustering should be used sparingly for queries that benefit from sequential access.
 𖦹 Hash indexes are unsuitable for clustered files because range queries cannot use them.
 𖦹 Index-only evaluation can compute queries using just index entries without fetching data records.
-𖦹 Example: Using a B+ tree index on age for SELECT <pink>FROM</pink> <yellow>Employees E</yellow> <pink>WHERE</pink> <yellow>E.age > 40</yellow>.
+𖦹 Example: Using a B+ tree index on age for SELECT [pink]FROM[/pink] [yellow]Employees E[/yellow] [pink]WHERE[/pink] [yellow]E.age > 40[/yellow].
 • Benefit depends on selectivity of the condition and whether the index is clustered.
 𖦹 Queries on non-key fields may benefit from clustering if many records share the same value.
 𖦹 Aggregate queries can use indexes (clustered or unclustered) without accessing full tuples.
@@ -2698,17 +2698,17 @@ IMG_URL tree-index.png
 𖦹 Composite keys allow broader query matching and increase opportunities for index-only evaluation.
 𖦹 Drawbacks: updates affect any field in the key; composite indexes are larger and may increase tree levels.
 𖦹 Design examples:
-• SELECT <pink>FROM</pink> <yellow>Employees E</yellow> <pink>WHERE</pink> <yellow>E.age BETWEEN 20 AND 30 AND E.sal BETWEEN 3000 AND 5000</yellow>
+• SELECT [pink]FROM[/pink] [yellow]Employees E[/yellow] [pink]WHERE[/pink] [yellow]E.age BETWEEN 20 AND 30 AND E.sal BETWEEN 3000 AND 5000[/yellow]
 - A composite B+ tree index on (age, sal) is effective; hash index cannot help.
-• SELECT <pink>FROM</pink> <yellow>Employees E</yellow> <pink>WHERE</pink> <yellow>E.age = 25 AND E.sal BETWEEN 3000 AND 5000</yellow>
+• SELECT [pink]FROM[/pink] [yellow]Employees E[/yellow] [pink]WHERE[/pink] [yellow]E.age = 25 AND E.sal BETWEEN 3000 AND 5000[/yellow]
 - Index on (age, sal) performs better than (sal, age) due to ordering of attributes.
 • Aggregate queries benefit from composite indexes for index-only scans.
 
 25. Index Specification in SQL: 1999
 𖦹 SQL:1999 does not require support for indexes or provide standard commands to create/drop them.
 𖦹 Commercial DBMS support indexes; example for creating a B+ tree index:
-<pink>CREATE INDEX</pink> <yellow>IndAgeRating ON Students</yellow>
-<pink>WITH STRUCTURE =</pink> <yellow>BTREE, KEY = (age, gpa)</yellow>
+[pink]CREATE INDEX[/pink] [yellow]IndAgeRating ON Students[/yellow]
+[pink]WITH STRUCTURE =[/pink] [yellow]BTREE, KEY = (age, gpa)[/yellow]
 𖦹 The index automatically updates with inserts and deletes on the Students table.
 
 SOURCE: Elmasri and Navathe – "FUNDAMENTALS OF DATABASE SYSTEMS"
@@ -2793,105 +2793,105 @@ SOURCE: Elmasri and Navathe – "FUNDAMENTALS OF DATABASE SYSTEMS"
 • Type constructors for complex objects: row type, array type, set, list, bag (added in SQL:2008)
 • Object identity via reference type
 • Encapsulation via user-defined types (UDTs) with operations; user-defined routines (UDRs)
-• Inheritance using <pink>UNDER</pink> keyword
+• Inheritance using [pink]UNDER[/pink] keyword
 
 8. User-Defined Types Using CREATE TYPE and Complex Objects
 𖦹 UDTs allow creation of complex-structured objects and separate type declaration from table creation.
-𖦹 Four collection types: <pink>ARRAY</pink>, <pink>MULTISET</pink>, <pink>LIST</pink>, <pink>SET</pink>.
+𖦹 Four collection types: [pink]ARRAY[/pink], [pink]MULTISET[/pink], [pink]LIST[/pink], [pink]SET[/pink].
 𖦹 UDTs can be used as attribute types or table types; nesting allows complex structures.
 𖦹 ROW TYPE allows direct structured attributes without separate UDT.
-𖦹 Collection elements accessed using square brackets; <pink>CARDINALITY</pink> returns current element count.
+𖦹 Collection elements accessed using square brackets; [pink]CARDINALITY[/pink] returns current element count.
 𖦹 Dot notation used to access components (e.g., ADDR.CITY).
 𖦹 Code examples:
-<pink>CREATE TYPE</pink> STREET_ADDR_TYPE <pink>AS</pink> (
- <yellow>NUMBER VARCHAR (5),</yellow>
- <yellow>STREET_NAME VARCHAR (25),</yellow>
- <yellow>APT_NO VARCHAR (5),</yellow>
- <yellow>SUITE_NO VARCHAR (5)</yellow>
+[pink]CREATE TYPE[/pink] STREET_ADDR_TYPE [pink]AS[/pink] (
+ [yellow]NUMBER VARCHAR (5),[/yellow]
+ [yellow]STREET_NAME VARCHAR (25),[/yellow]
+ [yellow]APT_NO VARCHAR (5),[/yellow]
+ [yellow]SUITE_NO VARCHAR (5)[/yellow]
 );
-<pink>CREATE TYPE</pink> USA_ADDR_TYPE <pink>AS</pink> (
- <yellow>STREET_ADDR STREET_ADDR_TYPE,</yellow>
- <yellow>CITY VARCHAR (25),</yellow>
- <yellow>ZIP VARCHAR (10)</yellow>
+[pink]CREATE TYPE[/pink] USA_ADDR_TYPE [pink]AS[/pink] (
+ [yellow]STREET_ADDR STREET_ADDR_TYPE,[/yellow]
+ [yellow]CITY VARCHAR (25),[/yellow]
+ [yellow]ZIP VARCHAR (10)[/yellow]
 );
-<pink>CREATE TYPE</pink> USA_PHONE_TYPE <pink>AS</pink> (
- <yellow>PHONE_TYPE VARCHAR (5),</yellow>
- <yellow>AREA_CODE CHAR (3),</yellow>
- <yellow>PHONE_NUM CHAR (7)</yellow>
+[pink]CREATE TYPE[/pink] USA_PHONE_TYPE [pink]AS[/pink] (
+ [yellow]PHONE_TYPE VARCHAR (5),[/yellow]
+ [yellow]AREA_CODE CHAR (3),[/yellow]
+ [yellow]PHONE_NUM CHAR (7)[/yellow]
 );
-<pink>CREATE TYPE</pink> PERSON_TYPE <pink>AS</pink> (
- <yellow>NAME VARCHAR (35),</yellow>
- <yellow>SEX CHAR,</yellow>
- <yellow>BIRTH_DATE DATE,</yellow>
- <yellow>PHONES USA_PHONE_TYPE ARRAY [4],</yellow>
- <yellow>ADDR USA_ADDR_TYPE,</yellow>
- <yellow>INSTANTIABLE,</yellow>
- <yellow>NOT FINAL,</yellow>
- <yellow>REF IS SYSTEM GENERATED,</yellow>
- <pink>INSTANCE METHOD</pink> AGE() <pink>RETURNS</pink> INTEGER;
- <pink>CREATE INSTANCE METHOD</pink> AGE() <pink>RETURNS</pink> INTEGER
- <pink>FOR</pink> PERSON_TYPE
- <pink>BEGIN</pink>
-  <yellow>RETURN /* CODE TO CALCULATE A PERSON’S AGE */</yellow>
- <pink>END;</pink>
+[pink]CREATE TYPE[/pink] PERSON_TYPE [pink]AS[/pink] (
+ [yellow]NAME VARCHAR (35),[/yellow]
+ [yellow]SEX CHAR,[/yellow]
+ [yellow]BIRTH_DATE DATE,[/yellow]
+ [yellow]PHONES USA_PHONE_TYPE ARRAY [4],[/yellow]
+ [yellow]ADDR USA_ADDR_TYPE,[/yellow]
+ [yellow]INSTANTIABLE,[/yellow]
+ [yellow]NOT FINAL,[/yellow]
+ [yellow]REF IS SYSTEM GENERATED,[/yellow]
+ [pink]INSTANCE METHOD[/pink] AGE() [pink]RETURNS[/pink] INTEGER;
+ [pink]CREATE INSTANCE METHOD[/pink] AGE() [pink]RETURNS[/pink] INTEGER
+ [pink]FOR[/pink] PERSON_TYPE
+ [pink]BEGIN[/pink]
+  [yellow]RETURN /* CODE TO CALCULATE A PERSON’S AGE */[/yellow]
+ [pink]END;[/pink]
 );
-<pink>CREATE TYPE</pink> GRADE_TYPE <pink>AS</pink> (
- <yellow>COURSENO CHAR (8),</yellow>
- <yellow>SEMESTER VARCHAR (8),</yellow>
- <yellow>YEAR CHAR (4),</yellow>
- <yellow>GRADE CHAR</yellow>
+[pink]CREATE TYPE[/pink] GRADE_TYPE [pink]AS[/pink] (
+ [yellow]COURSENO CHAR (8),[/yellow]
+ [yellow]SEMESTER VARCHAR (8),[/yellow]
+ [yellow]YEAR CHAR (4),[/yellow]
+ [yellow]GRADE CHAR[/yellow]
 );
-<pink>CREATE TYPE</pink> STUDENT_TYPE <pink>UNDER</pink> PERSON_TYPE <pink>AS</pink> (
- <yellow>MAJOR_CODE CHAR (4),</yellow>
- <yellow>STUDENT_ID CHAR (12),</yellow>
- <yellow>DEGREE VARCHAR (5),</yellow>
- <yellow>TRANSCRIPT GRADE_TYPE ARRAY [100],</yellow>
- <yellow>INSTANTIABLE,</yellow>
- <yellow>NOT FINAL,</yellow>
- <pink>INSTANCE METHOD</pink> GPA() <pink>RETURNS</pink> FLOAT;
- <pink>CREATE INSTANCE METHOD</pink> GPA() <pink>RETURNS</pink> FLOAT
- <pink>FOR</pink> STUDENT_TYPE
- <pink>BEGIN</pink>
-  <yellow>RETURN /* CODE TO CALCULATE GPA */</yellow>
- <pink>END;</pink>
+[pink]CREATE TYPE[/pink] STUDENT_TYPE [pink]UNDER[/pink] PERSON_TYPE [pink]AS[/pink] (
+ [yellow]MAJOR_CODE CHAR (4),[/yellow]
+ [yellow]STUDENT_ID CHAR (12),[/yellow]
+ [yellow]DEGREE VARCHAR (5),[/yellow]
+ [yellow]TRANSCRIPT GRADE_TYPE ARRAY [100],[/yellow]
+ [yellow]INSTANTIABLE,[/yellow]
+ [yellow]NOT FINAL,[/yellow]
+ [pink]INSTANCE METHOD[/pink] GPA() [pink]RETURNS[/pink] FLOAT;
+ [pink]CREATE INSTANCE METHOD[/pink] GPA() [pink]RETURNS[/pink] FLOAT
+ [pink]FOR[/pink] STUDENT_TYPE
+ [pink]BEGIN[/pink]
+  [yellow]RETURN /* CODE TO CALCULATE GPA */[/yellow]
+ [pink]END;[/pink]
 );
-<pink>CREATE TYPE</pink> EMPLOYEE_TYPE <pink>UNDER</pink> PERSON_TYPE <pink>AS</pink> (
- <yellow>JOB_CODE CHAR (4),</yellow>
- <yellow>SALARY FLOAT,</yellow>
- <yellow>SSN CHAR (11),</yellow>
- <yellow>INSTANTIABLE,</yellow>
- <yellow>NOT FINAL</yellow>
+[pink]CREATE TYPE[/pink] EMPLOYEE_TYPE [pink]UNDER[/pink] PERSON_TYPE [pink]AS[/pink] (
+ [yellow]JOB_CODE CHAR (4),[/yellow]
+ [yellow]SALARY FLOAT,[/yellow]
+ [yellow]SSN CHAR (11),[/yellow]
+ [yellow]INSTANTIABLE,[/yellow]
+ [yellow]NOT FINAL[/yellow]
 );
-<pink>CREATE TYPE</pink> MANAGER_TYPE <pink>UNDER</pink> EMPLOYEE_TYPE <pink>AS</pink> (
- <yellow>DEPT_MANAGED CHAR (20),</yellow>
- <yellow>INSTANTIABLE</yellow>
+[pink]CREATE TYPE[/pink] MANAGER_TYPE [pink]UNDER[/pink] EMPLOYEE_TYPE [pink]AS[/pink] (
+ [yellow]DEPT_MANAGED CHAR (20),[/yellow]
+ [yellow]INSTANTIABLE[/yellow]
 );
-<pink>CREATE TABLE</pink> PERSON <pink>OF</pink> PERSON_TYPE
- <yellow>REF IS PERSON_ID SYSTEM GENERATED;</yellow>
-<pink>CREATE TABLE</pink> EMPLOYEE <pink>OF</pink> EMPLOYEE_TYPE
- <pink>UNDER</pink> PERSON;
-<pink>CREATE TABLE</pink> MANAGER <pink>OF</pink> MANAGER_TYPE
- <pink>UNDER</pink> EMPLOYEE;
-<pink>CREATE TABLE</pink> STUDENT <pink>OF</pink> STUDENT_TYPE
- <pink>UNDER</pink> PERSON;
-<pink>CREATE TYPE</pink> COMPANY_TYPE <pink>AS</pink> (
- <yellow>COMP_NAME VARCHAR (20),</yellow>
- <yellow>LOCATION VARCHAR (20)</yellow>
+[pink]CREATE TABLE[/pink] PERSON [pink]OF[/pink] PERSON_TYPE
+ [yellow]REF IS PERSON_ID SYSTEM GENERATED;[/yellow]
+[pink]CREATE TABLE[/pink] EMPLOYEE [pink]OF[/pink] EMPLOYEE_TYPE
+ [pink]UNDER[/pink] PERSON;
+[pink]CREATE TABLE[/pink] MANAGER [pink]OF[/pink] MANAGER_TYPE
+ [pink]UNDER[/pink] EMPLOYEE;
+[pink]CREATE TABLE[/pink] STUDENT [pink]OF[/pink] STUDENT_TYPE
+ [pink]UNDER[/pink] PERSON;
+[pink]CREATE TYPE[/pink] COMPANY_TYPE [pink]AS[/pink] (
+ [yellow]COMP_NAME VARCHAR (20),[/yellow]
+ [yellow]LOCATION VARCHAR (20)[/yellow]
 );
-<pink>CREATE TYPE</pink> EMPLOYMENT_TYPE <pink>AS</pink> (
- <yellow>Employee REF (EMPLOYEE_TYPE) SCOPE (EMPLOYEE),</yellow>
- <yellow>Company REF (COMPANY_TYPE) SCOPE (COMPANY)</yellow>
+[pink]CREATE TYPE[/pink] EMPLOYMENT_TYPE [pink]AS[/pink] (
+ [yellow]Employee REF (EMPLOYEE_TYPE) SCOPE (EMPLOYEE),[/yellow]
+ [yellow]Company REF (COMPANY_TYPE) SCOPE (COMPANY)[/yellow]
 );
-<pink>CREATE TABLE</pink> COMPANY <pink>OF</pink> COMPANY_TYPE (
- <yellow>REF IS COMP_ID SYSTEM GENERATED,</yellow>
- <yellow>PRIMARY KEY (COMP_NAME)</yellow>
+[pink]CREATE TABLE[/pink] COMPANY [pink]OF[/pink] COMPANY_TYPE (
+ [yellow]REF IS COMP_ID SYSTEM GENERATED,[/yellow]
+ [yellow]PRIMARY KEY (COMP_NAME)[/yellow]
 );
-<pink>CREATE TABLE</pink> EMPLOYMENT <pink>OF</pink> EMPLOYMENT_TYPE;
+[pink]CREATE TABLE[/pink] EMPLOYMENT [pink]OF[/pink] EMPLOYMENT_TYPE;
 
 9. Object Identifiers Using Reference Types
-𖦹 Unique object identifiers created using <pink>REF</pink>.
-𖦹 Syntax: <pink>REF IS SYSTEM GENERATED</pink> creates system-generated ID.
-𖦹 User can specify <pink>REF IS <OID_ATTRIBUTE> <VALUE_GENERATION_METHOD></pink> with SYSTEM GENERATED or DERIVED.
+𖦹 Unique object identifiers created using [pink]REF[/pink].
+𖦹 Syntax: [pink]REF IS SYSTEM GENERATED[/pink] creates system-generated ID.
+𖦹 User can specify [pink]REF IS <OID_ATTRIBUTE> <VALUE_GENERATION_METHOD>[/pink] with SYSTEM GENERATED or DERIVED.
 
 10. Creating Tables Based on the UDTs
 𖦹 INSTANTIABLE UDTs can be used to create tables.
@@ -2900,17 +2900,17 @@ SOURCE: Elmasri and Navathe – "FUNDAMENTALS OF DATABASE SYSTEMS"
 
 11. Encapsulation of Operations
 𖦹 UDTs can have methods along with attributes.
-𖦹 Syntax: <pink>CREATE TYPE</pink> TYPE_NAME (<attributes>, <methods>)
+𖦹 Syntax: [pink]CREATE TYPE[/pink] TYPE_NAME (<attributes>, <methods>)
 𖦹 Constructor TYPE_T() returns new object with default values.
 𖦹 Observer function reads attribute; mutator updates it.
-𖦹 Functions may require <pink>EXECUTE</pink> privilege.
+𖦹 Functions may require [pink]EXECUTE[/pink] privilege.
 𖦹 Functions can be internal (SQL PSM) or external (host language signature only).
 𖦹 Attributes/functions categories: PUBLIC, PRIVATE, PROTECTED.
 𖦹 Virtual attributes computed via functions.
 
 12. Specifying Inheritance and Overloading of Functions
-𖦹 Inheritance applied using <pink>UNDER</pink> for types or tables.
-𖦹 <pink>NOT FINAL</pink> allows creation of subtypes.
+𖦹 Inheritance applied using [pink]UNDER[/pink] for types or tables.
+𖦹 [pink]NOT FINAL[/pink] allows creation of subtypes.
 𖦹 Rules:
 • All attributes inherited
 • Supertype order sets hierarchy
@@ -2921,15 +2921,15 @@ SOURCE: Elmasri and Navathe – "FUNDAMENTALS OF DATABASE SYSTEMS"
 𖦹 Table inheritance: INSERT, DELETE, UPDATE in subtable propagate to supertable; tuples in subtable must exist in supertable.
 
 13. Specifying Relationships via Reference
-𖦹 Component attribute can reference tuple of another table using <pink>REF</pink>.
-𖦹 <pink>SCOPE</pink> specifies table whose tuples can be referenced.
-𖦹 Dot notation accesses components; <pink>–></pink> used for dereferencing REF attributes.
+𖦹 Component attribute can reference tuple of another table using [pink]REF[/pink].
+𖦹 [pink]SCOPE[/pink] specifies table whose tuples can be referenced.
+𖦹 Dot notation accesses components; [pink]–>[/pink] used for dereferencing REF attributes.
 𖦹 Example:
-<pink>SELECT</pink> E.Employee–>NAME
-<pink>FROM</pink> EMPLOYMENT AS E
-<pink>WHERE</pink> E.Company–>COMP_NAME = ‘ABCXYZ’;
-𖦹 <pink>–></pink> works like in C: r–>a returns attribute a of referenced tuple.
-𖦹 <pink>SCOPE</pink> allows reference to tuples within a specific table of same type.
+[pink]SELECT[/pink] E.Employee–>NAME
+[pink]FROM[/pink] EMPLOYMENT AS E
+[pink]WHERE[/pink] E.Company–>COMP_NAME = ‘ABCXYZ’;
+𖦹 [pink]–>[/pink] works like in C: r–>a returns attribute a of referenced tuple.
+𖦹 [pink]SCOPE[/pink] allows reference to tuples within a specific table of same type.
 
 14. ODMG Object Model and Object Definition Language ODL
 𖦹 ODMG-93 (1.0) standard created by ODMG consortium; revised to 2.0 and 3.0.
@@ -2947,58 +2947,58 @@ SOURCE: Elmasri and Navathe – "FUNDAMENTALS OF DATABASE SYSTEMS"
 - Name: optional, unique within ODB; used to locate object.
 - Lifetime: persistent or transient; independent of class/type.
 - Structure: atomic (single user-defined object) or non-atomic (collection of objects).
-- Creation: via <pink>new</pink> operation in Object_Factory interface.
+- Creation: via [pink]new[/pink] operation in Object_Factory interface.
 
 16. Types of Literals
 𖦹 Atomic literals: predefined basic data types (long, short, unsigned, float, double, boolean, char, string, enum).
-𖦹 Structured literals: user-defined using <pink>STRUCT</pink>, include Date, Interval, Time, Timestamp.
+𖦹 Structured literals: user-defined using [pink]STRUCT[/pink], include Date, Interval, Time, Timestamp.
 𖦹 Collection literals: collections of objects or values without Object_id; type generators include set<T>, bag<T>, list<T>, array<T>, dictionary<K,V>.
 
 17. Object Interfaces and Classes
 𖦹 Interface: defines behavior only, non-instantiable.
 𖦹 Class: defines both state and behavior, instantiable.
 𖦹 Literal declaration: defines state only, no behavior or Object_id.
-𖦹 All objects inherit Object interface operations: <pink>copy()</pink>, <pink>delete()</pink>, <pink>same_as()</pink>.
-- Dot notation example: O.<pink>same_as</pink>(P), P = O.<pink>copy</pink>().
-- Arrow notation alternative: O–><pink>same_as</pink>(P), O–><pink>copy</pink>().
+𖦹 All objects inherit Object interface operations: [pink]copy()[/pink], [pink]delete()[/pink], [pink]same_as()[/pink].
+- Dot notation example: O.[pink]same_as[/pink](P), P = O.[pink]copy[/pink]().
+- Arrow notation alternative: O–>[pink]same_as[/pink](P), O–>[pink]copy[/pink]().
 
 18. Inheritance in ODMG
 𖦹 Behavior-only inheritance: interface inheritance (ISA), uses colon (:), supertype must be interface, subtype can be class or interface.
-𖦹 EXTENDS inheritance: inherits state + behavior among classes, uses <pink>extends</pink>, only single inheritance allowed.
+𖦹 EXTENDS inheritance: inherits state + behavior among classes, uses [pink]extends[/pink], only single inheritance allowed.
 𖦹 Classes can inherit behavior from multiple interfaces via colon.
 
 19. Built-in Interfaces and Classes
 𖦹 All inherit Object interface.
-𖦹 Collection objects include set, list, bag, array, dictionary; provide operations like <pink>cardinality()</pink>, <pink>is_empty()</pink>, <pink>insert_element(E)</pink>, <pink>remove_element(E)</pink>, <pink>contains_element(E)</pink>, <pink>create_iterator()</pink>.
-𖦹 Iterator interface: <pink>reset()</pink>, <pink>next_position()</pink>, <pink>get_element()</pink>.
+𖦹 Collection objects include set, list, bag, array, dictionary; provide operations like [pink]cardinality()[/pink], [pink]is_empty()[/pink], [pink]insert_element(E)[/pink], [pink]remove_element(E)[/pink], [pink]contains_element(E)[/pink], [pink]create_iterator()[/pink].
+𖦹 Iterator interface: [pink]reset()[/pink], [pink]next_position()[/pink], [pink]get_element()[/pink].
 𖦹 Exceptions: ElementNotFound, NoMoreElements.
-𖦹 Specialized operations for set<T>: <pink>create_union(S)</pink>, <pink>is_subset_of(S)</pink>.
-𖦹 List<T> operations: <pink>insert_element_first(E)</pink>, <pink>insert_element_after(E,I)</pink>, <pink>remove_first_element()</pink>, <pink>concat(I)</pink>, <pink>append(I)</pink>.
-𖦹 Array<T> operations: <pink>replace_element_at(I,E)</pink>, <pink>remove_element_at(I)</pink>, <pink>retrieve_element_at(I)</pink>, <pink>resize(N)</pink>.
-𖦹 Dictionary<K,V> operations: <pink>bind(K,V)</pink>, <pink>unbind(K)</pink>, <pink>lookup(K)</pink>, <pink>contains_key(K)</pink>.
+𖦹 Specialized operations for set<T>: [pink]create_union(S)[/pink], [pink]is_subset_of(S)[/pink].
+𖦹 List<T> operations: [pink]insert_element_first(E)[/pink], [pink]insert_element_after(E,I)[/pink], [pink]remove_first_element()[/pink], [pink]concat(I)[/pink], [pink]append(I)[/pink].
+𖦹 Array<T> operations: [pink]replace_element_at(I,E)[/pink], [pink]remove_element_at(I)[/pink], [pink]retrieve_element_at(I)[/pink], [pink]resize(N)[/pink].
+𖦹 Dictionary<K,V> operations: [pink]bind(K,V)[/pink], [pink]unbind(K)[/pink], [pink]lookup(K)[/pink], [pink]contains_key(K)[/pink].
 
 20. Atomic (User-Defined) Objects
-𖦹 Defined using <pink>class</pink> in ODL; not collections.
+𖦹 Defined using [pink]class[/pink] in ODL; not collections.
 𖦹 Example: STUDENT, EMPLOYEE, DEPARTMENT.
 𖦹 Components:
 • Attributes: simple or complex literals, or Object_ids.
-• Relationships: binary, use <pink>relationship</pink> keyword with <pink>inverse</pink> for bidirectional mapping.
+• Relationships: binary, use [pink]relationship[/pink] keyword with [pink]inverse[/pink] for bidirectional mapping.
 • Operations: define behavior, can include exceptions.
 
 21. Extents, Keys, and Factory Objects
-𖦹 Extent: declared with <pink>extent</pink>, contains all persistent objects of a class.
+𖦹 Extent: declared with [pink]extent[/pink], contains all persistent objects of a class.
 𖦹 Keys: unique attributes or relationships per extent; composite keys in parentheses.
-𖦹 Factory objects: create individual objects using <pink>new()</pink>.
+𖦹 Factory objects: create individual objects using [pink]new()[/pink].
 • Examples: ObjectFactory, SetFactory, ListFactory, ArrayFactory, DictionaryFactory, DateFactory.
 𖦹 Database interfaces: DatabaseFactory and Database.
-- Operations: <pink>open(name)</pink>, <pink>close()</pink>, <pink>bind(object,name)</pink>, <pink>unbind(name)</pink>, <pink>lookup(name)</pink>.
+- Operations: [pink]open(name)[/pink], [pink]close()[/pink], [pink]bind(object,name)[/pink], [pink]unbind(name)[/pink], [pink]lookup(name)[/pink].
 
 22. Object Definition Language (ODL)
 𖦹 ODL used to create object specifications (classes, interfaces) for object database schema.
 𖦹 Independent of programming language; can be mapped via language bindings (C++, Java, Smalltalk).
 𖦹 Example: UNIVERSITY database schema.
 • Entity types mapped to ODL classes.
-• Inheritance via <pink>extends</pink>; no direct mapping for union types or multiple inheritance.
+• Inheritance via [pink]extends[/pink]; no direct mapping for union types or multiple inheritance.
 • Classes: PERSON, FACULTY, STUDENT, GRAD_STUDENT.
 • Extents: PERSONS, FACULTY, STUDENTS, GRAD_STUDENTS.
 • Subsets: STUDENTS ⊆ PERSONS, GRAD_STUDENTS ⊆ STUDENTS.
@@ -3012,26 +3012,26 @@ IMG_URL odl.png
 𖦹 Classes DEPARTMENT, COURSE, SECTION, CURR_SECTION map directly to entity types.
 
 24. PERSON Class
-𖦹 <pink>class</pink> PERSON
-• <pink>extent</pink> PERSONS
-• <pink>key</pink> Ssn
+𖦹 [pink]class[/pink] PERSON
+• [pink]extent[/pink] PERSONS
+• [pink]key[/pink] Ssn
 𖦹 Attributes
-• <pink>attribute struct</pink> Pname { string Fname, string Mname, string Lname } Name
-• <pink>attribute string</pink> Ssn
-• <pink>attribute date</pink> Birth_date
-• <pink>attribute enum</pink> Gender{M, F} Sex
-• <pink>attribute struct</pink> Address { short No, string Street, short Apt_no, string City, string State, short Zip } Address
+• [pink]attribute struct[/pink] Pname { string Fname, string Mname, string Lname } Name
+• [pink]attribute string[/pink] Ssn
+• [pink]attribute date[/pink] Birth_date
+• [pink]attribute enum[/pink] Gender{M, F} Sex
+• [pink]attribute struct[/pink] Address { short No, string Street, short Apt_no, string City, string State, short Zip } Address
 𖦹 Methods
 • short Age()
 
 25. FACULTY Class
-𖦹 <pink>class</pink> FACULTY <pink>extends</pink> PERSON
-• <pink>extent</pink> FACULTY
+𖦹 [pink]class[/pink] FACULTY [pink]extends[/pink] PERSON
+• [pink]extent[/pink] FACULTY
 𖦹 Attributes
-• <pink>attribute string</pink> Rank
-• <pink>attribute float</pink> Salary
-• <pink>attribute string</pink> Office
-• <pink>attribute string</pink> Phone
+• [pink]attribute string[/pink] Rank
+• [pink]attribute float[/pink] Salary
+• [pink]attribute string[/pink] Office
+• [pink]attribute string[/pink] Phone
 𖦹 Relationships
 • DEPARTMENT Works_in inverse DEPARTMENT::Has_faculty
 • set<GRAD_STUDENT> Advises inverse GRAD_STUDENT::Advisor
@@ -3041,20 +3041,20 @@ IMG_URL odl.png
 • void promote(in string new_rank)
 
 26. GRADE Class
-𖦹 <pink>class</pink> GRADE
-• <pink>extent</pink> GRADES
+𖦹 [pink]class[/pink] GRADE
+• [pink]extent[/pink] GRADES
 𖦹 Attributes
-• <pink>attribute enum</pink> GradeValues{A,B,C,D,F,I,P} Grade
+• [pink]attribute enum[/pink] GradeValues{A,B,C,D,F,I,P} Grade
 𖦹 Relationships
 • SECTION Section inverse SECTION::Students
 • STUDENT Student inverse STUDENT::Completed_sections
 
 27. STUDENT Class
-𖦹 <pink>class</pink> STUDENT <pink>extends</pink> PERSON
-• <pink>extent</pink> STUDENTS
+𖦹 [pink]class[/pink] STUDENT [pink]extends[/pink] PERSON
+• [pink]extent[/pink] STUDENTS
 𖦹 Attributes
-• <pink>attribute string</pink> Class
-• <pink>attribute Department</pink> Minors_in
+• [pink]attribute string[/pink] Class
+• [pink]attribute Department[/pink] Minors_in
 𖦹 Relationships
 • Department Majors_in inverse DEPARTMENT::Has_majors
 • set<GRADE> Completed_sections inverse GRADE::Student
@@ -3066,17 +3066,17 @@ IMG_URL odl.png
 • void assign_grade(in short secno; IN GradeValue grade) raises(section_not_valid, grade_not_valid)
 
 28. DEGREE Class
-𖦹 <pink>class</pink> DEGREE
+𖦹 [pink]class[/pink] DEGREE
 𖦹 Attributes
-• <pink>attribute string</pink> College
-• <pink>attribute string</pink> Degree
-• <pink>attribute string</pink> Year
+• [pink]attribute string[/pink] College
+• [pink]attribute string[/pink] Degree
+• [pink]attribute string[/pink] Year
 
 29. GRAD_STUDENT Class
-𖦹 <pink>class</pink> GRAD_STUDENT <pink>extends</pink> STUDENT
-• <pink>extent</pink> GRAD_STUDENTS
+𖦹 [pink]class[/pink] GRAD_STUDENT [pink]extends[/pink] STUDENT
+• [pink]extent[/pink] GRAD_STUDENTS
 𖦹 Attributes
-• <pink>attribute set</pink><Degree> Degrees
+• [pink]attribute set[/pink]<Degree> Degrees
 𖦹 Relationships
 • Faculty advisor inverse FACULTY::Advises
 • set<FACULTY> Committee inverse FACULTY::On_committee_of
@@ -3085,46 +3085,46 @@ IMG_URL odl.png
 • void assign_committee_member(in string Lname; in string Fname) raises(faculty_not_valid)
 
 30. DEPARTMENT Class
-𖦹 <pink>class</pink> DEPARTMENT
-• <pink>extent</pink> DEPARTMENTS
-• <pink>key</pink> Dname
+𖦹 [pink]class[/pink] DEPARTMENT
+• [pink]extent[/pink] DEPARTMENTS
+• [pink]key[/pink] Dname
 𖦹 Attributes
-• <pink>attribute string</pink> Dname
-• <pink>attribute string</pink> Dphone
-• <pink>attribute string</pink> Doffice
-• <pink>attribute string</pink> College
-• <pink>attribute FACULTY</pink> Chair
+• [pink]attribute string[/pink] Dname
+• [pink]attribute string[/pink] Dphone
+• [pink]attribute string[/pink] Doffice
+• [pink]attribute string[/pink] College
+• [pink]attribute FACULTY[/pink] Chair
 𖦹 Relationships
 • set<FACULTY> Has_faculty inverse FACULTY::Works_in
 • set<STUDENT> Has_majors inverse STUDENT::Majors_in
 • set<COURSE> Offers inverse COURSE::Offered_by
 
 31. COURSE Class
-𖦹 <pink>class</pink> COURSE
-• <pink>extent</pink> COURSES
-• <pink>key</pink> Cno
+𖦹 [pink]class[/pink] COURSE
+• [pink]extent[/pink] COURSES
+• [pink]key[/pink] Cno
 𖦹 Attributes
-• <pink>attribute string</pink> Cname
-• <pink>attribute string</pink> Cno
-• <pink>attribute string</pink> Description
+• [pink]attribute string[/pink] Cname
+• [pink]attribute string[/pink] Cno
+• [pink]attribute string[/pink] Description
 𖦹 Relationships
 • set<SECTION> Has_sections inverse SECTION::Of_course
 • <DEPARTMENT> Offered_by inverse DEPARTMENT::Offers
 
 32. SECTION Class
-𖦹 <pink>class</pink> SECTION
-• <pink>extent</pink> SECTIONS
+𖦹 [pink]class[/pink] SECTION
+• [pink]extent[/pink] SECTIONS
 𖦹 Attributes
-• <pink>attribute short</pink> Sec_no
-• <pink>attribute string</pink> Year
-• <pink>attribute enum</pink> Quarter{Fall, Winter, Spring, Summer} Qtr
+• [pink]attribute short[/pink] Sec_no
+• [pink]attribute string[/pink] Year
+• [pink]attribute enum[/pink] Quarter{Fall, Winter, Spring, Summer} Qtr
 𖦹 Relationships
 • set<Grade> Students inverse Grade::Section
 • COURSE Of_course inverse COURSE::Has_sections
 
 33. CURR_SECTION Class
-𖦹 <pink>class</pink> CURR_SECTION <pink>extends</pink> SECTION
-• <pink>extent</pink> CURRENT_SECTIONS
+𖦹 [pink]class[/pink] CURR_SECTION [pink]extends[/pink] SECTION
+• [pink]extent[/pink] CURRENT_SECTIONS
 𖦹 Relationships
 • set<STUDENT> Registered_students inverse STUDENT::Registered_in
 𖦹 Methods
@@ -3141,8 +3141,8 @@ IMG_URL odl.png
 36. Interface Example
 𖦹 interface GeometryObject
 • Attributes
-- <pink>attribute enum</pink> Shape{RECTANGLE, TRIANGLE, CIRCLE, …} Shape
-- <pink>attribute struct</pink> Point {short x, short y} Reference_point
+- [pink]attribute enum[/pink] Shape{RECTANGLE, TRIANGLE, CIRCLE, …} Shape
+- [pink]attribute struct[/pink] Point {short x, short y} Reference_point
 • Methods
 - float perimeter()
 - float area()
@@ -3155,7 +3155,7 @@ IMG_URL odl.png
 
 37. Inheritance Rules
 𖦹 Interface inheritance allows multiple inheritance
-𖦹 Class <pink>extends</pink> inheritance allows only single inheritance
+𖦹 Class [pink]extends[/pink] inheritance allows only single inheritance
 • A class can extend at most one class and implement multiple interfaces
 
 38. Differences between ODB and RDB Design
@@ -3236,9 +3236,9 @@ IMG_URL odl.png
 49. Simple OQL Queries, Entry Points, and Iterator Variables
 𖦹 Basic OQL query syntax: select … from … where …
 • Example: 
-Q0: <pink>select</pink> D.Dname
-<pink>from</pink> D <pink>in</pink> DEPARTMENTS
-<pink>where</pink> D.College = 'Engineering';
+Q0: [pink]select[/pink] D.Dname
+[pink]from[/pink] D [pink]in[/pink] DEPARTMENTS
+[pink]where[/pink] D.College = 'Engineering';
 𖦹 Database entry points can be any named persistent object or extent.
 • Extent names refer to persistent collections (set of objects), e.g., DEPARTMENTS: set<DEPARTMENT>.
 𖦹 Iterator variables range over each object in the collection.
@@ -3261,32 +3261,32 @@ Q2A: CS_DEPARTMENT.Chair.Rank; returns string.
 Q2B: CS_DEPARTMENT.Has_faculty; returns set<FACULTY>.
 𖦹 Collections must use iterator variables for operations on attributes of multiple objects.
 • Example:
-Q3A: <pink>select</pink> F.Rank <pink>from</pink> F <pink>in</pink> CS_DEPARTMENT.Has_faculty;
-Q3B: <pink>select distinct</pink> F.Rank <pink>from</pink> F <pink>in</pink> CS_DEPARTMENT.Has_faculty;
+Q3A: [pink]select[/pink] F.Rank [pink]from[/pink] F [pink]in[/pink] CS_DEPARTMENT.Has_faculty;
+Q3B: [pink]select distinct[/pink] F.Rank [pink]from[/pink] F [pink]in[/pink] CS_DEPARTMENT.Has_faculty;
 
 51. Structs in Query Results
 𖦹 OQL can return complex structured results using struct.
 • Example:
-Q4A: <pink>select struct</pink>(name: struct(last_name: S.name.Lname, first_name: S.name.Fname),
-degrees: (<pink>select struct</pink>(deg: D.Degree, yr: D.Year, college: D.College)
-<pink>from</pink> D <pink>in</pink> S.Degrees)) 
-<pink>from</pink> S <pink>in</pink> CS_DEPARTMENT.Chair.Advises;
+Q4A: [pink]select struct[/pink](name: struct(last_name: S.name.Lname, first_name: S.name.Fname),
+degrees: ([pink]select struct[/pink](deg: D.Degree, yr: D.Year, college: D.College)
+[pink]from[/pink] D [pink]in[/pink] S.Degrees)) 
+[pink]from[/pink] S [pink]in[/pink] CS_DEPARTMENT.Chair.Advises;
 𖦹 Nested structs allow hierarchical data: first-level structs with name and degrees components, degrees is a collection of second-level structs.
 
 52. Orthogonality of Path Expressions
 𖦹 Attributes, relationships, and operations can be used interchangeably in path expressions.
 • Example: retrieving GPA of senior CS students ordered by GPA, last and first names:
-Q5A: <pink>select struct</pink>(last_name: S.name.Lname, first_name: S.name.Fname, gpa: S.gpa)
-<pink>from</pink> S <pink>in</pink> CS_DEPARTMENT.Has_majors
-<pink>where</pink> S.Class = 'senior'
-<pink>order by</pink> gpa desc, last_name asc, first_name asc;
+Q5A: [pink]select struct[/pink](last_name: S.name.Lname, first_name: S.name.Fname, gpa: S.gpa)
+[pink]from[/pink] S [pink]in[/pink] CS_DEPARTMENT.Has_majors
+[pink]where[/pink] S.Class = 'senior'
+[pink]order by[/pink] gpa desc, last_name asc, first_name asc;
 
 53. Views as Named Queries
 𖦹 Views use named queries via define keyword; unique identifier required.
 • Example:
-V1: <pink>define</pink> Has_minors(Dept_name) <pink>as</pink>
-<pink>select</pink> S <pink>from</pink> S <pink>in</pink> STUDENTS
-<pink>where</pink> S.Minors_in.Dname = Dept_name;
+V1: [pink]define[/pink] Has_minors(Dept_name) [pink]as[/pink]
+[pink]select[/pink] S [pink]from[/pink] S [pink]in[/pink] STUDENTS
+[pink]where[/pink] S.Minors_in.Dname = Dept_name;
 𖦹 Views can have parameters and represent infrequently used inverse relationships.
 𖦹 Example query using view: Has_minors('Computer Science');
 
@@ -3294,53 +3294,53 @@ V1: <pink>define</pink> Has_minors(Dept_name) <pink>as</pink>
 𖦹 element operator extracts a single element from a singleton collection.
 • Raises exception if collection is empty or has multiple elements.
 • Example:
-Q6: <pink>element</pink>(<pink>select</pink> D <pink>from</pink> D <pink>in</pink> DEPARTMENTS
-<pink>where</pink> D.Dname = 'Computer Science');
+Q6: [pink]element[/pink]([pink]select[/pink] D [pink]from[/pink] D [pink]in[/pink] DEPARTMENTS
+[pink]where[/pink] D.Dname = 'Computer Science');
 
 55. Collection Operators (Aggregates and Quantifiers)
 𖦹 Aggregate operators: min, max, count, sum, avg.
 • count returns integer; others return type of operand collection.
 • Examples:
-Q7: <pink>count</pink>(S <pink>in</pink> Has_minors('Computer Science'));
-Q8: <pink>avg</pink>(<pink>select</pink> S.Gpa <pink>from</pink> S <pink>in</pink> STUDENTS
-<pink>where</pink> S.Majors_in.Dname = 'Computer Science' <pink>and</pink> S.Class = 'Senior');
+Q7: [pink]count[/pink](S [pink]in[/pink] Has_minors('Computer Science'));
+Q8: [pink]avg[/pink]([pink]select[/pink] S.Gpa [pink]from[/pink] S [pink]in[/pink] STUDENTS
+[pink]where[/pink] S.Majors_in.Dname = 'Computer Science' [pink]and[/pink] S.Class = 'Senior');
 𖦹 Membership and quantifiers:
 • (E in C): true if E in collection C.
 • (for all V in C : B): true if all elements satisfy B.
 • (exists V in C : B): true if at least one element satisfies B.
 • Examples:
-Q10: <pink>select</pink> S.name.Lname, S.name.Fname <pink>from</pink> S <pink>in</pink> STUDENTS
-<pink>where</pink> 'Database Systems I' <pink>in</pink> (<pink>select</pink> C.Section.Of_course.Cname <pink>from</pink> C <pink>in</pink> S.Completed_sections);
-Q11: JEREMY <pink>in</pink> Has_minors('Computer Science');
-Q12: <pink>for all</pink> G <pink>in</pink> (<pink>select</pink> S <pink>from</pink> S <pink>in</pink> GRAD_STUDENTS
-<pink>where</pink> S.Majors_in.Dname = 'Computer Science') : G.Advisor <pink>in</pink> CS_DEPARTMENT.Has_faculty;
-Q13: <pink>exists</pink> G <pink>in</pink> (<pink>select</pink> S <pink>from</pink> S <pink>in</pink> GRAD_STUDENTS
-<pink>where</pink> S.Majors_in.Dname = 'Computer Science') : G.Gpa = 4;
+Q10: [pink]select[/pink] S.name.Lname, S.name.Fname [pink]from[/pink] S [pink]in[/pink] STUDENTS
+[pink]where[/pink] 'Database Systems I' [pink]in[/pink] ([pink]select[/pink] C.Section.Of_course.Cname [pink]from[/pink] C [pink]in[/pink] S.Completed_sections);
+Q11: JEREMY [pink]in[/pink] Has_minors('Computer Science');
+Q12: [pink]for all[/pink] G [pink]in[/pink] ([pink]select[/pink] S [pink]from[/pink] S [pink]in[/pink] GRAD_STUDENTS
+[pink]where[/pink] S.Majors_in.Dname = 'Computer Science') : G.Advisor [pink]in[/pink] CS_DEPARTMENT.Has_faculty;
+Q13: [pink]exists[/pink] G [pink]in[/pink] ([pink]select[/pink] S [pink]from[/pink] S [pink]in[/pink] GRAD_STUDENTS
+[pink]where[/pink] S.Majors_in.Dname = 'Computer Science') : G.Gpa = 4;
 
 56. Ordered (Indexed) Collection Expressions
 𖦹 Lists and arrays support first, last, ith element, sub-collection, concatenation.
 • Example for highest salary:
-Q14: <pink>first</pink>(<pink>select struct</pink>(facname: F.name.Lname, salary: F.Salary)
-<pink>from</pink> F <pink>in</pink> FACULTY
-<pink>order by</pink> salary desc);
+Q14: [pink]first[/pink]([pink]select struct[/pink](facname: F.name.Lname, salary: F.Salary)
+[pink]from[/pink] F [pink]in[/pink] FACULTY
+[pink]order by[/pink] salary desc);
 • Example for top 3 GPAs:
-Q15: (<pink>select struct</pink>(last_name: S.name.Lname, first_name: S.name.Fname, gpa: S.Gpa)
-<pink>from</pink> S <pink>in</pink> CS_DEPARTMENT.Has_majors
-<pink>order by</pink> gpa desc)[0:2];
+Q15: ([pink]select struct[/pink](last_name: S.name.Lname, first_name: S.name.Fname, gpa: S.Gpa)
+[pink]from[/pink] S [pink]in[/pink] CS_DEPARTMENT.Has_majors
+[pink]order by[/pink] gpa desc)[0:2];
 
 57. Grouping Operator
 𖦹 group by partitions objects with same attribute values; returns set of structs with partition data.
 • Example: count majors per department:
-Q16: (<pink>select struct</pink>(dept_name, number_of_majors: <pink>count</pink>(partition))
-<pink>from</pink> S <pink>in</pink> STUDENTS
-<pink>group by</pink> dept_name: S.Majors_in.Dname);
+Q16: ([pink]select struct[/pink](dept_name, number_of_majors: [pink]count[/pink](partition))
+[pink]from[/pink] S [pink]in[/pink] STUDENTS
+[pink]group by[/pink] dept_name: S.Majors_in.Dname);
 𖦹 Result type: set<struct(dept_name: string, partition: bag<struct(S: STUDENT)>)>
 𖦹 having clause filters groups based on conditions.
 • Example: average GPA for departments with >100 students:
-Q17: <pink>select</pink> dept_name, avg_gpa: <pink>avg</pink>(<pink>select</pink> P.gpa <pink>from</pink> P <pink>in</pink> partition)
-<pink>from</pink> S <pink>in</pink> STUDENTS
-<pink>group by</pink> dept_name: S.Majors_in.Dname
-<pink>having</pink> <pink>count</pink>(partition) > 100;
+Q17: [pink]select[/pink] dept_name, avg_gpa: [pink]avg[/pink]([pink]select[/pink] P.gpa [pink]from[/pink] P [pink]in[/pink] partition)
+[pink]from[/pink] S [pink]in[/pink] STUDENTS
+[pink]group by[/pink] dept_name: S.Majors_in.Dname
+[pink]having[/pink] [pink]count[/pink](partition) > 100;
 
 58. Overview of the C++ Language Binding in ODMG
 𖦹 C++ language binding maps ODL constructs to C++ constructs using a class library.
@@ -3365,12 +3365,12 @@ Q17: <pink>select</pink> dept_name, avg_gpa: <pink>avg</pink>(<pink>select</pink
 61. Relationships in C++ Binding
 𖦹 Relationships use prefix rel_ in type names.
 • Example for 1:N binary relationship between DEPARTMENT and STUDENT:
-<pink>d_Rel_Ref</pink><<yellow>DEPARTMENT, Has_majors</yellow>> Majors_in; 
-<pink>d_Rel_Set</pink><<yellow>STUDENT, Majors_in</yellow>> Has_majors;
+[pink]d_Rel_Ref[/pink]<[yellow]DEPARTMENT, Has_majors[/yellow]> Majors_in; 
+[pink]d_Rel_Set[/pink]<[yellow]STUDENT, Majors_in[/yellow]> Has_majors;
 
 62. Creating and Modifying Objects
-𖦹 OML overloads <pink>new</pink> to create persistent or transient objects.
-• Example: D_Ref<STUDENT> S = <pink>new</pink>(DB1, 'John_Smith') STUDENT; creates a persistent STUDENT in DB1.
+𖦹 OML overloads [pink]new[/pink] to create persistent or transient objects.
+• Example: D_Ref<STUDENT> S = [pink]new[/pink](DB1, 'John_Smith') STUDENT; creates a persistent STUDENT in DB1.
 𖦹 Objects can be deleted using delete_object().
 𖦹 Object modification is done through class-defined operations (methods).
 
@@ -3529,28 +3529,28 @@ WHERE EMPLOYEE.Dno A= DEPARTMENT AND Zipcode =30332
 • Merge and write output subfile.
 • Repeat until one subfile remains.
 
-<pink>set</pink> <yellow>i ← 1</yellow>;
-<pink>set</pink> <yellow>j ← b</yellow>;
-<pink>set</pink> <yellow>k ← nB</yellow>;
-<pink>set</pink> <yellow>m ← ceil(j / k)</yellow>;
-<pink>while</pink> <yellow>(i ≤ m)</yellow> <pink>do</pink> {
-  <yellow>read next k blocks</yellow>;
-  <yellow>sort and write subfile</yellow>;
-  <yellow>i ← i + 1</yellow>;
+[pink]set[/pink] [yellow]i ← 1[/yellow];
+[pink]set[/pink] [yellow]j ← b[/yellow];
+[pink]set[/pink] [yellow]k ← nB[/yellow];
+[pink]set[/pink] [yellow]m ← ceil(j / k)[/yellow];
+[pink]while[/pink] [yellow](i ≤ m)[/yellow] [pink]do[/pink] {
+  [yellow]read next k blocks[/yellow];
+  [yellow]sort and write subfile[/yellow];
+  [yellow]i ← i + 1[/yellow];
 }
-<pink>set</pink> <yellow>i ← 1</yellow>;
-<pink>set</pink> <yellow>p ← ceil(log(k−1)(m))</yellow>;
-<pink>set</pink> <yellow>j ← m</yellow>;
-<pink>while</pink> <yellow>(i ≤ p)</yellow> <pink>do</pink> {
-  <yellow>n ← 1</yellow>;
-  <yellow>q ← ceil(j / (k−1))</yellow>;
-  <pink>while</pink> <yellow>(n ≤ q)</yellow> <pink>do</pink> {
-    <yellow>read k−1 subfiles</yellow>;
-    <yellow>merge and write</yellow>;
-    <yellow>n ← n + 1</yellow>;
+[pink]set[/pink] [yellow]i ← 1[/yellow];
+[pink]set[/pink] [yellow]p ← ceil(log(k−1)(m))[/yellow];
+[pink]set[/pink] [yellow]j ← m[/yellow];
+[pink]while[/pink] [yellow](i ≤ p)[/yellow] [pink]do[/pink] {
+  [yellow]n ← 1[/yellow];
+  [yellow]q ← ceil(j / (k−1))[/yellow];
+  [pink]while[/pink] [yellow](n ≤ q)[/yellow] [pink]do[/pink] {
+    [yellow]read k−1 subfiles[/yellow];
+    [yellow]merge and write[/yellow];
+    [yellow]n ← n + 1[/yellow];
   }
-  <yellow>j ← q</yellow>;
-  <yellow>i ← i + 1</yellow>;
+  [yellow]j ← q[/yellow];
+  [yellow]i ← i + 1[/yellow];
 }
 
 84. Cost of Sort-Merge Algorithm
@@ -3587,8 +3587,8 @@ WHERE EMPLOYEE.Dno A= DEPARTMENT AND Zipcode =30332
 𖦹 S7a: Bitmap index. OR bitmaps for values. Example: Dnumber IN (3,27,49) in OP6.
 𖦹 S7b: Functional index. Supports expression-based selection.
 • Example functional index:
-<pink>CREATE</pink> <pink>INDEX</pink> <yellow>income_ix</yellow>
-<pink>ON</pink> <yellow>EMPLOYEE (Salary + (Salary*Commission_pct))</yellow>
+[pink]CREATE[/pink] [pink]INDEX[/pink] [yellow]income_ix[/yellow]
+[pink]ON[/pink] [yellow]EMPLOYEE (Salary + (Salary*Commission_pct))[/yellow]
 
 88. Notes on index-based methods
 𖦹 S1 works always.
@@ -3769,22 +3769,22 @@ WHERE EMPLOYEE.Dno A= DEPARTMENT AND Zipcode =30332
 • Example:
 - SQL: SELECT Dnumber FROM DEPARTMENT MINUS SELECT Dno FROM EMPLOYEE
 - Anti-join conversion:
-<pink>SELECT</pink> <yellow>DISTINCT DEPARTMENT.Dnumber</yellow>
-<pink>FROM</pink> <yellow>DEPARTMENT, EMPLOYEE</yellow>
-<pink>WHERE</pink> <yellow>DEPARTMENT.Dnumber A = EMPLOYEE.Dno</yellow>
+[pink]SELECT[/pink] [yellow]DISTINCT DEPARTMENT.Dnumber[/yellow]
+[pink]FROM[/pink] [yellow]DEPARTMENT, EMPLOYEE[/yellow]
+[pink]WHERE[/pink] [yellow]DEPARTMENT.Dnumber A = EMPLOYEE.Dno[/yellow]
 - "A=" represents anti-join: left table DEPARTMENT, right table EMPLOYEE.
 
 𖦹 SQL variations for sets and multisets:
 • UNION, INTERSECTION, EXCEPT/MINUS: eliminate duplicates.
 • UNION ALL, INTERSECTION ALL, EXCEPT ALL: retain duplicates (multisets).
 - Example with INTERSECT ALL:
-<pink>SELECT</pink> <yellow>Dno</yellow> <pink>FROM</pink> <yellow>EMPLOYEE</yellow>
-<pink>INTERSECT ALL</pink>
-<pink>SELECT</pink> <yellow>Dum</yellow> <pink>FROM</pink> <yellow>PROJECT</yellow>
+[pink]SELECT[/pink] [yellow]Dno[/yellow] [pink]FROM[/pink] [yellow]EMPLOYEE[/yellow]
+[pink]INTERSECT ALL[/pink]
+[pink]SELECT[/pink] [yellow]Dum[/yellow] [pink]FROM[/pink] [yellow]PROJECT[/yellow]
 - Semi-join can implement INTERSECT ALL while controlling duplicates:
-<pink>SELECT</pink> <yellow>DISTINCT EMPLOYEE.Dno</yellow>
-<pink>FROM</pink> <yellow>DEPARTMENT, EMPLOYEE</yellow>
-<pink>WHERE</pink> <yellow>EMPLOYEE.Dno S = DEPARTMENT.Dnumber</yellow>
+[pink]SELECT[/pink] [yellow]DISTINCT EMPLOYEE.Dno[/yellow]
+[pink]FROM[/pink] [yellow]DEPARTMENT, EMPLOYEE[/yellow]
+[pink]WHERE[/pink] [yellow]EMPLOYEE.Dno S = DEPARTMENT.Dnumber[/yellow]
 
 104. Implementing Aggregate Operations
 𖦹 Aggregate operators (MIN, MAX, COUNT, AVERAGE, SUM) can be computed via table scan or using indexes.
@@ -3803,8 +3803,8 @@ WHERE EMPLOYEE.Dno A= DEPARTMENT AND Zipcode =30332
 𖦹 Outer Joins
 • Types: left outer join, right outer join, full outer join.
 • Example of left outer join:
-<pink>SELECT</pink> <yellow>E.Lname, E.Fname, D.Dname</yellow>
-<pink>FROM</pink> <yellow>EMPLOYEE E LEFT OUTER JOIN DEPARTMENT D ON E.Dno = D.Dnumber</yellow>
+[pink]SELECT[/pink] [yellow]E.Lname, E.Fname, D.Dname[/yellow]
+[pink]FROM[/pink] [yellow]EMPLOYEE E LEFT OUTER JOIN DEPARTMENT D ON E.Dno = D.Dnumber[/yellow]
 - Includes all tuples from left table; unmatched tuples have NULLs in right table fields.
 • Can be computed by modifying join algorithms (nested-loop, single-loop, sort-merge, hash-join).
 • Algebraic approach:
@@ -3840,17 +3840,17 @@ WHERE EMPLOYEE.Dno A= DEPARTMENT AND Zipcode =30332
 • This contrasts with materialization where entire relations are stored and read back.
 𖦹 Query plan execution invokes iterators in a specific order, allowing multiple iterators to be active simultaneously.
 𖦹 Iterator interface methods:
-1. <pink>Open()</pink>
+1. [pink]Open()[/pink]
 - Initializes operator, allocates buffers, initializes data structures, and passes selection conditions.
-2. <pink>Get_Next()</pink>
-- Calls <pink>Get_Next()</pink> on input arguments, applies operation-specific code, returns next output tuple, updates iterator state.
-3. <pink>Close()</pink>
-- Ends iteration, calls <pink>Close()</pink> on input arguments.
+2. [pink]Get_Next()[/pink]
+- Calls [pink]Get_Next()[/pink] on input arguments, applies operation-specific code, returns next output tuple, updates iterator state.
+3. [pink]Close()[/pink]
+- Ends iteration, calls [pink]Close()[/pink] on input arguments.
 𖦹 Iterators can be implemented as classes with these methods.
 - Pipelining is effective if tuples can be processed completely as received.
 - If multiple passes over input are required, materialization is needed, reducing pipelining benefit.
 𖦹 Iterators can also be applied to access methods.
-- Example: B+-tree or hash-based index can be implemented as an iterator producing tuples that meet selection conditions passed to <pink>Open()</pink>.
+- Example: B+-tree or hash-based index can be implemented as an iterator producing tuples that meet selection conditions passed to [pink]Open()[/pink].
 
 108. Query Optimization Overview
 𖦹 Goal of query optimization is to select the most efficient and cost-effective strategy for query execution.
@@ -3915,12 +3915,12 @@ IMG_URL query_tree.png
 118. Example: Query Q2
 𖦹 Task: Retrieve project number, controlling department number, and department manager’s last name, address, and birthdate for projects located in ‘Stafford’.
 𖦹 Relational algebra expression:
-• πPnumber, Dnum, Lname, Address, Bdate (((σPlocation=‘Stafford’(<yellow>PROJECT</yellow>))
- Dnum=Dnumber(<yellow>DEPARTMENT</yellow>)) Mgr_ssn=Ssn(<yellow>EMPLOYEE</yellow>))
+• πPnumber, Dnum, Lname, Address, Bdate (((σPlocation=‘Stafford’([yellow]PROJECT[/yellow]))
+ Dnum=Dnumber([yellow]DEPARTMENT[/yellow])) Mgr_ssn=Ssn([yellow]EMPLOYEE[/yellow]))
 𖦹 SQL query:
-• <pink>SELECT</pink> P.Pnumber, P.Dnum, E.Lname, E.Address, E.Bdate
-  <pink>FROM</pink> <yellow>PROJECT</yellow> P, <yellow>DEPARTMENT</yellow> D, <yellow>EMPLOYEE</yellow> E
-  <pink>WHERE</pink> P.Dnum=D.Dnumber AND D.Mgr_ssn=E.Ssn AND P.Plocation='Stafford';
+• [pink]SELECT[/pink] P.Pnumber, P.Dnum, E.Lname, E.Address, E.Bdate
+  [pink]FROM[/pink] [yellow]PROJECT[/yellow] P, [yellow]DEPARTMENT[/yellow] D, [yellow]EMPLOYEE[/yellow] E
+  [pink]WHERE[/pink] P.Dnum=D.Dnumber AND D.Mgr_ssn=E.Ssn AND P.Plocation='Stafford';
 𖦹 Execution order in query tree:
 • Node (1) executes before node (2) because its resulting tuples are needed.
 • Node (2) executes before node (3), and so on.
@@ -3940,7 +3940,7 @@ IMG_URL query_optim2.png
 
 121. Example of Query Transformation
 𖦹 Query: Find last names of employees born after 1957 who work on project ‘Aquarius’.
-• SQL: <pink>SELECT</pink> E.Lname <pink>FROM</pink> <yellow>EMPLOYEE</yellow> E, <yellow>WORKS_ON</yellow> W, <yellow>PROJECT</yellow> P <pink>WHERE</pink> P.Pname='Aquarius' AND P.Pnumber=W.Pno AND E.Essn=W.Ssn AND E.Bdate>'1957-12-31';
+• SQL: [pink]SELECT[/pink] E.Lname [pink]FROM[/pink] [yellow]EMPLOYEE[/yellow] E, [yellow]WORKS_ON[/yellow] W, [yellow]PROJECT[/yellow] P [pink]WHERE[/pink] P.Pname='Aquarius' AND P.Pnumber=W.Pno AND E.Essn=W.Ssn AND E.Bdate>'1957-12-31';
 𖦹 Initial query tree creates a large CARTESIAN PRODUCT of all relations.
 𖦹 Step-by-step improvements:
 • Apply SELECT operations early to reduce tuples.
@@ -3953,14 +3953,14 @@ IMG_URL query_optim2.png
 𖦹 Commutativity of σ: σc1(σc2(R)) ≡ σc2(σc1(R))
 𖦹 Cascade of π: Only last π matters; earlier ones can be ignored.
 𖦹 Commuting σ with π: If σ involves attributes in projection, they can be swapped.
-𖦹 Commutativity of join and ×: R <pink>JOIN</pink>c S ≡ S <pink>JOIN</pink>c R ; R × S ≡ S × R
-𖦹 Commuting σ with join or ×: σc(R <pink>JOIN</pink>c S) ≡ (σc(R)) <pink>JOIN</pink>c S
-𖦹 Commuting π with join or ×: πL(R <pink>JOIN</pink>c S) ≡ (πA(R)) <pink>JOIN</pink>c (πB(S)) with adjustments for join attributes.
+𖦹 Commutativity of join and ×: R [pink]JOIN[/pink]c S ≡ S [pink]JOIN[/pink]c R ; R × S ≡ S × R
+𖦹 Commuting σ with join or ×: σc(R [pink]JOIN[/pink]c S) ≡ (σc(R)) [pink]JOIN[/pink]c S
+𖦹 Commuting π with join or ×: πL(R [pink]JOIN[/pink]c S) ≡ (πA(R)) [pink]JOIN[/pink]c (πB(S)) with adjustments for join attributes.
 𖦹 Commutativity of set operations: ∪ and ∩ are commutative; − is not.
-𖦹 Associativity of <pink>JOIN</pink>, ×, ∪, ∩: (R θ S) θ T ≡ R θ (S θ T)
+𖦹 Associativity of [pink]JOIN[/pink], ×, ∪, ∩: (R θ S) θ T ≡ R θ (S θ T)
 𖦹 Commuting σ with set operations: σc(R θ S) ≡ (σc(R)) θ (σc(S))
 𖦹 π operation commutes with ∪: πL(R ∪ S) ≡ (πL(R)) ∪ (πL(S))
-𖦹 Converting σ following × into JOIN: σc(R × S) ≡ R <pink>JOIN</pink>c S
+𖦹 Converting σ following × into JOIN: σc(R × S) ≡ R [pink]JOIN[/pink]c S
 𖦹 Pushing σ with − or ∩: Apply σc to only relevant relation(s).
 𖦹 Trivial transformations: R ∪ ∅ = R ; σtrue(R) = R
 𖦹 Boolean algebra rules: NOT(c1 AND c2) ≡ (NOT c1) OR (NOT c2); NOT(c1 OR c2) ≡ (NOT c1) AND (NOT c2)

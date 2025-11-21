@@ -43,43 +43,50 @@ const SEPARATOR_REGEX = /- - - - - - - - - - - - - - - - - - - - - - - - - - - -
 const DASH_LINE_REGEX = /^[- ]+$/;
 const SOURCE_LINE_REGEX = /^SOURCE:/i;
 const IMG_URL_REGEX = /^IMG_URL\s*@?\s*(.+)$/i; // Case-insensitive, handles optional @ and whitespace
-// Only match valid color tag names to avoid matching code like <int,int>
+// Color tags use bracket syntax: [color]text[/color] to avoid conflicts with code angle brackets
+// Support both old syntax <color>text</color> and new syntax [color]text[/color]
 const VALID_COLOR_NAMES = ['pink', 'yellow', 'blue', 'green', 'red', 'orange', 'purple', 'cyan', 'gray', 'grey', 'white', 'black', 'lightblue', 'lightgreen', 'lightyellow', 'lightpink', 'lightcyan', 'lightgray', 'lightgrey', 'darkblue', 'darkgreen', 'darkred', 'darkorange', 'darkpurple', 'brown', 'gold', 'silver', 'magenta', 'lime', 'aqua', 'navy', 'teal', 'maroon', 'olive', 'coral', 'salmon', 'violet', 'indigo', 'turquoise', 'tan', 'beige', 'khaki', 'plum', 'orchid', 'crimson', 'azure'];
-const COLORIZE_REGEX = new RegExp(`<(${VALID_COLOR_NAMES.join('|')})>(.*?)</\\1>`, 'gi');
+// Match both bracket syntax [color]text[/color] and angle bracket syntax <color>text</color>
+const BRACKET_COLOR_REGEX = new RegExp(`\\[(${VALID_COLOR_NAMES.join('|')})\\](.*?)\\[/\\1\\]`, 'gi');
+const ANGLE_COLOR_REGEX = new RegExp(`<(${VALID_COLOR_NAMES.join('|')})>(.*?)</\\1>`, 'gi');
 
-function escapeAngleBrackets(text) {
-    // Escape < and > that are not part of valid color tags
-    // First, replace color tags with placeholders
-    const placeholders = [];
-    let placeholderIndex = 0;
+function colorizeText(text) {
+    // First, handle bracket syntax [color]text[/color] - this is preferred and won't conflict
+    let processed = text.replace(BRACKET_COLOR_REGEX, (match, colorName, innerText) => {
+        // Escape any angle brackets in the inner text
+        const escapedInnerText = innerText.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        return `<span style="color:${colorName.toLowerCase()}">${escapedInnerText}</span>`;
+    });
     
-    // Reset regex lastIndex to ensure we start from beginning
-    COLORIZE_REGEX.lastIndex = 0;
+    // Then, handle angle bracket syntax <color>text</color> - for backward compatibility
+    // We need to be careful not to match code like <int,int>
+    // First escape all angle brackets, then restore color tags
+    const anglePlaceholders = [];
+    let anglePlaceholderCounter = 0;
     
-    let processed = text.replace(COLORIZE_REGEX, (match, color, innerText) => {
-        const placeholder = `__COLOR_PLACEHOLDER_${placeholderIndex}__`;
-        placeholders.push({ color: color.toLowerCase(), innerText: innerText });
-        placeholderIndex++;
+    ANGLE_COLOR_REGEX.lastIndex = 0;
+    processed = processed.replace(ANGLE_COLOR_REGEX, (match, colorName, innerText) => {
+        const placeholder = `__ANGLE_COLOR_${anglePlaceholderCounter}__`;
+        anglePlaceholders.push({
+            placeholder: placeholder,
+            color: colorName.toLowerCase(),
+            innerText: innerText
+        });
+        anglePlaceholderCounter++;
         return placeholder;
     });
     
-    // Escape remaining angle brackets
+    // Escape remaining angle brackets (code syntax)
     processed = processed.replace(/</g, '&lt;').replace(/>/g, '&gt;');
     
-    // Restore color tags and convert them to HTML spans
-    placeholders.forEach((placeholderData, index) => {
-        const placeholder = `__COLOR_PLACEHOLDER_${index}__`;
-        // Escape angle brackets in inner text
-        const escapedInnerText = placeholderData.innerText.replace(/</g, '&lt;').replace(/>/g, '&gt;');
-        const replacement = `<span style="color:${placeholderData.color}">${escapedInnerText}</span>`;
-        processed = processed.replace(placeholder, replacement);
+    // Restore angle bracket color tags
+    anglePlaceholders.forEach(data => {
+        const escapedInnerText = data.innerText.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        const htmlSpan = `<span style="color:${data.color}">${escapedInnerText}</span>`;
+        processed = processed.replace(data.placeholder, htmlSpan);
     });
     
     return processed;
-}
-
-function colorizeText(text) {
-    return escapeAngleBrackets(text);
 }
 
 async function loadLearnings(fileName) {
