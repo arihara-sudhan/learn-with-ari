@@ -1,98 +1,53 @@
-// Base URL for GitHub raw content - adjust branch and path as needed
-// Try GitHub Pages URL first, fallback to raw GitHub
 const getBaseUrl = () => {
     if (window.location.origin.includes('github.io')) {
-        // GitHub Pages - construct path from current location
-        // If URL is like https://arihara-sudhan.github.io/ari-learns/ or similar
         let pathname = window.location.pathname;
-        // Remove trailing slash and index.html
         pathname = pathname.replace(/\/index\.html$/, '').replace(/\/$/, '');
-        // If pathname includes 'ari-learns' or similar, use it
-        // Otherwise, try to detect from path
         if (pathname && pathname !== '/') {
             return `${window.location.origin}${pathname}/learnings/`;
         }
-        // Default: try common paths
-        // First try: /ari-learns/learnings/
-        // If that doesn't work, use raw GitHub
         return `${window.location.origin}/ari-learns/learnings/`;
     }
-    // Local development
     return './learnings/';
 };
 const RAW_GITHUB_URL = "https://raw.githubusercontent.com/arihara-sudhan/learn-with-ari/refs/heads/main/learnings/";
 
-// Base URL for images
 const getImageBaseUrl = () => {
     if (window.location.origin.includes('github.io')) {
-        // GitHub Pages - use absolute path from root
         const pathParts = window.location.pathname.split('/');
         const basePath = pathParts.slice(0, -1).join('/') || '';
         return `${window.location.origin}${basePath}/images/`;
     }
-    // Local development
     return './images/';
 };
 let activeButton = null;
-const contentCache = new Map(); // Cache parsed content
-
-// Pre-compile regex patterns for better performance
+const contentCache = new Map();
 const DATE_REGEX = /(-+\s*\[(\d{2}\/\d{2}\/\d{4})\])/g;
 const SOURCE_REGEX = /^SOURCE:\s*(.+?)(?:\r?\n|$)/m;
 const SEPARATOR_REGEX = /- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -/g;
 const DASH_LINE_REGEX = /^[- ]+$/;
 const SOURCE_LINE_REGEX = /^SOURCE:/i;
-const IMG_URL_REGEX = /^IMG_URL\s*@?\s*(.+)$/i; // Case-insensitive, handles optional @ and whitespace
-// Color tags use bracket syntax: [color]text[/color] to avoid conflicts with code angle brackets
-// Support both old syntax <color>text</color> and new syntax [color]text[/color]
+const IMG_URL_REGEX = /^IMG_URL\s*@?\s*(.+)$/i;
 const VALID_COLOR_NAMES = ['pink', 'yellow', 'blue', 'green', 'red', 'orange', 'purple', 'cyan', 'gray', 'grey', 'white', 'black', 'lightblue', 'lightgreen', 'lightyellow', 'lightpink', 'lightcyan', 'lightgray', 'lightgrey', 'darkblue', 'darkgreen', 'darkred', 'darkorange', 'darkpurple', 'brown', 'gold', 'silver', 'magenta', 'lime', 'aqua', 'navy', 'teal', 'maroon', 'olive', 'coral', 'salmon', 'violet', 'indigo', 'turquoise', 'tan', 'beige', 'khaki', 'plum', 'orchid', 'crimson', 'azure'];
-// Match both bracket syntax [color]text[/color] and angle bracket syntax <color>text</color>
 const BRACKET_COLOR_REGEX = new RegExp(`\\[(${VALID_COLOR_NAMES.join('|')})\\](.*?)\\[/\\1\\]`, 'gis');
-const ANGLE_COLOR_REGEX = new RegExp(`<(${VALID_COLOR_NAMES.join('|')})>(.*?)</\\1>`, 'gi');
 
 function colorizeText(text) {
-    // First, handle bracket syntax [color]text[/color] - this is preferred and won't conflict
-    // Reset regex lastIndex to ensure it works correctly
+    // First, escape all angle brackets in the original text (for code syntax)
+    let processed = text.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    
+    // Then process color tags - unescape the brackets inside color tags and create HTML spans
     BRACKET_COLOR_REGEX.lastIndex = 0;
-    let processed = text.replace(BRACKET_COLOR_REGEX, (match, colorName, innerText) => {
-        // Escape any angle brackets in the inner text
-        const escapedInnerText = innerText.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    processed = processed.replace(BRACKET_COLOR_REGEX, (match, colorName, innerText) => {
+        // Unescape the inner text (it was escaped above, but we want it as-is inside the span)
+        const unescapedInnerText = innerText.replace(/&lt;/g, '<').replace(/&gt;/g, '>');
+        // Re-escape only for HTML safety
+        const escapedInnerText = unescapedInnerText.replace(/</g, '&lt;').replace(/>/g, '&gt;');
         return `<span style="color:${colorName.toLowerCase()}">${escapedInnerText}</span>`;
-    });
-    
-    // Then, handle angle bracket syntax <color>text</color> - for backward compatibility
-    // We need to be careful not to match code like <int,int>
-    // First escape all angle brackets, then restore color tags
-    const anglePlaceholders = [];
-    let anglePlaceholderCounter = 0;
-    
-    ANGLE_COLOR_REGEX.lastIndex = 0;
-    processed = processed.replace(ANGLE_COLOR_REGEX, (match, colorName, innerText) => {
-        const placeholder = `__ANGLE_COLOR_${anglePlaceholderCounter}__`;
-        anglePlaceholders.push({
-            placeholder: placeholder,
-            color: colorName.toLowerCase(),
-            innerText: innerText
-        });
-        anglePlaceholderCounter++;
-        return placeholder;
-    });
-    
-    // Escape remaining angle brackets (code syntax)
-    processed = processed.replace(/</g, '&lt;').replace(/>/g, '&gt;');
-    
-    // Restore angle bracket color tags
-    anglePlaceholders.forEach(data => {
-        const escapedInnerText = data.innerText.replace(/</g, '&lt;').replace(/>/g, '&gt;');
-        const htmlSpan = `<span style="color:${data.color}">${escapedInnerText}</span>`;
-        processed = processed.replace(data.placeholder, htmlSpan);
     });
     
     return processed;
 }
 
 async function loadLearnings(fileName) {
-    // Check cache first
     if (contentCache.has(fileName)) {
         const contentDiv = document.getElementById("content");
         contentDiv.innerHTML = contentCache.get(fileName);
@@ -100,18 +55,15 @@ async function loadLearnings(fileName) {
         return;
     }
 
-    // Try raw GitHub URL first (most reliable), then fallback to GitHub Pages
     const fileUrl = `${RAW_GITHUB_URL}${fileName}.txt`;
     const fallbackUrl = `${getBaseUrl()}${fileName}.txt`;
     const contentDiv = document.getElementById("content");
     
-    // Show loading indicator
     contentDiv.innerHTML = '<pre style="text-align:center;padding:2rem;">Loading...</pre>';
     
     try {
         let response = await fetch(fileUrl);
         
-        // If primary URL fails, try fallback
         if (!response.ok && fileUrl !== fallbackUrl) {
             console.log(`Primary URL failed, trying fallback: ${fallbackUrl}`);
             response = await fetch(fallbackUrl);
@@ -122,29 +74,23 @@ async function loadLearnings(fileName) {
         }
         const text = await response.text();
 
-        // Split by date pattern, keeping the delimiters to extract dates
-        DATE_REGEX.lastIndex = 0; // Reset regex
+        DATE_REGEX.lastIndex = 0;
         const parts = [];
         let lastIndex = 0;
         let match;
         
         while ((match = DATE_REGEX.exec(text)) !== null) {
-            // Add content before the date match
             if (match.index > lastIndex) {
                 parts.push(text.substring(lastIndex, match.index));
             }
-            // Add the date (match[2] is the captured date, match[1] is the full match)
             parts.push(match[2]); // Just the date
             lastIndex = DATE_REGEX.lastIndex;
         }
-        // Add remaining content after last date
         if (lastIndex < text.length) {
             parts.push(text.substring(lastIndex));
         }
         
         let htmlContent = '';
-        
-        // Process first section (before any dates)
         if (parts.length > 0) {
             let firstSection = parts[0];
             SOURCE_REGEX.lastIndex = 0; // Reset regex
@@ -188,7 +134,7 @@ async function loadLearnings(fileName) {
                     }
                     return colorizeText(line);
                 }).join('\n');
-                htmlContent += `<pre>${content}</pre>`;
+                htmlContent += `<div class="code-content">${content}</div>`;
             } else if (source) {
                 // If only source exists without content, still show the source
                 htmlContent += `<h2 id="source">SOURCE: ${source}</h2>`;
@@ -249,7 +195,7 @@ async function loadLearnings(fileName) {
                     <div class="section">
                         ${source ? `<h2 id="source">SOURCE: ${source}</h2>` : ''}
                         <h2 id="date">Date: ${date}</h2>
-                        <pre>${content_cleaned}</pre>
+                        <div class="code-content">${content_cleaned}</div>
                     </div>
                 `;
             }

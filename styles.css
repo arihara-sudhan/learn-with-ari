@@ -27,6 +27,15 @@ pre {
     font-size: 1rem;
     border-radius: 1rem;
 }
+.code-content {
+    background: black;
+    padding: 1rem;
+    color: lawngreen;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-size: 1rem;
+    border-radius: 1rem;
+}
 a {
     color: black;
 }
