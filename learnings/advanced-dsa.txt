@@ -1,73 +1,68 @@
 IMG_URL sparse_array.png
 1. Sparse Arrays
-𖦹 Concept: An array where most elements are zero or empty (null, None, etc.).
-𖦹 Example: 
-• Regular array (size 10): [0, 0, 0, 5, 0, 0, 0, 0, 0, 10]
+𖦹 Concept: An array where most elements are zero or "empty" (null, None, etc.)
+𖦹 Example:
+• Regular array: [0, 0, 0, 5, 0, 0, 0, 0, 0, 10]
 • Sparse array: Only non-zero values stored: index 3 → 5, index 9 → 10
-𖦹 Reason: Storing lots of zeros wastes memory, especially in large arrays.
+𖦹 Reason: Storing lots of zeros wastes memory, especially in large arrays
 
 2. Problem with Regular Arrays
-𖦹 Memory wasted storing zeros.
-𖦹 Traversal or copying wastes time on zeros.
-𖦹 Large arrays may exceed memory capacity if most entries are empty.
+𖦹 Memory wasted storing zeros
+𖦹 Operations like traversal or copying waste time on zeros
+𖦹 Large arrays may exceed memory capacity if most entries are empty
 
-3. Solution: Store Only Non-empty Elements
-𖦹 Store only non-zero or meaningful elements along with their indices.
-𖦹 Reduces memory usage drastically.
+3. Solution: Store only non-empty elements
+𖦹 Store only non-zero or meaningful elements with their indices
+𖦹 Reduces memory usage drastically
 
 4. Implementations
-𖦹 a) Hash Map / Dictionary
-• Idea: Use key-value store: Key = index, Value = non-zero element.
-• Example in Python:
-<pink># Original sparse array</pink>
-<yellow>arr = [0, 0, 0, 5, 0, 0, 0, 0, 0, 10]</yellow>
-<pink># Sparse representation using dict</pink>
-<yellow>sparse_dict = {3: 5, 9: 10}</yellow>
-<pink># Access element at index i</pink>
-<yellow>i = 3</yellow>
-<yellow>value = sparse_dict.get(i, 0)  # returns 5</yellow>
-• Pros: Fast lookups O(1), no memory wasted on zeros.
-• Cons: Hash table overhead for keys and structure.
-
-𖦹 b) List of Tuples (Index-Value Pairs)
-• Idea: Store as list of (index, value) pairs, sorted by index.
-• Example:
-<yellow>sparse_list = [(3, 5), (9, 10)]</yellow>
-<pink># Access element at index i</pink>
-<yellow>def get_value(i):</yellow>
-<yellow>    for idx, val in sparse_list:</yellow>
-<yellow>        if idx == i:</yellow>
-<yellow>            return val</yellow>
-<yellow>    return 0</yellow>
-<yellow>print(get_value(3))  # Output: 5</yellow>
-<yellow>print(get_value(5))  # Output: 0</yellow>
-• Pros: Minimal memory overhead.
-• Cons: Access O(n) if unsorted; can improve to O(log n) with sorted + binary search.
-
-𖦹 c) Compressed Storage Techniques
-• CRS / CCS for matrices.
-• Store: non-zero values, row/column indices, pointers to start of each row/column.
-• Efficient for matrix operations in scientific computing or graphs.
+𖦹 Hash Map / Dictionary
+• Idea: Use key = index, value = non-zero element
+• Example in C++:
+<pink>unordered_map</pink><yellow><int,int> sparse_dict;</yellow>
+<pink>int</pink> arr[10] = {0,0,0,5,0,0,0,0,0,10};
+sparse_dict[3] = 5;
+sparse_dict[9] = 10;
+<pink>int</pink> i = 3;
+<pink>int</pink> value = sparse_dict.count(i) ? sparse_dict[i] : 0; // returns 5
+• Pros: Fast lookups O(1), no memory wasted on zeros
+• Cons: Hash table overhead (extra memory for keys and structure)
+𖦹 List of Tuples (Index-Value Pairs)
+• Idea: Store as a list of (index, value) pairs sorted by index
+• Example in C++:
+<pink>vector</pink><yellow><pair<int,int>> sparse_list = {{3,5},{9,10}};</yellow>
+<pink>int</pink> get_value(<pink>int</pink> i){
+  <pink>for</pink>(auto [idx,val] : sparse_list){
+    <pink>if</pink>(idx == i) <pink>return</pink> val;
+  }
+  <pink>return</pink> 0;
+}
+• Pros: Minimal memory overhead
+• Cons: Access time O(n) if unsorted, O(log n) if sorted + binary search
+𖦹 Compressed Storage Techniques
+• Compressed Row Storage (CRS) / Compressed Column Storage (CCS)
+• Store non-zero values, row/column indices, pointers to start of each row/column
+• Efficient for matrix operations in scientific computing or graph algorithms
 
 5. Advantages
-𖦹 Saves memory drastically for large arrays with few non-zero elements.
-𖦹 Faster iteration over only meaningful elements.
-𖦹 Can handle datasets too large for memory in dense form.
+𖦹 Saves memory drastically for large arrays with few non-zero elements
+𖦹 Faster iteration over only meaningful elements
+𖦹 Can handle datasets too large for memory in dense form
 
 6. Applications
-𖦹 Graph adjacency matrices: Most graphs are sparse.
-• Example: Social networks with millions of users.
-𖦹 Scientific computations: Sparse matrices in physics, chemistry, engineering.
-𖦹 Machine learning: Sparse feature vectors in NLP, recommendation systems.
+𖦹 Graph adjacency matrices: Most graphs are sparse
+• Example: Social network with millions of users → most pairs not connected
+𖦹 Scientific computations: Matrices in physics, chemistry, engineering
+𖦹 Machine learning: Sparse feature vectors in NLP, recommendation systems
 
 7. Memory Comparison
-𖦹 Dense Array: 1M elements → 1M × size_of(int) memory.
-𖦹 Sparse Dict: 10 non-zero → 10 × (index + value) + hash overhead.
-𖦹 Huge saving when non-zero elements << total size.
+𖦹 Dense Array: 1M elements → memory wasted = 1M × size_of(int)
+𖦹 Sparse Dict: 10 non-zero → memory used = 10 × (index + value) + hash overhead
+𖦹 Huge saving when non-zero elements << total size
 
 8. Key Takeaways
-𖦹 Sparse arrays are memory-efficient.
-𖦹 Choice of storage depends on lookup vs iteration needs:
-• Dictionary → fast random access.
-• List of tuples → less memory, slower access.
-• CRS / CCS → optimized for matrix operations.
+𖦹 Sparse arrays are memory-efficient
+𖦹 Storage choice depends on lookup vs iteration needs
+• Dictionary → fast random access
+• List of tuples → less memory, slower access
+• CRS / CCS → optimized for matrix operations
