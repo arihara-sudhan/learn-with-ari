@@ -12,10 +12,6 @@
         "label": "RAG"
     },
     {
-        "id": "linear-algebra",
-        "label": "Linear Algebra"
-    },
-    {
         "id": "advanced-dsa",
         "label": "Advanced DSA"
     },
