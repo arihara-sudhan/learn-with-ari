@@ -1,68 +1,289 @@
-IMG_URL sparse_array.png
-1. Sparse Arrays
-𖦹 Concept: An array where most elements are zero or "empty" (null, None, etc.)
-𖦹 Example:
-• Regular array: [0, 0, 0, 5, 0, 0, 0, 0, 0, 10]
-• Sparse array: Only non-zero values stored: index 3 → 5, index 9 → 10
-𖦹 Reason: Storing lots of zeros wastes memory, especially in large arrays
+IMG_URL time_complexity.png
+1. Computational and asymptotic complexity
+𖦹 A single problem can have many algorithms, each with different efficiency.
+𖦹 For small data, these differences are small; for large data, the differences grow.
+• Computational complexity
+- Shows how much effort an algorithm needs in terms of time or space.
 
-2. Problem with Regular Arrays
-𖦹 Memory wasted storing zeros
-𖦹 Operations like traversal or copying waste time on zeros
-𖦹 Large arrays may exceed memory capacity if most entries are empty
+2. Time and space as efficiency measures
+𖦹 Time is usually more important than space when judging an algorithm.
+𖦹 Actual run time depends on the machine used.
+• System dependence
+- An inefficient algorithm on a very fast machine may still run faster than an efficient one on a slow machine.
+- To compare many algorithms, all must be tested on the same machine.
+• Language dependence
+- Compiled programs run faster than interpreted ones.
+- Some languages produce faster code than others.
 
-3. Solution: Store only non-empty elements
-𖦹 Store only non-zero or meaningful elements with their indices
-𖦹 Reduces memory usage drastically
+3. Using logical units instead of real time
+𖦹 Real-time units (microseconds, nanoseconds) should not be used for analysis.
+𖦹 Use logical units that relate input size n to time t.
+• Linear example
+- If t₁ = c·n₁, then increasing n by 5 times increases t by 5 times.
+• Log example
+- If t₁ = log₂(n), doubling n increases t by 1 unit.
 
-4. Implementations
-𖦹 Hash Map / Dictionary
-• Idea: Use key = index, value = non-zero element
-• Example in C++:
-[pink]unordered_map[/pink][yellow]<int,int> sparse_dict;[/yellow]
-[pink]int[/pink] arr[10] = {0,0,0,5,0,0,0,0,0,10};
-sparse_dict[3] = 5;
-sparse_dict[9] = 10;
-[pink]int[/pink] i = 3;
-[pink]int[/pink] value = sparse_dict.count(i) ? sparse_dict[i] : 0; // returns 5
-• Pros: Fast lookups O(1), no memory wasted on zeros
-• Cons: Hash table overhead (extra memory for keys and structure)
-𖦹 List of Tuples (Index-Value Pairs)
-• Idea: Store as a list of (index, value) pairs sorted by index
-• Example in C++:
-[pink]vector[/pink][yellow]<pair<int,int>> sparse_list = {{3,5},{9,10}};[/yellow]
-[pink]int[/pink] get_value([pink]int[/pink] i){
-  [pink]for[/pink](auto [idx,val] : sparse_list){
-    [pink]if[/pink](idx == i) [pink]return[/pink] val;
-  }
-  [pink]return[/pink] 0;
+4. Need for simplified functions
+𖦹 The true relationship between n and t can be complex.
+𖦹 For large data, small terms in the function do not change its overall growth.
+𖦹 These small terms are removed to get a simpler approximate function.
+• Asymptotic complexity
+- Used when only the main growth of the function matters.
+- Useful when exact calculation is hard or unnecessary.
+
+5. Example: f(n) = n² + 100n + log₁₀(n) + 1000
+𖦹 For small n, the constant term 1000 is the biggest.
+𖦹 At n = 10, the linear term 100n and constant term 1000 are similar in effect.
+𖦹 At n = 100, the n² and 100n terms have similar effects.
+• For large n
+- The n² term grows much faster than other terms.
+- 100n, log₁₀(n), and 1000 become very small in comparison.
+- The function mainly depends on n² when n is large.
+
+6. Big-O notation
+𖦹 Big-O is used to describe how fast a function grows for large n.
+𖦹 It compares two functions f(n) and g(n) by checking if f grows no faster than g.
+• Meaning of f(n) = O(g(n))
+- There exist positive numbers c and N such that f(n) ≤ c·g(n) for all n ≥ N.
+- g(n) acts as an upper bound for the growth of f(n) when n is large.
+
+7. Limits of the basic definition
+𖦹 The definition says constants c and N must exist but does not show how to find them.
+𖦹 Many different pairs of c and N can satisfy the same f(n) and g(n).
+• Example idea
+- For f(n) = 2n² + 3n + 1 and g(n) = n², many c, N pairs work.
+- These pairs come from solving: 2n² + 3n + 1 ≤ c·n².
+
+8. Finding useful constants
+𖦹 To pick the best N, find when the largest term in f(n) stays the largest.
+𖦹 For f(n) = 2n² + 3n + 1, the biggest terms are 2n² and 3n.
+• Compare terms
+- 2n² > 3n when n > 1.
+- So N = 2 is suitable, and c must be at least 33/4.
+
+9. Meaning of different c and N
+𖦹 Many pairs of c and N still describe the same relationship f = O(g).
+𖦹 “Almost always” means g·c is ≥ f for all n ≥ N.
+• Effect of choosing different N
+- If N = 1, then c must be ≥ 6.
+- If N = 2, c must be ≥ 3.75.
+- If N = 3, c must be ≥ 31/9.
+- c and N depend on each other.
+
+10. Multiple possible upper bounds
+𖦹 A function f can be O(n²), O(n³), O(n⁴), … for any power ≥ 2.
+𖦹 To avoid too many choices, the smallest suitable g(n) is normally taken.
+• Removing small terms
+- Small terms in f(n) that do not affect growth are written using O( ).
+- Example: f(n) = n² + 100n + O(log₁₀(n))
+• Another example
+- f(n) = 2n² + O(n)
+
+11. Finding c and N
+𖦹 We compare each part of f(n) with g(n) to show f(n) ≤ c × g(n)
+𖦹 We rewrite all parts of f(n) so they look like some_number × g(n)
+• This helps us show f(n) grows no faster than g(n)
+- Explanation: If every part of f(n) can be written in terms of g(n), then the whole f(n) can also be written using g(n)
+
+11.1 Making all terms look like g(n) = n²
+𖦹 For f(n) = 2n² + 3n + 1, we try to rewrite each term as something × n²
+𖦹 First term: 2n² ≤ 2n²
+• It already matches n², so no change needed
+
+11.2 Converting 3n into something × n²
+𖦹 We check if 3n can be compared with 3n²
+𖦹 Check if n ≤ n² when n ≥ 1
+• Divide both sides by n (n > 0) → 1 ≤ n
+- Explanation: This is true for all n ≥ 1, so 3n ≤ 3n²
+
+11.3 Converting constant 1 into something × n²
+𖦹 We check if 1 ≤ n² when n ≥ 1
+𖦹 For n = 1,2,3,... this is always true
+• So 1 ≤ n² for all n ≥ 1
+
+11.4 Putting all replacements together
+𖦹 Now each part of f(n) is written in terms of n²
+𖦹 So:
+• 2n² + 3n + 1 ≤ 2n² + 3n² + n²
+- Explanation: Add them → 6n²
+
+11.5 Final values
+𖦹 f(n) ≤ 6n²
+𖦹 So c = 6
+𖦹 And N = 1
+
+12. Properties of Big-O notation
+𖦹 Big-O has useful rules that help compare how fast functions grow
+𖦹 These rules make it easier to estimate how fast algorithms run
+
+12.1 Fact 1: Transitivity
+𖦹 If f(n) is O(g(n)) and g(n) is O(h(n)), then f(n) is O(h(n))
+𖦹 This means we can connect the two bounds into one
+- Explanation: Since f(n) ≤ c1·g(n) for n ≥ N1 and g(n) ≤ c2·h(n) for n ≥ N2, we get f(n) ≤ (c1·c2)·h(n) for large enough n
+
+12.2 Fact 2: Sum rule
+𖦹 If f(n) is O(h(n)) and g(n) is O(h(n)), then f(n) + g(n) is O(h(n))
+- Explanation: If f(n) ≤ c1·h(n) and g(n) ≤ c2·h(n), then f(n)+g(n) ≤ (c1+c2)·h(n)
+
+12.3 Fact 3: Constant times nk
+𖦹 The function a·n^k is O(n^k)
+- Explanation: a·n^k ≤ c·n^k if c ≥ a
+
+12.4 Fact 4: Smaller powers grow slower
+𖦹 n^k is O(n^(k+j)) for any positive j
+- Explanation: This works for c = 1 and N = 1
+
+12.5 Polynomial rule
+𖦹 A polynomial grows at the rate of its highest power
+𖦹 Example: f(n) = ak·n^k + ak−1·n^(k−1) + … + a1·n + a0 is O(n^k)
+• Also, f(n) is O(n^(k+j)) for any positive j
+
+12.6 Logarithmic functions grow very slowly
+𖦹 Algorithms with logarithmic running time are considered very good
+𖦹 Some even slower functions exist, like log log n or constant time O(1), but they are rarely used
+
+12.7 Fact 5: Constant multiple rule
+𖦹 If f(n) = c·g(n), then f(n) is O(g(n))
+- Explanation: Multiplying by a fixed constant does not change the growth rate
+
+12.8 Fact 6: Logarithms with any base have the same growth
+𖦹 log_a(n) is O(log_b(n)) for any positive a and b ≠ 1
+𖦹 All logarithms grow at the same rate
+- Explanation: Using log rules, log_a(n) can be written as a constant × log_b(n)
+
+12.9 Fact 7: Using base 2 for convenience
+𖦹 log_a(n) is O(lg n) for any positive a ≠ 1
+𖦹 lg n means log base 2 of n
+
+13. Ω and Θ notations
+𖦹 Ω notation gives a lower bound for how fast a function grows
+𖦹 f(n) is Ω(g(n)) when f(n) ≥ c·g(n) for all n ≥ N
+• Means f grows at least as fast as g in the long run
+- Explanation: Only the direction of the inequality changes compared to big-O
+
+13.1 Relation between Ω and O
+𖦹 f(n) is Ω(g(n)) exactly when g(n) is O(f(n))
+𖦹 Both notations allow many choices of c and N
+• Many different lower bounds are possible for the same f
+
+13.2 Examples of many possible lower bounds
+𖦹 If f(n) is Ω(n²), it is also Ω(n), Ω(n¹ᐟ²), Ω(n¹ᐟ³), and so on
+𖦹 Also Ω(log n), Ω(log log n), etc.
+- Explanation: Only the largest lower bound is interesting in practice
+
+13.3 Θ notation idea
+𖦹 Θ notation gives both lower and upper bounds together
+𖦹 f(n) is Θ(g(n)) if c1·g(n) ≤ f(n) ≤ c2·g(n) for all n ≥ N
+- Explanation: Means f and g grow at the same rate in the long run
+
+13.4 Link between O, Ω, and Θ
+𖦹 f(n) is Θ(g(n)) only if f(n) is both O(g(n)) and Ω(g(n))
+𖦹 For the function 2n² + 3n + 1, the simplest Θ bound is n²
+
+13.5 Using these notations in practice
+𖦹 These notations are approximations and hide some details
+𖦹 They are still useful for comparing algorithm speeds
+
+14. Possible problems with big-O
+𖦹 Big-O hides constants; a large constant can mislead comparisons
+𖦹 Some algorithms may look worse by big-O but are faster for small n
+- Explanation: Big-O only cares about the long run and ignores small n
+
+14.1 Example of misleading big-O
+𖦹 Compare 108·n and 10·n²
+𖦹 First is O(n), second is O(n²)
+• For n ≤ 10⁷, second one is actually faster
+- Explanation: Big-O alone may cause rejecting a better algorithm
+
+14.2 Double-O (OO) notation idea
+𖦹 OO(g(n)) means O(g(n)) but with a constant too large to be useful
+𖦹 Example: 108·n is OO(n)
+- Explanation: “Too large” depends on the application
+
+15. Examples of complexities
+𖦹 Algorithms can be grouped by how fast their running time grows
+𖦹 Common groups: constant, logarithmic, linear, n·log n, quadratic, cubic, exponential
+- Explanation: Growth patterns show which algorithms are practical
+
+15.1 Real-time execution examples
+𖦹 With 1 million operations per second, quadratic on 1M items takes 11+ days
+𖦹 Cubic on 1M items takes thousands of years
+• Even huge hardware improvements help only a little for high-complexity algorithms
+- Explanation: Good algorithm design is more important than fast hardware
+
+15.2 Importance of complexity study
+𖦹 Even fast computers cannot save badly designed algorithms
+𖦹 Understanding complexity is essential, especially in data structures
+
+16. Asymptotic complexity idea
+𖦹 Asymptotic bounds help us estimate time and memory needs of algorithms
+𖦹 We mostly study time complexity by counting assignment steps
+• Comparisons are also counted in some cases
+- Explanation: We focus on how the total work grows when input size grows
+
+16.1 Simple loop example
+𖦹 Code:
+[pink]for[/pink] [yellow](i = sum = 0; i < n; i++)[/yellow]
+    [pink]sum[/pink] [yellow]+= a[i];[/yellow]
+𖦹 Two initial assignments, then loop runs n times
+• Each loop step has 2 assignments (sum update and i update)
+- Explanation: Total steps = 2 + 2n, so complexity is O(n)
+
+16.2 Nested loop example (sums of subarrays starting at 0)
+𖦹 Code:
+[pink]for[/pink] [yellow](i = 0; i < n; i++)[/yellow] {
+    [pink]for[/pink] [yellow](j = 1, sum = a[0]; j <= i; j++)[/yellow]
+        [pink]sum[/pink] [yellow]+= a[j];[/yellow]
+    [yellow]System.out.println(...);[/yellow]
 }
-• Pros: Minimal memory overhead
-• Cons: Access time O(n) if unsorted, O(log n) if sorted + binary search
-𖦹 Compressed Storage Techniques
-• Compressed Row Storage (CRS) / Compressed Column Storage (CCS)
-• Store non-zero values, row/column indices, pointers to start of each row/column
-• Efficient for matrix operations in scientific computing or graph algorithms
+𖦹 Outer loop runs n times; inner loop runs i times for each i
+• Inner loop has 2 assignments per step
+- Explanation: Total = 1 + 3n + 2(1+2+…+(n–1)) = O(n²)
 
-5. Advantages
-𖦹 Saves memory drastically for large arrays with few non-zero elements
-𖦹 Faster iteration over only meaningful elements
-𖦹 Can handle datasets too large for memory in dense form
+16.3 Nested loops but with fixed-size work
+𖦹 We print sums of last five cells of each subarray starting at 0
+𖦹 Code:
+[pink]for[/pink] [yellow](i = 4; i < n; i++)[/yellow] {
+    [pink]for[/pink] [yellow](j = i-3, sum = a[i-4]; j <= i; j++)[/yellow]
+        [pink]sum[/pink] [yellow]+= a[j];[/yellow]
+    [yellow]System.out.println(...);[/yellow]
+}
+• Outer loop runs n–4 times
+• Inner loop always runs 4 times (constant work)
+- Explanation: Total = 1 + 8·(n–4) = O(n)
 
-6. Applications
-𖦹 Graph adjacency matrices: Most graphs are sparse
-• Example: Social network with millions of users → most pairs not connected
-𖦹 Scientific computations: Matrices in physics, chemistry, engineering
-𖦹 Machine learning: Sparse feature vectors in NLP, recommendation systems
+16.4 Loops where iteration count depends on data order
+𖦹 We find length of longest increasing subarray
+𖦹 Code:
+[pink]for[/pink] [yellow](i = 0, length = 1; i < n-1; i++)[/yellow] {
+    [pink]for[/pink] [yellow](i1 = i2 = k = i; k < n-1 && a[k] < a[k+1]; k++, i2++)[/yellow];
+    [pink]if[/pink] [yellow](length < i2 - i1 + 1)[/yellow]
+        [pink]length[/pink] [yellow]= i2 - i1 + 1;[/yellow]
+    [yellow]System.out.println(...);[/yellow]
+}
+𖦹 Worst case (array strictly increasing):
+• Outer loop runs n–1 times, inner loop runs (n–1–i) times  
+- Explanation: Total = O(n²)
+𖦹 Best case (array strictly decreasing):
+• Inner loop runs once each time  
+- Explanation: Total = O(n)
 
-7. Memory Comparison
-𖦹 Dense Array: 1M elements → memory wasted = 1M × size_of(int)
-𖦹 Sparse Dict: 10 non-zero → memory used = 10 × (index + value) + hash overhead
-𖦹 Huge saving when non-zero elements << total size
-
-8. Key Takeaways
-𖦹 Sparse arrays are memory-efficient
-𖦹 Storage choice depends on lookup vs iteration needs
-• Dictionary → fast random access
-• List of tuples → less memory, slower access
-• CRS / CCS → optimized for matrix operations
+16.5 Binary search complexity
+𖦹 Binary search works by checking the middle of the current array part
+𖦹 Code:
+[pink]int[/pink] [yellow]binarySearch(int[] arr, int key) {[/yellow]
+    [pink]int[/pink] [yellow]lo = 0, mid, hi = arr.length-1;[/yellow]
+    [pink]while[/pink] [yellow](lo <= hi) {[/yellow]
+        [yellow]mid = (lo + hi)/2;[/yellow]
+        [pink]if[/pink] [yellow](key < arr[mid])[/yellow]
+            [yellow]hi = mid - 1;[/yellow]
+        [pink]else if[/pink] [yellow](arr[mid] < key)[/yellow]
+            [yellow]lo = mid + 1;[/yellow]
+        [pink]else return[/pink] [yellow]mid;[/yellow]
+    [yellow]}[/yellow]
+    [pink]return[/pink] [yellow]-1;[/yellow]
+[yellow]}[/yellow]
+𖦹 If key is absent:
+• Checked array sizes go n → n/2 → n/4 → ... → 1
+- Explanation: Number of halvings = m where n / 2^m = 1, so m = log₂ n  
+• Complexity = O(log n)
