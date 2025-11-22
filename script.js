@@ -129,7 +129,7 @@ async function loadLearnings(fileName) {
                                 const imageBaseUrl = getImageBaseUrl();
                                 url = `${imageBaseUrl}${fileName}/${imgValue}`;
                             }
-                            return `<img src="${url}" loading="lazy" style="border-radius:0.5rem;margin-top:0.2rem;margin-bottom:0.2rem;margin-left:auto;margin-right:auto;width:100%;max-width:100%;display:block;border:1px solid lightgreen;" />`;
+                            return `<img src="${url}" loading="lazy" style="border-radius:0.5rem;margin-top:0.2rem;margin-bottom:0.2rem;margin-left:auto;margin-right:auto;width:100%;max-width:100%;display:block;" />`;
                         }
                     }
                     return colorizeText(line);
