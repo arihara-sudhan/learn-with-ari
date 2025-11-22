@@ -114,8 +114,31 @@ async function loadLearnings(fileName) {
                 if (source) {
                     htmlContent += `<h2 id="source">SOURCE: ${source}</h2>`;
                 }
-                const contentLines = firstSection.split('\n').filter(line => line.trim().length > 0);
-                let content = contentLines.map((line, index) => {
+                const contentLines = firstSection.split('\n');
+                // Normalize spacing: collapse multiple blank lines and ensure single blank line before numbered sections
+                let normalizedLines = [];
+                let prevWasBlank = false;
+                for (let i = 0; i < contentLines.length; i++) {
+                    const line = contentLines[i];
+                    const trimmedLine = line.trim();
+                    const isBlank = trimmedLine.length === 0;
+                    const isNumberedSection = /^\d+\./.test(trimmedLine);
+                    
+                    // If this is a numbered section and previous line wasn't blank, add a blank line
+                    if (isNumberedSection && i > 0 && !prevWasBlank && normalizedLines.length > 0) {
+                        normalizedLines.push('');
+                    }
+                    
+                    // Collapse multiple consecutive blank lines to single blank line
+                    if (isBlank && prevWasBlank) {
+                        continue;
+                    }
+                    
+                    normalizedLines.push(line);
+                    prevWasBlank = isBlank;
+                }
+                
+                let content = normalizedLines.map(line => {
                     const trimmedLine = line.trim();
                     // Check if line starts with IMG_URL (case-insensitive)
                     if (/^IMG_URL/i.test(trimmedLine)) {
@@ -132,12 +155,7 @@ async function loadLearnings(fileName) {
                             return `<img src="${url}" loading="lazy" style="border-radius:0.5rem;margin-top:0.2rem;margin-bottom:0.2rem;margin-left:auto;margin-right:auto;width:100%;max-width:100%;display:block;" />`;
                         }
                     }
-                    const processedLine = colorizeText(line);
-                    // Add spacing before new numbered sections or main bullet points (𖦹)
-                    if (index > 0 && (/^\d+\./.test(trimmedLine) || /^𖦹/.test(trimmedLine))) {
-                        return '\n' + processedLine;
-                    }
-                    return processedLine;
+                    return colorizeText(line);
                 }).join('\n');
                 htmlContent += `<div class="code-content">${content}</div>`;
             } else if (source) {
@@ -174,9 +192,32 @@ async function loadLearnings(fileName) {
             
             // Only create section if there's actual content (not just whitespace)
             if (content_cleaned && content_cleaned.replace(/\s+/g, '').length > 0) {
-                // Process content lines (filter out empty lines first)
-                const validLines = content_cleaned.split('\n').filter(line => line.trim().length > 0);
-                content_cleaned = validLines.map((line, index) => {
+                // Process content lines and normalize spacing
+                const allLines = content_cleaned.split('\n');
+                // Normalize spacing: collapse multiple blank lines and ensure single blank line before numbered sections
+                let normalizedLines = [];
+                let prevWasBlank = false;
+                for (let i = 0; i < allLines.length; i++) {
+                    const line = allLines[i];
+                    const trimmedLine = line.trim();
+                    const isBlank = trimmedLine.length === 0;
+                    const isNumberedSection = /^\d+\./.test(trimmedLine);
+                    
+                    // If this is a numbered section and previous line wasn't blank, add a blank line
+                    if (isNumberedSection && i > 0 && !prevWasBlank && normalizedLines.length > 0) {
+                        normalizedLines.push('');
+                    }
+                    
+                    // Collapse multiple consecutive blank lines to single blank line
+                    if (isBlank && prevWasBlank) {
+                        continue;
+                    }
+                    
+                    normalizedLines.push(line);
+                    prevWasBlank = isBlank;
+                }
+                
+                content_cleaned = normalizedLines.map(line => {
                     const trimmedLine = line.trim();
                     // Check if line starts with IMG_URL (case-insensitive)
                     if (/^IMG_URL/i.test(trimmedLine)) {
@@ -193,12 +234,7 @@ async function loadLearnings(fileName) {
                             return `<img src="${url}" loading="lazy" style="border-radius:0.5rem;margin-top:0.2rem;margin-bottom:0.2rem;margin-left:auto;margin-right:auto;width:100%;max-width:100%;display:block;" />`;
                         }
                     }
-                    const processedLine = colorizeText(line);
-                    // Add spacing before new numbered sections or main bullet points (𖦹)
-                    if (index > 0 && (/^\d+\./.test(trimmedLine) || /^𖦹/.test(trimmedLine))) {
-                        return '\n' + processedLine;
-                    }
-                    return processedLine;
+                    return colorizeText(line);
                 }).join('\n');
 
                 htmlContent += `
