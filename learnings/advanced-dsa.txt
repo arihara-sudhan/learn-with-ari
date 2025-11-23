@@ -862,4 +862,205 @@ function reverseLinkedList(head):
     
     head = prev           // prev is the new head
     return head
+
+29. Skip List
+𖦹 A skip list speeds up search, insertion, and deletion in a sorted linked list
+𖦹 Adds extra "express lanes" or higher-level pointers
+𖦹 Normal linked list: check nodes one by one → slow
+𖦹 Skip list: jump ahead using higher levels, drop down when needed
+𖦹 Example:
+• Level 3: A ------------------> E
+• Level 2: A --------> C ------> E
+• Level 1: A -> B -> C -> D -> E
+
+30. Properties
+𖦹 Elements must be sorted for skipping to work
+𖦹 Multiple levels: top levels few nodes, bottom level all nodes
+𖦹 Randomized levels: each node gets level randomly, balances list probabilistically
+𖦹 Average time: O(log n) for search, insertion, deletion
+𖦹 Space: O(n)
+
+31. Analogy
+𖦹 Like a book with page numbers
+• Normal: read page by page
+• Skip list: table of contents + bookmarks → jump ahead, fine-tune
+𖦹 Faster than normal linked list for sorted data
+𖦹 Simpler than balanced trees like AVL or Red-Black
+
+32. Search – Average O(log n), Worst O(n)
+𖦹 Average:
+• Multiple levels allow skipping many nodes
+• Each step reduces remaining nodes roughly by half
+• Levels ≈ log₂(n)
+• Horizontal moves small
+- Total steps ≈ log₂(n) → O(log n)
+𖦹 Worst case:
+• All nodes at level 1 → behaves like normal linked list
+• Traverse all n nodes → O(n)
+
+33. Insertion – Average O(log n)
+𖦹 Search for correct position (average O(log n))
+𖦹 Insert node at all its levels (update pointers)
+𖦹 Randomized level assignment limits number of levels per node
+- Average insertion ≈ O(log n)
+- Worst case rare: all nodes at level 1 → O(n)
+
+34. Deletion – Average O(log n)
+𖦹 Search for node (average O(log n))
+𖦹 Update pointers of predecessors at all levels
+𖦹 Same reasoning as insertion → total cost ≈ O(log n)
+
+35. Space – O(n)
+𖦹 Each node stores array of next pointers = node’s level
+𖦹 Average node level small (≈ 2) → extra memory per node constant
+𖦹 Total nodes = n → total space O(n)
+
+36. What is a Skip List
+𖦹 An advanced linked list with multiple levels of forward pointers
+𖦹 Faster search, insertion, and deletion using express lanes
+𖦹 Each node has a randomly assigned level
+𖦹 Search starts from top level and goes down
+
+37. Node Levels
+𖦹 Each node can have multiple levels = number of forward pointers
+𖦹 Higher levels skip more nodes
+𖦹 Levels assigned randomly to balance the list
+𖦹 Example:
+• Nodes: 1 2 3 4 5 6 7
+• Levels: 1→5, 2→2, 3→3, 4→1, 5→2, 6→1, 7→1
+
+38. How Search Works
+𖦹 Start at header node, topmost level
+𖦹 Move forward while next node’s key < search key
+𖦹 Drop down one level if next is nullptr or ≥ key
+𖦹 Repeat until level 0
+𖦹 curr points to predecessor → check level 0:
+• curr = curr->forward[0]; if curr != nullptr && curr->key == key found
+- Step forward at level 0 because curr ends as largest node < key
+
+39. Why Skip List is Fast
+𖦹 Multiple levels allow jumping over nodes
+𖦹 Average search = O(log n)
+𖦹 Worst case = O(n) if all nodes end at level 0
+𖦹 Space = O(n)
+
+40. Example Search (key = 5)
+𖦹 Nodes & levels: 1(5), 2(2), 3(3), 4(1), 5(2), 6(1), 7(1)
+𖦹 Steps:
+• Start at node 1, level 5 → forward[5]=6 → 6>5 → drop to level 4
+• Level 4 → forward[4]=5 → candidate? curr still points to 1
+• Move forward level 0: curr=curr->forward[0] → points to 5 → key==5 ✅
+
+41. Key Operations
+𖦹 Search: Avg O(log n), Worst O(n)
+𖦹 Insertion: Avg O(log n)
+𖦹 Deletion: Avg O(log n)
+𖦹 Space: O(n)
+
+42. Express Lanes Analogy
+𖦹 Level >0 pointers = express lanes
+𖦹 Level 0 pointers = normal linked list
+𖦹 Node 1 level 5 can jump over nodes 2,3,4,5 to reach 6
+𖦹 Nodes exist at multiple levels via random assignment
+
+43. C++ Implementation
+𖦹 Includes header, random, time libraries
+𖦹 [pink]class[/pink] [yellow]Node[/yellow] with [yellow]key[/yellow], [blue]forward[/blue], [yellow]nodeLevel[/yellow]
+𖦹 [pink]class[/pink] [yellow]SkipList[/yellow] with [yellow]level[/yellow] and [yellow]header[/yellow]
+𖦹 Random level generator: 0.5 probability to go up
+𖦹 [pink]insert[/pink](key): find position, assign random level, update forward pointers
+𖦹 [pink]search[/pink](key): move top-down, return found/not found
+𖦹 [pink]printList[/pink](): print all levels
+𖦹 [pink]main[/pink](): create skip list, insert keys, print list, search keys
+• Code Example:
+[pink]#include[/pink] <yellow>iostream</yellow>  
+[pink]#include[/pink] <yellow>cstdlib</yellow>  
+[pink]#include[/pink] <yellow>ctime</yellow>  
+using namespace <green>std</green>;  
+
+const int MAX_LEVEL = 4;  
+
+[pink]class[/pink] [yellow]Node[/yellow] {  
+public:  
+    int key;  
+    [blue]Node**[/blue] forward;  
+    int nodeLevel;  
+    [pink]Node[/pink](int key, int level) { /* create forward array */ }  
+};  
+
+[pink]class[/pink] [yellow]SkipList[/yellow] {  
+private:  
+    int level;  
+    [blue]Node*[/blue] header;  
+public:  
+    [pink]SkipList[/pink]() { /* init header */ }  
+    int randomLevel() { /* 0.5 probability */ }  
+    void insert(int key) { /* insert node */ }  
+    bool search(int key) { /* search node */ }  
+    void printList() { /* print levels */ }  
+};  
+
+[pink]int[/pink] [pink]main[/pink]() {  
+    srand(time(0));  
+    SkipList list;  
+    list.insert(3); list.insert(6); /* insert more */  
+    list.printList();  
+    list.search(9); list.search(15);  
+    return 0;  
+}
+
+44. Self-Organizing Lists
+𖦹 Normal linked list is slow for search because you check nodes one by one
+𖦹 Self-organizing lists reorder nodes dynamically to speed up search for frequent items
+
+45. Move-to-Front Method
+𖦹 After finding an element, move it to the beginning
+𖦹 Frequently searched items stay near the front
+𖦹 Example: A B C D, search D → D A B C
+
+46. Transpose Method
+𖦹 After finding an element, swap it with the previous node
+𖦹 Element moves gradually toward front
+𖦹 Example: A B C D, search D → swap with C → A B D C
+
+47. Count Method
+𖦹 Keep a count of how many times each element is accessed
+𖦹 Sort list so most accessed elements are near front
+𖦹 Example: D accessed 3 times, B accessed 1 time → D comes before B
+
+48. Ordering Method
+𖦹 Keep list sorted by natural order (alphabetical, birthday, salary)
+𖦹 Position of elements does not change dynamically
+𖦹 Example: Alice, Bob, Charlie, David
+
+49. How New Data is Inserted
+𖦹 In move-to-front, transpose, count methods: new data goes to end of list
+𖦹 In ordering method: insert at correct position to maintain order
+
+50. Why This Helps
+𖦹 Frequently searched items stay near front → fewer steps to find
+𖦹 Useful for repeated searches in a data stream
+𖦹 In ordering method, can stop early if element doesn’t exist because list is sorted
+
+51. Inserting a Node in the Middle of a Doubly Linked List
+𖦹 To insert in the middle, first find the middle node
+𖦹 Use two pointers: slow and fast
+• [yellow]slow[/yellow] moves 1 step at a time
+• [yellow]fast[/yellow] moves 2 steps at a time
+• When [yellow]fast[/yellow] reaches end (nullptr), [yellow]slow[/yellow] points to middle
+- Code:
+[pink]while[/pink] ([yellow]fast[/yellow] != [green]nullptr[/green] && [yellow]fast[/yellow]->next != [green]nullptr[/green]) {
+    [yellow]slow[/yellow] = [yellow]slow[/yellow]->next;       // 1 step
+    [yellow]fast[/yellow] = [yellow]fast[/yellow]->next->next; // 2 steps
+}
+𖦹 Once middle node is found, insert new node before or after it
+• Adjust [yellow]prev[/yellow] and [yellow]next[/yellow] pointers of surrounding nodes
+
+52. Adapting Binary Search to Linked Lists
+𖦹 Linked lists don’t allow direct index access like arrays
+𖦹 Binary search needs O(n) to reach middle each time
+𖦹 So total time = O(n) + O(n/2) + O(n/4) + ... ≈ O(n)
+- Not as efficient as array binary search (O(log n))
+𖦹 Works logically but practically slower for large lists
+
 --END--
