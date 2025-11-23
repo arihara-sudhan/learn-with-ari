@@ -27,7 +27,8 @@ const DASH_LINE_REGEX = /^[- ]+$/;
 const SOURCE_LINE_REGEX = /^SOURCE:/i;
 const IMG_URL_REGEX = /^IMG_URL\s*@?\s*(.+)$/i;
 // Matches: --BEGIN--DATE--TOPIC-- or --BEGIN--TOPIC--DATE (e.g., --BEGIN--23/11/2025--CRISPR-- or --BEGIN--NLP--12/04/2025)
-const SNIPPET_BEGIN_REGEX = /--BEGIN--(?:(\d{2}\/\d{2}\/\d{4})--([A-Za-z0-9_-]+)--|([A-Za-z0-9_-]+)--(\d{2}\/\d{2}\/\d{4}))/g;
+// Updated to allow spaces in topic names (e.g., "TIME COMPLEXITY")
+const SNIPPET_BEGIN_REGEX = /--BEGIN--(?:(\d{2}\/\d{2}\/\d{4})--([^--]+)--|([^--]+)--(\d{2}\/\d{2}\/\d{4}))/g;
 const SNIPPET_END_REGEX = /--END--/g;
 const VALID_COLOR_NAMES = ['pink', 'yellow', 'blue', 'green', 'red', 'orange', 'purple', 'cyan', 'gray', 'grey', 'white', 'black', 'lightblue', 'lightgreen', 'lightyellow', 'lightpink', 'lightcyan', 'lightgray', 'lightgrey', 'darkblue', 'darkgreen', 'darkred', 'darkorange', 'darkpurple', 'brown', 'gold', 'silver', 'magenta', 'lime', 'aqua', 'navy', 'teal', 'maroon', 'olive', 'coral', 'salmon', 'violet', 'indigo', 'turquoise', 'tan', 'beige', 'khaki', 'plum', 'orchid', 'crimson', 'azure'];
 const BRACKET_COLOR_REGEX = new RegExp(`\\[(${VALID_COLOR_NAMES.join('|')})\\](.*?)\\[/\\1\\]`, 'gis');
