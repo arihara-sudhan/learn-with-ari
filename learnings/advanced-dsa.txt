@@ -121,23 +121,29 @@ IMG_URL bigo.png
 𖦹 These rules make it easier to estimate how fast algorithms run
 
 12.1 Fact 1: Transitivity
+IMG_URL transitive.png
 𖦹 If f(n) is O(g(n)) and g(n) is O(h(n)), then f(n) is O(h(n))
 𖦹 This means we can connect the two bounds into one
 - Explanation: Since f(n) ≤ c1·g(n) for n ≥ N1 and g(n) ≤ c2·h(n) for n ≥ N2, we get f(n) ≤ (c1·c2)·h(n) for large enough n
 
 12.2 Fact 2: Sum rule
+IMG_URL sumrule.png
 𖦹 If f(n) is O(h(n)) and g(n) is O(h(n)), then f(n) + g(n) is O(h(n))
 - Explanation: If f(n) ≤ c1·h(n) and g(n) ≤ c2·h(n), then f(n)+g(n) ≤ (c1+c2)·h(n)
 
 12.3 Fact 3: Constant times nk
+IMG_URL constant.png
 𖦹 The function a·n^k is O(n^k)
 - Explanation: a·n^k ≤ c·n^k if c ≥ a
+An Example: Even though 5·n³ is big for small n, as n → ∞, it becomes insignificant compared to n⁴. Multiplying by a constant (5) cannot change the exponent — n³ will always grow slower than n⁴ in the long run
 
 12.4 Fact 4: Smaller powers grow slower
+IMG_URL smallpower.png
 𖦹 n^k is O(n^(k+j)) for any positive j
 - Explanation: This works for c = 1 and N = 1
 
 12.5 Polynomial rule
+IMG_URL highestpower.png
 𖦹 A polynomial grows at the rate of its highest power
 𖦹 Example: f(n) = ak·n^k + ak−1·n^(k−1) + … + a1·n + a0 is O(n^k)
 • Also, f(n) is O(n^(k+j)) for any positive j
@@ -151,6 +157,7 @@ IMG_URL bigo.png
 - Explanation: Multiplying by a fixed constant does not change the growth rate
 
 12.8 Fact 6: Logarithms with any base have the same growth
+IMG_URL logdiffbases.png
 𖦹 log_a(n) is O(log_b(n)) for any positive a and b ≠ 1
 𖦹 All logarithms grow at the same rate
 - Explanation: Using log rules, log_a(n) can be written as a constant × log_b(n)
@@ -183,10 +190,6 @@ IMG_URL bigo.png
 13.4 Link between O, Ω, and Θ
 𖦹 f(n) is Θ(g(n)) only if f(n) is both O(g(n)) and Ω(g(n))
 𖦹 For the function 2n² + 3n + 1, the simplest Θ bound is n²
-
-13.5 Using these notations in practice
-𖦹 These notations are approximations and hide some details
-𖦹 They are still useful for comparing algorithm speeds
 
 14. Possible problems with big-O
 𖦹 Big-O hides constants; a large constant can mislead comparisons
