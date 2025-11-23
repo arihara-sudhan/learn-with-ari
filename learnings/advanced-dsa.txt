@@ -1223,4 +1223,108 @@ public:
     [pink]return[/pink] 0;
 }
 
+44. XOR Linked List – Simple Explanation
+𖦹 A normal doubly linked list has two pointers per node: next (points to next node) and prev (points to previous node)
+𖦹 XOR linked list reduces this to one pointer per node by storing XOR(prev, next)
+• Each node has [blue]Node*[/blue] [yellow]npx[/yellow] = prev XOR next
+- Using XOR, if you know one node (prev or next), you can compute the other
+
+45. How it works
+𖦹 XOR is a bitwise operation: a XOR b lets you reconstruct a or b if the other is known
+𖦹 To move forward: [yellow]next[/yellow] = [yellow]prev[/yellow] XOR [yellow]npx[/yellow]
+𖦹 To move backward: [yellow]prev[/yellow] = [yellow]next[/yellow] XOR [yellow]npx[/yellow]
+
+46. Traversal example
+𖦹 Suppose list is A <-> B <-> C
+𖦹 Node B stores: [yellow]B.npx[/yellow] = A XOR C
+𖦹 If you are at B and came from A: [yellow]next[/yellow] = B.npx XOR prev → (A XOR C) XOR A = C
+- This lets traversal use only one pointer per node
+
+47. Pros & Cons
+𖦹 Pros
+• Saves memory: one pointer instead of two per node
+• Clever low-level technique
+𖦹 Cons
+• Hard to debug
+• Needs XOR operation each traversal
+• Not suitable for garbage-collected languages
+• Insertions and deletions are tricky
+
+48. Key Idea
+𖦹 Each node keeps combined XOR of prev and next
+𖦹 Always need one known node (prev or next) to find the other
+𖦹 Traversal is sequential but memory usage is reduced
+𖦹 Formula:
+• npx = address(prev) XOR address(next)
+• To go forward: next = prev XOR npx
+• To go backward: prev = next XOR npx
+
+49. C++ Implementation
+[pink]#include[/pink] <[green]iostream[/green]>
+[pink]using[/pink] [pink]namespace[/pink] [green]std[/green];
+
+[pink]class[/pink] [yellow]XORNode[/yellow] {
+[pink]public[/pink]:
+    [blue]int[/blue] [yellow]data[/yellow];
+    [yellow]XORNode[/yellow]* [yellow]npx[/yellow]; // XOR of prev and next
+    [pink]XORNode[/pink]([blue]int[/blue] [yellow]val[/yellow]) {
+        [yellow]data[/yellow] = [yellow]val[/yellow];
+        [yellow]npx[/yellow] = [green]nullptr[/green];
+    }
+};
+
+// Helper XOR function
+[pink]XORNode*[/pink] [yellow]XOR[/yellow]([yellow]XORNode[/yellow]* [yellow]a[/yellow], [yellow]XORNode[/yellow]* [yellow]b[/yellow]) {
+    return ([pink]reinterpret_cast[/pink]<[yellow]XORNode[/yellow]*>(
+        ([blue]uintptr_t[/blue]) [yellow]a[/yellow] ^ ([blue]uintptr_t[/blue]) [yellow]b[/yellow]));
+}
+
+[pink]class[/pink] [yellow]XORLinkedList[/yellow] {
+[pink]private[/pink]:
+    [yellow]XORNode[/yellow]* [yellow]head[/yellow];
+    [yellow]XORNode[/yellow]* [yellow]tail[/yellow];
+[pink]public[/pink]:
+    [pink]XORLinkedList[/pink]() {
+        [yellow]head[/yellow] = [green]nullptr[/green];
+        [yellow]tail[/yellow] = [green]nullptr[/green];
+    }
+
+    [pink]void[/pink] [yellow]insert[/yellow]([blue]int[/blue] [yellow]val[/yellow]) {
+        [yellow]XORNode[/yellow]* [yellow]newNode[/yellow] = [pink]new[/pink] [yellow]XORNode[/yellow]([yellow]val[/yellow]);
+        [pink]if[/pink] ([yellow]head[/yellow] == [green]nullptr[/green]) {
+            [yellow]head[/yellow] = [yellow]tail[/yellow] = [yellow]newNode[/yellow];
+        } [pink]else[/pink] {
+            [yellow]newNode[/yellow]->[yellow]npx[/yellow] = [yellow]XOR[/yellow]([green]nullptr[/green], [yellow]tail[/yellow]);
+            [yellow]tail[/yellow]->[yellow]npx[/yellow] = [yellow]XOR[/yellow]([yellow]XOR[/yellow]([yellow]tail[/yellow]->[yellow]npx[/yellow], [green]nullptr[/green]), [yellow]newNode[/yellow]);
+            [yellow]tail[/yellow] = [yellow]newNode[/yellow];
+        }
+    }
+
+    [pink]void[/pink] [yellow]traverseForward[/yellow]() {
+        [yellow]XORNode[/yellow]* [yellow]curr[/yellow] = [yellow]head[/yellow];
+        [yellow]XORNode[/yellow]* [yellow]prev[/yellow] = [green]nullptr[/green];
+        [yellow]XORNode[/yellow]* [yellow]next[/yellow];
+
+        [pink]while[/pink] ([yellow]curr[/yellow] != [green]nullptr[/green]) {
+            [green]cout[/green] << [yellow]curr[/yellow]->[yellow]data[/yellow] << " ";
+            [yellow]next[/yellow] = [yellow]XOR[/yellow]([yellow]prev[/yellow], [yellow]curr[/yellow]->[yellow]npx[/yellow]);
+            [yellow]prev[/yellow] = [yellow]curr[/yellow];
+            [yellow]curr[/yellow] = [yellow]next[/yellow];
+        }
+        [green]cout[/green] << [green]endl[/green];
+    }
+};
+
+[pink]int[/pink] [pink]main[/pink]() {
+    [yellow]XORLinkedList[/yellow] [yellow]list[/yellow];
+     ;
+     ;
+     ;
+     ;
+
+    [green]cout[/green] << "Forward traversal: ";
+    [yellow]list[/yellow].[yellow]traverseForward[/yellow]();
+
+    [pink]return[/pink] 0;
+}
 --END--
