@@ -23,10 +23,12 @@ let activeButton = null;
 const contentCache = new Map();
 const DATE_REGEX = /(-+\s*\[(\d{2}\/\d{2}\/\d{4})\])/g;
 const SOURCE_REGEX = /^SOURCE:\s*(.+?)(?:\r?\n|$)/m;
-const SEPARATOR_REGEX = /- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -/g;
 const DASH_LINE_REGEX = /^[- ]+$/;
 const SOURCE_LINE_REGEX = /^SOURCE:/i;
 const IMG_URL_REGEX = /^IMG_URL\s*@?\s*(.+)$/i;
+// Matches: --BEGIN--DATE--TOPIC-- or --BEGIN--TOPIC--DATE (e.g., --BEGIN--23/11/2025--CRISPR-- or --BEGIN--NLP--12/04/2025)
+const SNIPPET_BEGIN_REGEX = /--BEGIN--(?:(\d{2}\/\d{2}\/\d{4})--([A-Za-z0-9_-]+)--|([A-Za-z0-9_-]+)--(\d{2}\/\d{2}\/\d{4}))/g;
+const SNIPPET_END_REGEX = /--END--/g;
 const VALID_COLOR_NAMES = ['pink', 'yellow', 'blue', 'green', 'red', 'orange', 'purple', 'cyan', 'gray', 'grey', 'white', 'black', 'lightblue', 'lightgreen', 'lightyellow', 'lightpink', 'lightcyan', 'lightgray', 'lightgrey', 'darkblue', 'darkgreen', 'darkred', 'darkorange', 'darkpurple', 'brown', 'gold', 'silver', 'magenta', 'lime', 'aqua', 'navy', 'teal', 'maroon', 'olive', 'coral', 'salmon', 'violet', 'indigo', 'turquoise', 'tan', 'beige', 'khaki', 'plum', 'orchid', 'crimson', 'azure'];
 const BRACKET_COLOR_REGEX = new RegExp(`\\[(${VALID_COLOR_NAMES.join('|')})\\](.*?)\\[/\\1\\]`, 'gis');
 
@@ -47,7 +49,92 @@ function colorizeText(text) {
     return processed;
 }
 
+function extractSnippets(text) {
+    // Debug: check if text contains BEGIN markers
+    if (text.includes('--BEGIN--')) {
+        console.log('Text contains --BEGIN-- markers');
+        // Find first BEGIN marker position
+        const firstBegin = text.indexOf('--BEGIN--');
+        const sample = text.substring(firstBegin, Math.min(firstBegin + 50, text.length));
+        console.log('Sample around first BEGIN:', sample);
+    }
+    
+    // Find all BEGIN markers
+    const beginMatches = [];
+    SNIPPET_BEGIN_REGEX.lastIndex = 0;
+    let beginMatch;
+    while ((beginMatch = SNIPPET_BEGIN_REGEX.exec(text)) !== null) {
+        console.log('Found BEGIN match:', beginMatch[0], 'at index', beginMatch.index);
+        // Handle both formats: DATE--TOPIC-- (groups 1,2) or TOPIC--DATE (groups 3,4)
+        const date = beginMatch[1] || beginMatch[4] || '';
+        const topic = beginMatch[2] || beginMatch[3] || '';
+        beginMatches.push({
+            index: beginMatch.index,
+            fullMatch: beginMatch[0],
+            date: date,
+            topic: topic,
+            endIndex: beginMatch.index + beginMatch[0].length
+        });
+    }
+    
+    // Find all END markers
+    const endMatches = [];
+    SNIPPET_END_REGEX.lastIndex = 0;
+    let endMatch;
+    while ((endMatch = SNIPPET_END_REGEX.exec(text)) !== null) {
+        endMatches.push({
+            index: endMatch.index,
+            endIndex: endMatch.index + endMatch[0].length
+        });
+    }
+    
+    // If no BEGIN markers found, return null to indicate no snippets
+    if (beginMatches.length === 0) {
+        return null;
+    }
+    
+    // Extract content between matching BEGIN and END markers
+    const snippets = [];
+    let usedEndIndices = new Set();
+    
+    for (let i = 0; i < beginMatches.length; i++) {
+        const begin = beginMatches[i];
+        // Find the next unused END marker after this BEGIN marker
+        const end = endMatches.find(e => e.index > begin.endIndex && !usedEndIndices.has(e.index));
+        
+        if (end) {
+            // Mark this END marker as used
+            usedEndIndices.add(end.index);
+            // Extract content between BEGIN and END (excluding the markers themselves)
+            const snippetContent = text.substring(begin.endIndex, end.index).trim();
+            if (snippetContent) {
+                snippets.push({
+                    content: snippetContent,
+                    date: begin.date,
+                    topic: begin.topic
+                });
+            }
+        } else {
+            // If no END marker found, extract from BEGIN to end of text
+            const snippetContent = text.substring(begin.endIndex).trim();
+            if (snippetContent) {
+                snippets.push({
+                    content: snippetContent,
+                    date: begin.date,
+                    topic: begin.topic
+                });
+            }
+        }
+    }
+    
+    // Return array of snippets, or null if none found
+    return snippets.length > 0 ? snippets : null;
+}
+
 async function loadLearnings(fileName) {
+    // Temporarily clear cache for testing - remove this line after confirming it works
+    contentCache.delete(fileName);
+    
     if (contentCache.has(fileName)) {
         const contentDiv = document.getElementById("content");
         contentDiv.innerHTML = contentCache.get(fileName);
@@ -59,7 +146,7 @@ async function loadLearnings(fileName) {
     const fallbackUrl = `${getBaseUrl()}${fileName}.txt`;
     const contentDiv = document.getElementById("content");
     
-    contentDiv.innerHTML = '<pre style="text-align:center;padding:2rem;">Loading...</pre>';
+    contentDiv.innerHTML = '<pre style="text-align:center;padding:2rem;margin:0 auto;width:60%;">Loading...</pre>';
     
     try {
         let response = await fetch(fileUrl);
@@ -72,7 +159,78 @@ async function loadLearnings(fileName) {
         if (!response.ok) {
             throw new Error(`HTTP Error! Status: ${response.status} - Failed to load from both ${fileUrl} and ${fallbackUrl}`);
         }
-        const text = await response.text();
+        let text = await response.text();
+        
+        // Extract snippets if BEGIN/END markers are present
+        const snippets = extractSnippets(text);
+        console.log('Snippets found:', snippets ? snippets.length : 0, snippets);
+        
+        // If snippets found, process them separately; otherwise use date-based parsing
+        if (snippets && snippets.length > 0) {
+            console.log('Processing', snippets.length, 'snippets...');
+            let htmlContent = '';
+            
+            // Check for SOURCE citation at the beginning of the file (before first snippet)
+            const firstBeginIndex = text.indexOf('--BEGIN--');
+            if (firstBeginIndex > 0) {
+                const textBeforeFirstSnippet = text.substring(0, firstBeginIndex);
+                SOURCE_REGEX.lastIndex = 0;
+                const fileSourceMatch = textBeforeFirstSnippet.match(SOURCE_REGEX);
+                if (fileSourceMatch) {
+                    const fileSource = fileSourceMatch[1].trim();
+                    htmlContent += `<h2 id="source" style="text-align: center; margin: 0.3rem auto 1rem auto; width: 70%; color: black;">${fileSource}</h2>`;
+                }
+            }
+            
+            // Process each snippet as a separate div
+            for (let i = 0; i < snippets.length; i++) {
+                const snippet = snippets[i];
+                console.log(`Processing snippet ${i + 1}/${snippets.length}:`, snippet.date, snippet.topic);
+                let snippetContent = snippet.content;
+                
+                // Remove SOURCE lines from snippet content (don't show them inside snippets)
+                snippetContent = snippetContent.replace(SOURCE_REGEX, '');
+                
+                // Process content lines exactly as they appear in the file
+                const allLines = snippetContent.split('\n');
+                const processedContent = allLines.map(line => {
+                    // Check if line starts with IMG_URL (case-insensitive) - only trim for detection
+                    const trimmedLine = line.trim();
+                    if (/^IMG_URL/i.test(trimmedLine)) {
+                        IMG_URL_REGEX.lastIndex = 0;
+                        const imgMatch = trimmedLine.match(IMG_URL_REGEX);
+                        if (imgMatch) {
+                            const imgValue = imgMatch[1].trim();
+                            let url = imgValue;
+                            if (!/^https?:\/\//.test(imgValue) && !imgValue.includes('/')) {
+                                const imageBaseUrl = getImageBaseUrl();
+                                url = `${imageBaseUrl}${fileName}/${imgValue}`;
+                            }
+                            return `<img src="${url}" loading="lazy" style="border-radius:0.5rem;margin-top:0.2rem;margin-bottom:0.2rem;margin-left:auto;margin-right:auto;width:100%;max-width:100%;display:block;" />`;
+                        }
+                    }
+                    // Return line exactly as it is, preserving all spaces
+                    return colorizeText(line);
+                }).join('\n');
+                
+                if (processedContent.trim().length > 0) {
+                    // Wrap snippet in div with black background and green text
+                    htmlContent += `
+                        <div class="snippet-container" style="background-color: black; color: lightgreen; padding: 0.5rem 1rem 1rem 1rem; margin: 1rem auto; width: 70%; border-radius: 0.5rem; position: relative;">
+                            ${snippet.date ? `<span id="date" style="position: absolute; top: 0.5rem; right: 1rem; font-size: clamp(0.6rem, 1.5vw, 0.8rem); opacity: 0.8;">${snippet.date}</span>` : ''}
+                            ${snippet.topic ? `<h2 id="topic" style="margin: 0; margin-top: -0.2rem; margin-bottom: 0; color: lightgreen; font-size: clamp(1.5rem, 4vw, 3rem); font-weight: bold;">${snippet.topic}</h2>` : ''}
+                            <div class="code-content">${processedContent}</div>
+                        </div>
+                    `;
+                }
+            }
+            
+            contentDiv.innerHTML = htmlContent;
+            contentCache.set(fileName, htmlContent);
+            updateActiveButton(fileName);
+            updateRoute(fileName);
+            return;
+        }
 
         DATE_REGEX.lastIndex = 0;
         const parts = [];
@@ -100,8 +258,7 @@ async function loadLearnings(fileName) {
                 source = sourceMatch[1].trim();
                 firstSection = firstSection.replace(SOURCE_REGEX, '');
             }
-            // Remove separator patterns and lines that are only dashes, spaces, or hyphens
-            firstSection = firstSection.replace(SEPARATOR_REGEX, "");
+            // Remove lines that are only dashes, spaces, or hyphens
             const lines = firstSection.split('\n');
             firstSection = lines.filter(line => {
                 const trimmed = line.trim();
@@ -112,7 +269,7 @@ async function loadLearnings(fileName) {
             // Only add section if there's actual content (not just whitespace)
             if (firstSection && firstSection.replace(/\s+/g, '').length > 0) {
                 if (source) {
-                    htmlContent += `<h2 id="source">SOURCE: ${source}</h2>`;
+                    htmlContent += `<h2 id="source">${source}</h2>`;
                 }
                 const contentLines = firstSection.split('\n').filter(line => line.trim().length > 0);
                 let content = contentLines.map(line => {
@@ -156,10 +313,8 @@ async function loadLearnings(fileName) {
                 content = content.replace(SOURCE_REGEX, '');
             }
             
-            // Clean up separator lines and trim
-            let content_cleaned = content.replace(SEPARATOR_REGEX, "");
-            
             // Remove lines that are only dashes, spaces, hyphens, or SOURCE lines
+            let content_cleaned = content;
             const allLines = content_cleaned.split('\n');
             content_cleaned = allLines.filter(line => {
                 const trimmed = line.trim();
@@ -193,7 +348,7 @@ async function loadLearnings(fileName) {
 
                 htmlContent += `
                     <div class="section">
-                        ${source ? `<h2 id="source">SOURCE: ${source}</h2>` : ''}
+                        ${source ? `<h2 id="source">${source}</h2>` : ''}
                         <h2 id="date">Date: ${date}</h2>
                         <div class="code-content">${content_cleaned}</div>
                     </div>

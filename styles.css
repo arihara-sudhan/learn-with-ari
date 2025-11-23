@@ -1,8 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap');
 header {
     text-align: center;
-    margin-bottom: 1.5rem;
-    padding: 1rem 0;
+    margin-bottom: 0;
+    padding: 1rem 0 0.2rem 0;
 }
 h1 {
     margin: 0;
@@ -50,14 +50,15 @@ pre {
 }
 .code-content {
     background: black;
-    padding: 1rem;
+    padding: 0;
+    margin: 0;
     color: lawngreen;
     white-space: pre-wrap;
     word-wrap: break-word;
     font-size: 1rem;
-    border-radius: 1rem;
+    border-radius: 0;
     font-family: consolas, monospace;
-    line-height: 2;
+    line-height: 1 !important;
 }
 a {
     color: black;
@@ -93,6 +94,12 @@ img {
     }
     .code-content {
         font-size: 0.9rem;
+    }
+    .snippet-container {
+        width: 90% !important;
+    }
+    #source {
+        width: 90% !important;
     }
 }
 

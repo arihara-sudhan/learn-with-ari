@@ -1,5 +1,5 @@
 SOURCE: Chapter 2 of The Book, "Machine Learning for Brain Disorders" by Johann Faouzi, Olivier Colliot
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[14/03/2025]
+--BEGIN--CLASSICAL ML--22/11/2025
 1. Nearest Neighbor: Intuition
  - Training Samples are converted into feature vectors
  - Clusters Observed
@@ -52,7 +52,6 @@ SOURCE: Chapter 2 of The Book, "Machine Learning for Brain Disorders" by Johann 
 10. Linear Regression
  - A linear model is a model that linearly combines the features
 		Y^ = x^⊤w + B
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[15/03/2025]
 11. To estimate w values,
  - Ordinary Least Squares Regression
 	||y - Xw||²₂
@@ -107,7 +106,6 @@ Fitting: y = w1 * X1 + w2 * X2 + b
   - w1 = 4, w2 = 2  
   - w1 = -2, w2 = 8  
 PBLM: Poor Generalization on New Data
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[16/03/2025]
 25. With ℓ₂ Regularization (Ridge Regression)  
 	L = Σ (y_i - (w1 * X1 + w2 * X2 + b))² + λ (w1² + w2²)  
 where λ controls the strength of the regularization.
@@ -267,7 +265,6 @@ In ε-insensitive loss, ε (epsilon) represents a tolerance margin within which 
 	Gini_gain = 0.48 - 0
 	 = 0.48
 	Perfect split! (Best possible case: Gini Impurity of 0 for both child nodes)
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[17/03/2025]
 54. Random Forest
  - Each tree is trained on a random subset of training samples
  - Random sampling helps trees be less correlated with each other
@@ -300,7 +297,6 @@ For Regression:
 	There comes an Elbow Point, where the K value is changing the direction
 	This is the point where K represents the actual number of clusters
 60. We can also use Silhoutte Score instead of WCSSC
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[27/04/2025]
 61. GMM: Gaussian Mixture Model
 	Assumption: The data comes from multiple blobs; Each blob has a center (mean), spread (variance)
 62. Clusters can Overlap: GMM tells, "This image belongs 70% to blob A, 30% to blob B"
@@ -328,7 +324,6 @@ For Regression:
 	7. Once converged, output the final Gaussian parameters and the soft cluster assignments for each data point.
 67. Eigen Vector: A special vector that, when acted upon by a matrix, only gets stretched or compressed (scaled by a scalar called an eigenvalue) but does not change its direction
 	Av=λv
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[28/04/2025]
 68. Curse of Dimensionality
 	- More Features -> Sparsity of Datapoints
 	- In HIGH Dimensions, the distance loses it's meaning
@@ -340,3 +335,11 @@ For Regression:
 	Eigen Values tell us how much variance (importance) each principal component explains
 72. We take The Eigen Vector of Covariance Matrix
 73. When we project a particular vector onto the eigen vector, the projected vector stretches (Spreads) | Any vector can have some spread (variance) when we project the data onto it. But, the spread is not maximum unless the vector is an eigenvector of the covariance matrix
+--END-- data makes models harder to train and more prone to overfitting capturing noise rather than the underlying patterns
+69. More Spread - More Information
+70. Principal Component Analysis: Aims to find a low-dimensional representation of a dataset while keeping a great share of the variance; It is unsupervised
+71. Eigen Vectors tell us the principal components
+	Eigen Values tell us how much variance (importance) each principal component explains
+72. We take The Eigen Vector of Covariance Matrix
+73. When we project a particular vector onto the eigen vector, the projected vector stretches (Spreads) | Any vector can have some spread (variance) when we project the data onto it. But, the spread is not maximum unless the vector is an eigenvector of the covariance matrix
+--END--

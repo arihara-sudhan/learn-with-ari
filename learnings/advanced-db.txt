@@ -1,5 +1,5 @@
 SOURCE: Elmasri & Navathe – “Database System Concepts” by Abraham Silberschatz, Henry F. Korth and S. Sudarshan.
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[07/11/2025]
+--BEGIN--DBMS--12/07/2025
 1. Database-Management System (DBMS)
 𖦹 A DBMS is a collection of interrelated data and programs to access the data.
 𖦹 The collection of data is called the database and contains information relevant to an enterprise.
@@ -376,7 +376,6 @@ SOURCE: Elmasri & Navathe – “Database System Concepts” by Abraham Silbersc
 - Ensuring sufficient disk space.
 - Monitoring database performance and managing heavy workloads.
 
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[08/11/2025]
 29. Introduction to the Relational Model
 𖦹 The relational model is widely used in commercial data-processing.
 𖦹 Its simplicity makes it easier for programmers compared to earlier models.
@@ -675,7 +674,6 @@ courses_fall ∩ courses_spring
 𖦹 Logical connectives (and, or, not) and comparison operators (<, <=, >, >=, =, <>) can be used in conditions.
 𖦹 Conditions can compare numbers, strings, or special types like dates.
 
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[09/11/2025]
 56. Queries on Multiple Relations
 𖦹 Queries can combine data from multiple tables.
 𖦹 Example: Retrieve instructor names with department names and building names:
@@ -839,7 +837,6 @@ courses_fall ∩ courses_spring
 𖦹 Some systems (like Oracle) use minus instead of except.
 𖦹 MySQL does not implement except; subqueries can be used as alternatives.
 
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[10/11/2025]
 68. Null Values
 𖦹 Null values create special issues in arithmetic, comparison, and set operations.
 𖦹 Any arithmetic expression with a null input results in null.
@@ -1230,7 +1227,6 @@ courses_fall ∩ courses_spring
 • select ID from student natural left outer join takes where courseid is null
 𖦹 Right outer join works symmetrically, order of relations affects result attribute order
 
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[11/11/2025]
 92. Purpose of Views  
 𖦹 Not all users should see full data in all relations  
 𖦹 Views allow showing only selected attributes  
@@ -2472,7 +2468,6 @@ IMG_URL er-uml.png
 • Designers interact with domain experts to understand requirements.
 
 SOURCE: Raghu Ramakrishnan & Johannes Gehrke – "Database Management Systems", McGraw-Hill
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[12/11/2025]
 1. File organization and basic data access
 𖦹 A collection of records is stored in files, and each file consists of pages.
 𖦹 The file layer arranges data to support fast access to needed records.
@@ -2712,7 +2707,6 @@ IMG_URL tree-index.png
 𖦹 The index automatically updates with inserts and deletes on the Students table.
 
 SOURCE: Elmasri and Navathe – "FUNDAMENTALS OF DATABASE SYSTEMS"
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[12/11/2025]
 1. Object and Object-Relational Databases
 𖦹 Object-oriented data models have features now incorporated in relational databases and SQL standards.
 𖦹 Some features are also in NoSQL and XML models.
@@ -4046,3 +4040,21 @@ IMG_URL query_optim2.png
 𖦹 Use in queries
 • Replace query components with materialized view to save computation.
 • Example: using view for R ⨝ S or πLR to avoid recomputation; indexes may further optimize access.
+--END--and.
+• Periodic: update at regular intervals.
+• Triggers may automate updates.
+𖦹 Incremental View Maintenance
+• Update view only with net changes from inserted/deleted tuples.
+• Join: vnew = (r ∪ ri) ⨝ s or adjust for deletions.
+• Selection: vnew = vold ∪ σC ri or vnew = vold − σC rd.
+• Projection: maintain counts for tuples; update on insert/delete.
+• Intersection: insert if in other relation; delete if present.
+• Aggregation (Group By)
+- Count: increment/decrement per group.
+- Sum: maintain sum and count per group; adjust on insert/delete.
+- Average: maintain sum and count to compute average.
+- Max/Min: track max value and count; recompute if max deleted.
+𖦹 Use in queries
+• Replace query components with materialized view to save computation.
+• Example: using view for R ⨝ S or πLR to avoid recomputation; indexes may further optimize access.
+--END--

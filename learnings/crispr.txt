@@ -1,5 +1,5 @@
 SOURCE: A CRACK IN CREATION : Gene Editing And The Unthinkable Power To Control Evolution by JENNIFER A. DOUDNA SAMUEL H. STERNBERG
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[12/07/2025]
+--BEGIN--CRISPR--12/07/2025
 IMG_URL dna-structure.png
 1. Zinc Finger Protein: Recognizer of DNA Bases: Adenine, Cytosine, Guanine, and Thymine
 2. Nuclease: Cutting Protein
@@ -29,7 +29,8 @@ IMG_URL crispr-sgrna.png
 12. The gRNA (guide RNA) acts like a GPS, directing the Cas9 protein to the specific DNA sequence that needs to be cut. However, Cas9 can’t cut just anywhere—it needs to see a small tag next to the target site called the PAM (Protospacer Adjacent Motif). PAM isn’t part of the guidance system but acts like a "cut here" signal or a permission slip; without it, Cas9 won’t make the cut, even if the gRNA is correct. So, the gRNA shows where to go, and the PAM confirms whether it’s allowed to cut there.
 13. Vectors: To get Cas9 and gRNA into the cell, we need a carrier (like a box) to deliver them. These carriers are called vectors
 14. OFFTARGETS: Off-targets are accidental edits in the wrong place
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[14/07/2025]
+--END--
+--BEGIN--CRISPR--14/07/2025
 IMG_URL cell-chromosome-gene-dna.png
 15. WHIM Syndrome: Affecting just a few dozen people worldwide, WHIM is a painful, potentially deadly immunodeficiency disease that makes life difficult for those unfortunate enough to suffer from it. It is caused by a tiny mutation, a single incorrect letter among some six billion total letters of one’s DNA
 16. Kim’s Mysterious Recovery: Diagnosed with WHIM from birth. By age 58, she was symptom-free for over 20 years, without treatment. Her daughters still had the disease. Kim’s skin cells still had the mutation. Her blood cells did not, the mutated gene was missing. DNA from one of her chromosomes was heavily damaged and rearranged.
@@ -58,7 +59,8 @@ IMG_URL gene-addition.png
 Example: Sickle cell disease – You need two faulty HBB genes to have the disease.
 🧬 Dominant Disease: Only one gene copy needs to be mutated to cause the disease. The faulty gene overrides the normal one. Example: Huntington’s disease or WHIM syndrome – Even one mutated gene causes symptoms.
 30. Scientists realized they needed tools to fix faulty genes at the source, not just add copies. New Approaches Explored: Researchers began experimenting with editing RNA and DNA directly in cells and animal models, enabling precise genetic modifications
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[15/07/2025]
+--END--
+--BEGIN--CRISPR--15/07/2025
 31. Sickle cell is a recessive genetic disease: One must inherit two copies of the mutated gene (one from each parent) to be affected. If someone only inherits one copy, he/she is a carrier; he/she usually doesn’t get sick, but he/she can pass it to his/her kids
 32. In sickle cell disease: A single letter in the gene is changed: an “A” is swapped for a “T” at position 17. This changes one amino acid in the hemoglobin protein: glutamate → valine. Even though it’s just 10 atoms out of 8000+, this causes: Hemoglobin proteins to stick together. Red blood cells to change shape (become sickle-shaped)
 Health problems: anemia, pain, stroke risk, infections
@@ -96,7 +98,8 @@ So:
     Together → targets "GAATGCCCT"
 51. Limitations of ZFNs: Difficult to design and expensive: Required expertise in protein engineering | Unpredictable performance: some ZFNs failed to cut or were too random. Because of these issues, ZFNs were not widely adopted despite their promise
 52. Next: TALENs (Transcription Activator-Like Effector Nucleases) | TALENs came from plant pathogens (Xanthomonas). Like ZFNs, they had repeatable parts that could be customized. Key advantage: Each TALE segment recognized 1 letter of DNA, making them easier to design. Scientists could easily assemble custom DNA-binding proteins. TALENs were better than ZFNs: easier to design and build. Worked well in gene editing applications
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[28/07/2025]
+--END--
+--BEGIN--CRISPR--28/07/2025
 53. Chromatin: Package in which the DNA is stored inside a cell nucleus; Packed
 54. Types of Chromatin: 
 	Euchromatin	-> Loosely packed: Genes are active, easy to access
@@ -116,7 +119,8 @@ Clustered: These repeat-spacer arrays are found in one region, not scattered acr
 62. Comparison with Other Repeats: Other bacterial DNA repeats (like REP and BIME) exist but lacked CRISPR’s regularity and defined structure.
 63. Significance of Repeats: CRISPR repeats are palindromic, i.e., they read nearly the same forwards and backwards, which aids in forming secondary structures in RNA.
 64. Why It Mattered: This structured and uniform DNA region hinted at a functional role, not just junk DNA prompting further research
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[29/07/2025]
+--END--
+--BEGIN--CRISPR--29/07/2025
 IMG_URL phage.png
 65. CRISPR (Clustered Regularly Interspaced Short Palindromic Repeats) spacers are snippets of DNA located between repeating sequences.
 66. These spacers have DNA sequences that match those of known bacterial viruses.
@@ -162,7 +166,8 @@ IMG_URL phage3.png
 95. In the Type II CRISPR-Cas system (e.g., in S. thermophilus), the DNA destruction is more precise, with the enzyme acting like a pair of scissors to cut the DNA at a specific site.
 96. The enzyme responsible for cutting DNA in the Type II system was, at that point, still unknown. The mechanisms for targeting were also a mystery.
 97. The programmable DNA-cutting ability of the Type II system drew comparisons to existing gene-editing tools like ZFNs and TALENs, highlighting its potential for future applications.
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[30/07/2025]
+--END--
+--BEGIN--CRISPR--30/07/2025
 98. Emmanuelle Charpentier discovered a second RNA molecule, called tracrRNA, which is also necessary for the production of CRISPR RNAs in some Type II CRISPR systems. This demonstrated a greater diversity in bacterial immunity than previously understood.
 99. The Type II CRISPR system in the bacterium Streptococcus pyogenes uses a gene called csn1 (later renamed cas9) to snip apart viral DNA.
 100. S. pyogenes is a pathogen responsible for numerous human illnesses and over half a million deaths annually, making research into its CRISPR system medically significant.
@@ -212,7 +217,8 @@ IMG_URL crispr-mice.png
 IMG_URL indel.png
 133. This disruption of the reading frame is the basis of a gene knockout (KO), where the CRISPR-induced indels prevent a gene from producing a functional protein, effectively "knocking it out."
 IMG_URL crispr-knockout.png
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[31/07/2025]
+--END--
+--BEGIN--CRISPR--31/07/2025
 IMG_URL crispr-knockout-removal.png
 134. Gene knockouts are a useful application of CRISPR, as demonstrated by an experiment where targeting the TYR gene (involved in melanin synthesis) in mice resulted in albino pups.
 135. Homologous recombination (also known as homology-directed repair) is a more precise DNA repair mechanism than nonhomologous end joining. It uses a provided repair template that is similar in sequence to the broken chromosome ends to accurately fix the DNA, allowing for the correction of specific genetic mutations.
@@ -227,3 +233,4 @@ IMG_URL crispr-knockout-removal.png
 144. Addgene is a plasmid repository and distribution service that functions like Netflix, making CRISPR tools easily accessible to academic and nonprofit labs around the world.
 145. Advanced algorithms and software have made CRISPR design even easier, enabling complex experiments like genome-wide screens.
 146. The democratization of CRISPR has led to its use by amateurs and "biohackers" and even in a crowdfunded DIY gene-editing kit, which raises concerns about the potential for unintended and uncontrolled applications.
+--END--

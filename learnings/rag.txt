@@ -1,5 +1,5 @@
 SOURCE: "A Taxonomy of Retrieval Augmented Generation" by Abhinav Kimothi
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[14/04/2025]
+--BEGIN--RAG--12/07/2025
 1. RAG - Introduced by Dr.Patrick Lewis
 2. LLM Limitation
 	- Knowledge Cut-Off
@@ -53,7 +53,6 @@ SOURCE: "A Taxonomy of Retrieval Augmented Generation" by Abhinav Kimothi
 	- To handle HIGH Dimensional Vectors
 	- Stores & Indexes'em Efficiently
 	- Examples: FAISS, Weaviate, Pinecone
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[15/04/2025]
 18. Generation Pipeline
 	- Set of Processes employed to search, retrieve and generate
 	- Real Time
@@ -109,7 +108,6 @@ SOURCE: "A Taxonomy of Retrieval Augmented Generation" by Abhinav Kimothi
 	Observation: Ales Bialiatski, Memorial, and Center for Civil Liberties won
 	Thought: Now I know who won. Let me answer clearly
 	Final Answer: Ales Bialiatski, Memorial, and the Center for Civil Liberties
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[16/04/2025]		
 28. Pretraining
 	- Training a large model on massive unlabeled data using self-supervised learning (like predicting the next word)
 	- To learn language, reasoning, and world knowledge, which makes it highly adaptable for many downstream tasks with minimal additional training
@@ -192,7 +190,6 @@ SOURCE: "A Taxonomy of Retrieval Augmented Generation" by Abhinav Kimothi
 		"Python is used in AI and has easy syntax."
 	Relevant claims covered = 2 / 3 = 0.66 (66% coverage)
 38. Interesting: We can prepare, "QUERY-PROMPT-RESPONSE" for evaluating RAG
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[22/04/2025]
 39. Noise Robustness: The ability of The RAG System to answer relevantly although there are noises [Noises: Documents which are mostly out of Context/Query being asked]
 40. Negative Rejection: The ability of the RAG system to not give an answer when there is no relevant information in the document retrieved
 41. Information Integration: The generation part takes care of it; When there are high relevance in the retrieved claims, they will be integrated with the help of LLMs
@@ -218,7 +215,6 @@ SOURCE: "A Taxonomy of Retrieval Augmented Generation" by Abhinav Kimothi
 	- The retrieved documents are checked for similarity with the Hypothetical Answer
 50. Query Routing
 	- Directing to The Query
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[23/04/2025]
 51. Hybrid Retrieval: Combining Multiple Types of Retrieval together to get the best
 52. Iterative Retrieval: The Retrieval happens for n times; The Generated Response is used for further retrievals
 53. Recursive Retrieval: The Retrieval Query is moderated based on the generation
@@ -242,7 +238,6 @@ SOURCE: "A Taxonomy of Retrieval Augmented Generation" by Abhinav Kimothi
 		1/2 + 1/1 + 1/2 = 2
 	Descending Order: 2.34 -> 2 -> 1.16
 		REST_A -> REST_C -> REST_B
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[24/04/2025]
 59. Routing: Navigates through diverse data sources, selecting the optimal pathway for a query
 60. Knowledge Graph: Compact, Effective Representation of KB
   ENTITY ---- RELATIONSHIP
@@ -294,7 +289,6 @@ Relationships (Edges):
 64. Community Summaries: LLM generated summaries for communities, providing insights into topical structure and semantics
 65. Local Search: Identifying a set of entities from the knowledge graph that are related to the user input
 Global Search: Similarity based search on community summaries
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[25/04/2025]
 66. Multimodal RAG: Using other modalities like Vision, Audio, etc,. in addition to text in both retrieval and generation
 67. CLIP: Contrastive Language Image Pre-Training; For Cross-Modal Retrieval
 68. Agentic RAG: LLM based Agent + Tools
@@ -304,3 +298,13 @@ Global Search: Similarity based search on community summaries
 72. RAG with Active Learning: Improvises over time
 73. Personalized RAG: Personalizes based on interaction
 74. RAG Limitations: Handling Large Scale of Data, Inefficient Routing, Data Silos, Context Loss in Long Queries, Adversarial Attacks, Incoherent Generation, Relevance Mismatch
+--END--Multimodal RAG: Using other modalities like Vision, Audio, etc,. in addition to text in both retrieval and generation
+67. CLIP: Contrastive Language Image Pre-Training; For Cross-Modal Retrieval
+68. Agentic RAG: LLM based Agent + Tools
+69. Routing Agent: Reasons + Understands + Delegates to appropriate TOOL
+70. Query Planning Agent: Breaks the complex query into subqueries and delegates them to apt tools and orchestrates the pipeline
+71. Corrective RAG: Generates -> Checks with Gold
+72. RAG with Active Learning: Improvises over time
+73. Personalized RAG: Personalizes based on interaction
+74. RAG Limitations: Handling Large Scale of Data, Inefficient Routing, Data Silos, Context Loss in Long Queries, Adversarial Attacks, Incoherent Generation, Relevance Mismatch
+--END--
