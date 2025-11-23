@@ -171,6 +171,7 @@ IMG_URL logdiffbases.png
 𖦹 f(n) is Ω(g(n)) when f(n) ≥ c·g(n) for all n ≥ N
 • Means f grows at least as fast as g in the long run
 - Explanation: Only the direction of the inequality changes compared to big-O
+In other words, f(n cannot grow slower than g(n) after some point N)
 
 13.1 Relation between Ω and O
 𖦹 f(n) is Ω(g(n)) exactly when g(n) is O(f(n))
@@ -294,4 +295,64 @@ IMG_URL logdiffbases.png
 • Checked array sizes go n → n/2 → n/4 → ... → 1
 - Explanation: Number of halvings = m where n / 2^m = 1, so m = log₂ n  
 • Complexity = O(log n)
+--END--
+--BEGIN--23/11/2025--LINKED LISTS--
+1. Arrays and their limitations
+𖦹 Arrays store elements one after another in memory, i.e., sequentially
+𖦹 Limitations of arrays:
+• Fixed size
+- To change the size, you must create a new array and copy all data.
+• Sequential memory
+- Elements are next to each other in memory.
+- Inserting in the middle requires shifting other elements, which is slow.
+
+2. Linked structures
+𖦹 Used to overcome array limitations.
+𖦹 Made of nodes, where each node has:
+• Data
+- The value you want to store.
+• Reference(s)
+- Links to other nodes.
+𖦹 Nodes can be anywhere in memory.
+𖦹 You move from one node to another using links.
+
+3. Singly Linked List (SLL)
+𖦹 Each node has a link only to its next node (successor).
+𖦹 Nodes are connected like a chain.
+𖦹 Access the list using one variable pointing to the first node.
+𖦹 Last node points to null to indicate the end of the list.
+IMG_URL sll.png
+
+4. Singly Linked List (SLL) implementation
+𖦹 Demonstrates creating and linking nodes in a singly linked list.
+𖦹 Code example:
+
+[pink]#include[/pink] <[green]iostream[/green]>
+[pink]using[/pink] [pink]namespace[/pink] [green]std[/green];
+
+[pink]class[/pink] [yellow]SLLNode[/yellow] {
+    [pink]public[/pink]:
+        [blue]int[/blue] [yellow]data[/yellow];
+        [yellow]SLLNode*[/yellow] [yellow]next[/yellow];
+        [yellow]SLLNode[/yellow]([blue]int[/blue] [yellow]data[/yellow], [yellow]SLLNode*[/yellow] [yellow]next[/yellow]=[green]nullptr[/green]){
+            [pink]this[/pink]->[yellow]data[/yellow] = [yellow]data[/yellow];
+            [pink]this[/pink]->[yellow]next[/yellow] = [yellow]next[/yellow];
+        }
+};
+
+[pink]int[/pink] [pink]main[/pink]() {
+     ;
+    [yellow]SLLNode*[/yellow] [yellow]firstNode[/yellow] = [pink]new[/pink] [yellow]SLLNode[/yellow](2, [yellow]secondNode[/yellow]);
+    [green]cout[/green]<<[yellow]firstNode[/yellow]->[yellow]data[/yellow]<<"\n";
+    [green]cout[/green]<<[yellow]firstNode[/yellow]->[yellow]next[/yellow]->[yellow]data[/yellow];
+    [pink]delete[/pink] [yellow]secondNode[/yellow];
+    [pink]delete[/pink] [yellow]firstNode[/yellow];
+    [pink]return[/pink] 0;
+}
+𖦹 Creates two nodes with data 2 and 3.
+𖦹 Links first node to second node.
+𖦹 Prints data of first and second node.
+𖦹 Frees memory using delete to avoid memory leaks.
+
+
 --END--
