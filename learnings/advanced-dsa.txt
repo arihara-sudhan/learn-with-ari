@@ -83,6 +83,7 @@ IMG_URL rabbit-carrot-chase.gif
 - f(n) = 2n² + O(n)
 
 11. Finding c and N
+IMG_URL bigo.png
 𖦹 We compare each part of f(n) with g(n) to show f(n) ≤ c × g(n)
 𖦹 We rewrite all parts of f(n) so they look like some_number × g(n)
 • This helps us show f(n) grows no faster than g(n)
