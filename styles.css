@@ -68,6 +68,19 @@ img {
     max-width: 100%;
     height: auto;
 }
+.bottom-gif {
+    position: fixed;
+    bottom: -10px;
+    z-index: 1000;
+    left: 0%;
+    pointer-events: none;
+}
+.bottom-gif img {
+    width: 50%;
+    height: auto;
+    max-width: none;
+    display: block;
+}
 @media (max-width: 600px) {
     body { 
         padding: 10px;
@@ -100,6 +113,9 @@ img {
     }
     #source {
         width: 90% !important;
+    }
+    .bottom-gif {
+        display: none;
     }
 }
 
