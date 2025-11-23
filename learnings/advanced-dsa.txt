@@ -508,4 +508,27 @@ IMG_URL sll.png
 𖦹 Otherwise, update previous node's next to skip the deleted node.
 𖦹 The destructor frees all nodes to avoid memory leaks.
 
+7. Singly Linked List Operations and Complexity
+𖦹 Insertion at head: O(1)
+• Create a new node and point it to the current head.
+- Very fast because no traversal is needed.
+𖦹 Insertion at tail (without tail pointer): O(n)
+• Traverse from head to the last node.
+• Link the new node after the last node.
+- Slower because traversal is needed.
+𖦹 Insertion after a given node: O(1)
+• If you have a pointer to the node, link the new node immediately.
+- Constant time insertion.
+𖦹 Deletion of head node: O(1)
+• Move head pointer to the next node.
+• Delete the old head node.
+- Fast because no traversal is needed.
+𖦹 Deletion of a node by value: O(n)
+• Traverse the list to find the node with the value.
+• Remove the node and fix links.
+- Slower because search may require visiting all nodes.
+𖦹 Searching for a value: O(n)
+• Check each node from head to tail.
+- Linear time search.
+
 --END--
