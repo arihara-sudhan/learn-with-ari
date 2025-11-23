@@ -531,4 +531,236 @@ IMG_URL sll.png
 • Check each node from head to tail.
 - Linear time search.
 
+8. What is a DLL?
+IMG_URL dll.png
+𖦹 A list where each node has two links: next and prev
+𖦹 You can move both forward and backward
+𖦹 Helpful when you need two-way movement
+
+9. Node structure
+𖦹 Each node has:
+• data
+• next pointer → goes to next node
+• prev pointer → goes to previous node
+𖦹 First node has prev = NULL
+𖦹 Last node has next = NULL
+
+10. Basic picture
+𖦹 NULL <- [10] <-> [20] <-> [30] -> NULL
+11. Doubly Linked List Operations and Complexity
+𖦹 Insertion at head: O(1)
+• Create new node
+• new->next = head
+• head->prev = new
+• head = new
+- No need to walk through list
+𖦹 Insertion at tail without tail pointer: O(n)
+• Walk from head to last node
+• last->next = new
+• new->prev = last
+- Must visit all nodes
+𖦹 Insertion at tail with tail pointer: O(1)
+• tail->next = new
+• new->prev = tail
+• tail = new
+- Very quick
+𖦹 Insertion after a given node: O(1)
+• new->next = node->next
+• new->prev = node
+• Fix next node’s prev
+• Fix node->next
+- Only pointer updates
+𖦹 Insertion before a given node: O(1)
+• new->prev = node->prev
+• new->next = node
+• Fix prev node’s next
+• Fix node->prev
+- DLL makes “insert before” easy
+𖦹 Deletion of head: O(1)
+• head = head->next
+• head->prev = NULL
+• delete old head
+- Very fast
+𖦹 Deletion of tail with tail pointer: O(1)
+• tail = tail->prev
+• tail->next = NULL
+• delete old tail
+- No traversal needed
+𖦹 Deletion by value: O(n)
+• Walk to find the value
+• Fix next and prev
+• Delete the node
+- Search takes linear time
+𖦹 Searching for a value: O(n)
+• Move node by node
+- Same as singly list
+𖦹 Forward traversal: O(n)
+• Use next pointer
+
+𖦹 Backward traversal: O(n)
+• Use prev pointer
+- Only DLL can do backward travel
+
+12. Extra Advanced DLL Operations
+𖦹 Reverse the list: O(n)
+• Swap next and prev for each node
+• Move head to last node
+𖦹 Insert at position k: O(n)
+• Walk to k
+• Insert before or after
+𖦹 Delete at position k: O(n)
+• Walk to k
+• Remove the node
+
+13. Memory Usage
+𖦹 DLL uses more memory than singly lists
+• data
+• next pointer
+• prev pointer
+𖦹 Extra pointer takes more space
+
+14. Advantages of DLL
+𖦹 Move in both directions
+𖦹 Delete easier because prev exists
+𖦹 Insert before any node easily
+𖦹 Good for systems like:
+• LRU cache
+• Browser history
+• Undo-redo
+• Playlist navigation
+𖦹 Fast tail deletion if tail pointer exists
+
+15. Disadvantages of DLL
+𖦹 Uses more memory
+𖦹 More complex to code
+𖦹 Must update two pointers
+𖦹 Mistakes in pointers can break list
+
+16. When to Use DLL
+𖦹 Use DLL when:
+• You need two-way movement
+• You want quick delete after finding node
+• You need undo/redo
+• You want LRU cache
+• You need easy navigation
+𖦹 Do not use DLL when:
+• You want simple structure
+• Memory must be saved
+• Only forward travel is needed
+• Backward travel not needed
+
+17. Doubly Linked List Example Program
+[pink]#include[/pink] <iostream>
+[pink]using[/pink] [pink]namespace[/pink] std;
+
+[pink]class[/pink] [yellow]DLLNode[/yellow] {
+[pink]public[/pink]:
+    [pink]int[/pink] [yellow]data[/yellow];
+    [blue]DLLNode*[/blue] [yellow]next[/yellow];
+    [blue]DLLNode*[/blue] [yellow]prev[/yellow];
+
+    [yellow]DLLNode[/yellow]([pink]int[/pink] [yellow]data[/yellow],
+              [blue]DLLNode*[/blue] [yellow]next[/yellow] = [green]nullptr[/green],
+              [blue]DLLNode*[/blue] [yellow]prev[/yellow] = [green]nullptr[/green]) {
+        [pink]this[/pink]->[yellow]data[/yellow] = [yellow]data[/yellow];
+        [pink]this[/pink]->[yellow]next[/yellow] = [yellow]next[/yellow];
+        [pink]this[/pink]->[yellow]prev[/yellow] = [yellow]prev[/yellow];
+    }
+};
+
+[pink]class[/pink] [yellow]DoublyLinkedList[/yellow] {
+[pink]private[/pink]:
+    [blue]DLLNode*[/blue] [yellow]head[/yellow];
+
+[pink]public[/pink]:
+    [yellow]DoublyLinkedList[/yellow]() {
+        [yellow]head[/yellow] = [green]nullptr[/green];
+    }
+
+    [pink]~DoublyLinkedList[/pink]() {
+        [blue]DLLNode*[/blue] [yellow]temp[/yellow] = [yellow]head[/yellow];
+        [pink]while[/pink] ([yellow]temp[/yellow] != [green]nullptr[/green]) {
+            [blue]DLLNode*[/blue] [yellow]nextNode[/yellow] = [yellow]temp[/yellow]->[yellow]next[/yellow];
+            [pink]delete[/pink] [yellow]temp[/yellow];
+            [yellow]temp[/yellow] = [yellow]nextNode[/yellow];
+        }
+    }
+
+    [pink]void[/pink] [yellow]printAll[/yellow]() {
+        [blue]DLLNode*[/blue] [yellow]temp[/yellow] = [yellow]head[/yellow];
+        [pink]while[/pink] ([yellow]temp[/yellow] != [green]nullptr[/green]) {
+            [green]cout[/green] << [yellow]temp[/yellow]->[yellow]data[/yellow] << " <-> ";
+            [yellow]temp[/yellow] = [yellow]temp[/yellow]->[yellow]next[/yellow];
+        }
+        [green]cout[/green] << "END\n";
+    }
+
+    [pink]void[/pink] [yellow]addNode[/yellow]([pink]int[/pink] [yellow]value[/yellow]) {
+        [blue]DLLNode*[/blue] [yellow]newNode[/yellow] = [pink]new[/pink] [yellow]DLLNode[/yellow]([yellow]value[/yellow]);
+
+        [pink]if[/pink] ([yellow]head[/yellow] == [green]nullptr[/green]) {
+            [yellow]head[/yellow] = [yellow]newNode[/yellow];
+            [pink]return[/pink];
+        }
+
+        [blue]DLLNode*[/blue] [yellow]temp[/yellow] = [yellow]head[/yellow];
+        [pink]while[/pink] ([yellow]temp[/yellow]->[yellow]next[/yellow] != [green]nullptr[/green]) {
+            [yellow]temp[/yellow] = [yellow]temp[/yellow]->[yellow]next[/yellow];
+        }
+
+        [yellow]temp[/yellow]->[yellow]next[/yellow] = [yellow]newNode[/yellow];
+        [yellow]newNode[/yellow]->[yellow]prev[/yellow] = [yellow]temp[/yellow];
+    }
+
+    [pink]void[/pink] [yellow]deleteNode[/yellow]([pink]int[/pink] [yellow]value[/yellow]) {
+        [pink]if[/pink] ([yellow]head[/yellow] == [green]nullptr[/green]) {
+            [green]cout[/green] << "NOTHING TO DELETE\n";
+            [pink]return[/pink];
+        }
+
+        [blue]DLLNode*[/blue] [yellow]temp[/yellow] = [yellow]head[/yellow];
+        [pink]while[/pink] ([yellow]temp[/yellow] != [green]nullptr[/green] &&
+               [yellow]temp[/yellow]->[yellow]data[/yellow] != [yellow]value[/yellow]) {
+            [yellow]temp[/yellow] = [yellow]temp[/yellow]->[yellow]next[/yellow];
+        }
+
+        [pink]if[/pink] ([yellow]temp[/yellow] == [green]nullptr[/green]) {
+            [green]cout[/green] << "DATA NOT THERE\n";
+            [pink]return[/pink];
+        }
+
+        [pink]if[/pink] ([yellow]temp[/yellow] == [yellow]head[/yellow]) {
+            [yellow]head[/yellow] = [yellow]head[/yellow]->[yellow]next[/yellow];
+            [pink]if[/pink] ([yellow]head[/yellow] != [green]nullptr[/green]) {
+                [yellow]head[/yellow]->[yellow]prev[/yellow] = [green]nullptr[/green];
+            }
+        } [pink]else[/pink] {
+            [yellow]temp[/yellow]->[yellow]prev[/yellow]->[yellow]next[/yellow] = [yellow]temp[/yellow]->[yellow]next[/yellow];
+
+            [pink]if[/pink] ([yellow]temp[/yellow]->[yellow]next[/yellow] != [green]nullptr[/green]) {
+                [yellow]temp[/yellow]->[yellow]next[/yellow]->[yellow]prev[/yellow] = [yellow]temp[/yellow]->[yellow]prev[/yellow];
+            }
+        }
+
+        [pink]delete[/pink] [yellow]temp[/yellow];
+    }
+};
+
+[pink]int[/pink] [yellow]main[/yellow]() {
+    [yellow]DoublyLinkedList[/yellow] [yellow]dll[/yellow];
+
+    ;
+    ;
+    ;
+
+    [yellow]dll[/yellow].[yellow]printAll[/yellow]();
+
+    ;
+    [yellow]dll[/yellow].[yellow]printAll[/yellow]();
+
+    ;
+
+    [pink]return[/pink] 0;
+}
+
 --END--
