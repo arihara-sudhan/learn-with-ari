@@ -763,4 +763,88 @@ IMG_URL dll.png
     [pink]return[/pink] 0;
 }
 
+18. What is a Circularly Linked List (CLL)?
+𖦹 Last node points back to first node, forming a loop
+𖦹 Each node has data and next pointer
+𖦹 Can be singly circular (one next) or doubly circular (next and prev)
+𖦹 No true head or tail; can start from any node
+𖦹 A cursor node marks starting point for operations
+
+19. Structure
+𖦹 Singly Circular:
+IMG_URL csll.png
+𖦹 Doubly Circular:
+IMG_URL cdll.png
+
+21. Key Concepts
+𖦹 Cursor marks special node for operations
+• back → element at cursor
+• front → element after cursor
+𖦹 Traversal
+• Forward: follow next, eventually cycles back
+• Backward (doubly): follow prev, cycles back
+𖦹 Head/Tail Access
+• Singly circular: tail pointer may be enough
+• Tail’s next points to head
+
+22. Advantages of Circular List
+𖦹 Useful in round-robin scheduling
+𖦹 Can implement playlists, queues, process scheduling
+𖦹 In doubly circular, insertion/deletion at both ends is easy
+𖦹 No end; can cycle infinitely
+
+23. Operations and Complexity
+𖦹 Singly Circular:
+• Add after cursor: O(1)
+- Create new node
+- newNode->next = cursor->next
+- cursor->next = newNode
+• Remove after cursor: O(1)
+- Only node → cursor = NULL
+- Else → cursor->next = cursor->next->next
+- Delete old node
+• Advance cursor: O(1)
+- cursor = cursor->next
+• Access front/back: O(1)
+- back() = cursor->elem
+- front() = cursor->next->elem
+𖦹 Doubly Circular:
+• Insert/delete at head or tail: O(1)
+- prev pointer allows direct access to previous node
+• Traversal backward: O(n)
+- Can move in reverse without loops
+
+24. Examples of Use
+𖦹 Round-robin process scheduling
+• Each process is a node
+• Cursor moves to next process after execution
+𖦹 Digital Audio Player / Playlist
+• Each song is a node
+• Cursor points to current song
+• Advance moves to next song
+• Add/remove songs after cursor
+𖦹 Example Playlist Sequence
+• Empty list: []
+• Add "StayinAlive": [StayinAlive*]
+• Add "LeFreak": [LeFreak, StayinAlive*]
+• Add "JiveTalkin": [JiveTalkin, LeFreak, StayinAlive*]
+• Advance cursor twice: [StayinAlive, JiveTalkin, LeFreak*]
+• Remove after cursor: [JiveTalkin, LeFreak*]
+• Add "DiscoInferno": [DiscoInferno, JiveTalkin, LeFreak*]
+
+25. Memory Usage
+𖦹 Similar to singly or doubly linked lists
+𖦹 Doubly circular uses extra memory for prev pointers
+
+26. Advantages of Circular Lists
+𖦹 No head/tail limits; perfect for cycling
+𖦹 O(1) insertion and deletion after cursor (or tail in doubly circular)
+𖦹 Forward/backward traversal (doubly circular)
+𖦹 Efficient for playlists, queues, round-robin
+
+27. Disadvantages
+𖦹 Slightly more complex than SLL or DLL
+𖦹 Singly circular: reverse traversal difficult
+𖦹 Must maintain links carefully; broken link breaks cycle
+
 --END--
