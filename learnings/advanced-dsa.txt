@@ -46,6 +46,7 @@
 • Meaning of f(n) = O(g(n))
 - There exist positive numbers c and N such that f(n) ≤ c·g(n) for all n ≥ N.
 - g(n) acts as an upper bound for the growth of f(n) when n is large.
+IMG_URL rabbit-carrot-chase.gif
 
 7. Limits of the basic definition
 𖦹 The definition says constants c and N must exist but does not show how to find them.
