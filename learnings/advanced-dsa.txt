@@ -1063,4 +1063,164 @@ public:
 - Not as efficient as array binary search (O(log n))
 𖦹 Works logically but practically slower for large lists
 
+53. Unrolled Linked List
+𖦹 A linked list variation where each node stores multiple elements in an array plus a pointer to next node.
+𖦹 Purpose: reduce pointer overhead, improve cache performance, and reduce wasted memory.
+𖦹 Acts like a mix between arrays and linked lists: dynamic insertion/deletion like linked lists but stores chunks to reduce overhead.
+
+54. Node Structure
+𖦹 Each node has:
+• [yellow]next[/yellow] pointer (and optionally [yellow]prev[/yellow] for doubly)
+• [yellow]numElements[/yellow] → number of actual elements
+• [yellow]elements[][/yellow] → array of capacity [yellow]maxElements[/yellow]
+- Typically nodes aim to be at least half full for efficiency
+- Example:
+[pink]record[/pink] [yellow]node[/yellow] {
+   [yellow]node next[/yellow];
+   [pink]int[/pink] [yellow]numElements[/yellow];
+   [yellow]array elements[/yellow];
+}
+
+55. Capacity / Block Size
+𖦹 Choose [yellow]maxElements[/yellow] so each node fits well into cache lines
+𖦹 Example: each node fills one cache line or a small multiple
+
+56. List Layout
+𖦹 Nodes chained: Node1 → Node2 → Node3 …
+𖦹 Each node has an array of elements, e.g., Node1: [1,2,3,4], Node2: [5,6,7,8]
+𖦹 Doubly unrolled list: nodes also have [yellow]prev[/yellow] pointer
+
+57. Search / Traversal
+𖦹 Traverse nodes until correct node found, then search inside node’s array
+𖦹 Reduces pointer hops because nodes hold multiple elements
+𖦹 Example: n elements, block size ~√n → ~√n nodes, each ~√n size → search ~O(√n)
+
+58. Insertion
+𖦹 Find node where insertion belongs
+𖦹 If node has space → insert in array (shift if needed)
+𖦹 If node full → split node, move half elements to new node, insert new element
+
+59. Deletion
+𖦹 Find element’s node, remove from array, shift items
+𖦹 If node falls below threshold (e.g., < half full) → merge with neighbor or rebalance
+
+60. Advantages
+𖦹 Reduced pointer overhead: one pointer per node instead of per element
+𖦹 Better cache performance: contiguous memory access inside node
+𖦹 More efficient than plain linked lists for dynamic sequences
+
+61. Disadvantages / Trade-offs
+𖦹 Slightly complex: splitting/merging nodes, managing arrays inside nodes
+𖦹 Large block size with few elements wastes space
+𖦹 Within-node search is linear unless extra indexing used
+𖦹 Worst-case time may still be linear in number of nodes
+
+62. Complexity Summary
+𖦹 Let n = total elements, B = block size
+𖦹 Number of nodes ≈ n/B
+𖦹 Search = O(n/B + B)
+𖦹 Insert/Delete = O(B) (may involve split/merge)
+𖦹 Space overhead per element reduced compared to plain linked list
+
+63. Example: 16 elements, block size 4
+𖦹 Nodes: Node1: [1,2,3,4] → Node2: [5,6,7,8] → Node3: [9,10,11,12] → Node4: [13,14,15,16]
+𖦹 Search 7: traverse Node1 → Node2, then linear scan inside Node2 → 5 comparisons vs 7 in normal linked list
+𖦹 Worst-case search 16: 3 node traversals + 4 inside-node → 7 comparisons vs 16 in normal linked list
+
+64. Choosing Block Size B
+𖦹 Too small → behaves like normal linked list
+𖦹 Too large → inside-node search slow
+𖦹 Sweet spot: B ≈ √n → search O(√n)
+𖦹 Example: n=10,000 → B=100 → ~100 nodes, inside-node scan ≤ 100 → ~200 comparisons
+
+65. C++ Program for Unrolled Linked List
+[pink]#include[/pink] <[green]iostream[/green]>
+[pink]#include[/pink] <[green]vector[/green]>
+[pink]using[/pink] [pink]namespace[/pink] [green]std[/green];
+
+[pink]class[/pink] [yellow]Node[/yellow] {
+[pink]public[/pink]:
+    [green]vector[/green]<[blue]int[/blue]> [yellow]elements[/yellow];
+    [yellow]Node[/yellow]* [yellow]next[/yellow];
+    [blue]int[/blue] [yellow]capacity[/yellow];
+
+    [pink]Node[/pink]([blue]int[/blue] [yellow]cap[/yellow]) {
+        [yellow]capacity[/yellow] = [yellow]cap[/yellow];
+        [yellow]next[/yellow] = [green]nullptr[/green];
+    }
+};
+
+[pink]class[/pink] [yellow]UnrolledLinkedList[/yellow] {
+[pink]private[/pink]:
+    [yellow]Node[/yellow]* [yellow]head[/yellow];
+    [blue]int[/blue] [yellow]nodeCapacity[/yellow];
+
+[pink]public[/pink]:
+    [pink]UnrolledLinkedList[/pink]([blue]int[/blue] [yellow]cap[/yellow]) {
+        [yellow]nodeCapacity[/yellow] = [yellow]cap[/yellow];
+        [yellow]head[/yellow] = [pink]new[/pink] [yellow]Node[/yellow]([yellow]nodeCapacity[/yellow]);
+    }
+
+    [pink]void[/pink] [yellow]insert[/yellow]([blue]int[/blue] [yellow]val[/yellow]) {
+        [yellow]Node[/yellow]* [yellow]curr[/yellow] = [yellow]head[/yellow];
+        [pink]while[/pink] ([yellow]curr[/yellow]->[yellow]next[/yellow] != [green]nullptr[/green])
+            [yellow]curr[/yellow] = [yellow]curr[/yellow]->[yellow]next[/yellow];
+
+        [pink]if[/pink] ([yellow]curr[/yellow]->[yellow]elements[/yellow].[green]size[/green]() < [yellow]curr[/yellow]->[yellow]capacity[/yellow]) {
+            [yellow]curr[/yellow]->[yellow]elements[/yellow].[green]push_back[/green]([yellow]val[/yellow]);
+        } [pink]else[/pink] {
+            [yellow]Node[/yellow]* [yellow]newNode[/yellow] = [pink]new[/pink] [yellow]Node[/yellow]([yellow]nodeCapacity[/yellow]);
+            [yellow]newNode[/yellow]->[yellow]elements[/yellow].[green]push_back[/green]([yellow]val[/yellow]);
+            [yellow]curr[/yellow]->[yellow]next[/yellow] = [yellow]newNode[/yellow];
+        }
+    }
+
+    [pink]bool[/pink] [yellow]search[/yellow]([blue]int[/blue] [yellow]val[/yellow]) {
+        [yellow]Node[/yellow]* [yellow]curr[/yellow] = [yellow]head[/yellow];
+        [pink]while[/pink] ([yellow]curr[/yellow] != [green]nullptr[/green]) {
+            [pink]if[/pink] (![yellow]curr[/yellow]->[yellow]elements[/yellow].[green]empty[/green]() && [yellow]val[/yellow] <= [yellow]curr[/yellow]->[yellow]elements[/yellow].[green]back[/green]()) {
+                [pink]for[/pink] ([blue]int[/blue] [yellow]x[/yellow] : [yellow]curr[/yellow]->[yellow]elements[/yellow]) {
+                    [pink]if[/pink] ([yellow]x[/yellow] == [yellow]val[/yellow]) {
+                        [green]cout[/green] << "Found " << [yellow]val[/yellow] << " in node.\n";
+                        [pink]return[/pink] [green]true[/green];
+                    }
+                }
+                [pink]return[/pink] [green]false[/green];
+            }
+            [yellow]curr[/yellow] = [yellow]curr[/yellow]->[yellow]next[/yellow];
+        }
+        [green]cout[/green] << [yellow]val[/yellow] << " not found in list.\n";
+        [pink]return[/pink] [green]false[/green];
+    }
+
+    [pink]void[/pink] [yellow]printList[/yellow]() {
+        [yellow]Node[/yellow]* [yellow]curr[/yellow] = [yellow]head[/yellow];
+        [blue]int[/blue] [yellow]nodeId[/yellow] = 1;
+        [pink]while[/pink] ([yellow]curr[/yellow] != [green]nullptr[/green]) {
+            [green]cout[/green] << "Node " << [yellow]nodeId[/yellow] << ": ";
+            [pink]for[/pink] ([blue]int[/blue] [yellow]x[/yellow] : [yellow]curr[/yellow]->[yellow]elements[/yellow])
+                [green]cout[/green] << [yellow]x[/yellow] << " ";
+            [green]cout[/green] << [green]endl[/green];
+            [yellow]curr[/yellow] = [yellow]curr[/yellow]->[yellow]next[/yellow];
+            [yellow]nodeId[/yellow]++;
+        }
+    }
+};
+
+[pink]int[/pink] [pink]main[/pink]() {
+    [blue]int[/blue] [yellow]nodeCapacity[/yellow] = 4;
+    [yellow]UnrolledLinkedList[/yellow] [yellow]list[/yellow]([yellow]nodeCapacity[/yellow]);
+
+    [pink]for[/pink] ([blue]int[/blue] [yellow]i[/yellow] = 1; [yellow]i[/yellow] <= 16; [yellow]i[/yellow]++)
+        [yellow]list[/yellow].[yellow]insert[/yellow]([yellow]i[/yellow]);
+
+    [yellow]list[/yellow].[yellow]printList[/yellow]();
+
+     ;
+     ;
+     ;
+
+    [pink]return[/pink] 0;
+}
+
 --END--
