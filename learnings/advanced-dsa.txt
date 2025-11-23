@@ -1,4 +1,4 @@
---BEGIN--TIME COMPLEXITY--22/11/2025
+--BEGIN--22/11/2025--TIME COMPLEXITY--
 1. Computational and asymptotic complexity
 𖦹 A single problem can have many algorithms, each with different efficiency.
 𖦹 For small data, these differences are small; for large data, the differences grow.
