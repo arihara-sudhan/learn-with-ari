@@ -847,4 +847,19 @@ IMG_URL cdll.png
 𖦹 Singly circular: reverse traversal difficult
 𖦹 Must maintain links carefully; broken link breaks cycle
 
+28. Reverse A Linked List
+IMG_URL reverse-ll.gif
+𖦹 PSEUDOCODE
+function reverseLinkedList(head):
+    prev = NULL           // start with prev as NULL
+    curr = head           // start at the first node
+    
+    while curr is not NULL:
+        nextNode = curr.next   // remember the next node
+        curr.next = prev       // reverse the link
+        prev = curr            // move prev forward
+        curr = nextNode        // move curr forward
+    
+    head = prev           // prev is the new head
+    return head
 --END--
