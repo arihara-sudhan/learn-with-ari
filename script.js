@@ -146,7 +146,7 @@ async function loadLearnings(fileName) {
     const fallbackUrl = `${getBaseUrl()}${fileName}.txt`;
     const contentDiv = document.getElementById("content");
     
-    contentDiv.innerHTML = '<pre style="text-align:center;padding:2rem;margin:0 auto;width:60%;">Loading...</pre>';
+    contentDiv.innerHTML = '<div style="display: flex; justify-content: center; align-items: center; min-height: 50vh; width: 100%;"><img src="https://upload.wikimedia.org/wikipedia/commons/a/ad/YouTube_loading_symbol_3_%28transparent%29.gif" alt="Loading..." style="width: 80px; height: 80px;" /></div>';
     
     try {
         let response = await fetch(fileUrl);
