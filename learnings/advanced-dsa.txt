@@ -44,7 +44,9 @@
 𖦹 Big-O is used to describe how fast a function grows for large n.
 𖦹 It compares two functions f(n) and g(n) by checking if f grows no faster than g.
 • Meaning of f(n) = O(g(n))
+IMG_URL fnlessthancgn.png
 - There exist positive numbers c and N such that f(n) ≤ c·g(n) for all n ≥ N.
+IMG_URL fnogn.png
 - g(n) acts as an upper bound for the growth of f(n) when n is large.
 IMG_URL rabbit-carrot-chase.gif
 
