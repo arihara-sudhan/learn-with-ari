@@ -1,41 +1,39 @@
-SOURCE: SEVENTH EDITION - ELEMENTARY NUMBER THEORY by DAVID M. BURTON
---BEGIN--24/11/2025--WELL ORDERING PRINCIPLE--
 1. Number theory and natural numbers
-𖦹 [pink]Number theory[/pink] studies [pink]integers[/pink], mainly positive ones: [blue]1[/blue], [blue]2[/blue], [blue]3[/blue], …
-𖦹 Positive integers are also called [pink]natural numbers[/pink]
+𖦹 Number theory studies integers, mainly positive ones: 1, 2, 3, …
+𖦹 Positive integers are also called natural numbers
 
 2. Well-Ordering Principle (WOP)
-𖦹 Every non-empty set [yellow]S[/yellow] of nonnegative [pink]integers[/pink] has a smallest element
-• There is some [yellow]a[/yellow] in [yellow]S[/yellow] such that [yellow]a[/yellow] [orange]≤[/orange] [yellow]b[/yellow] for all [yellow]b[/yellow] in [yellow]S[/yellow]
-- [gray]This means you can always find the least number in any set of positive integers[/gray]
+𖦹 [red]Every non-empty set S of nonnegative integers has a smallest element[/red]
+• There is some a in S such that a ≤ b for all b in S
+- You can always find the least number in any set of positive integers
 
 3. Archimedean property
-𖦹 For any positive numbers [yellow]x[/yellow] and [yellow]y[/yellow], there exists a [pink]natural number[/pink] [yellow]n[/yellow] such that [yellow]n[/yellow] [orange]⋅[/orange] [yellow]x[/yellow] [orange]>[/orange] [yellow]y[/yellow]
-𖦹 Using WOP, if no such [yellow]n[/yellow] existed, a set without a smallest element could be formed, which is impossible
---MATH-START--
-PROOF:
-𖦹 If [yellow]a[/yellow] and [yellow]b[/yellow] are positive numbers, there exists a positive integer [yellow]n[/yellow] such that [yellow]n[/yellow] [orange]⋅[/orange] [yellow]a[/yellow] [orange]>[/orange] [yellow]b[/yellow]
-IDEA:
-𖦹 Assume the opposite and show a contradiction using WOP
+𖦹 [red]For any positive numbers x and y, there exists a natural number n such that n ⋅ x > y[/red]
+𖦹 Using WOP, if no such n existed, a set without a smallest element could be formed, which is impossible
+
+4. Proof of Archimedean property
+--MATH--START--
+𖦹 If a and b are positive numbers, there exists a positive integer n such that n ⋅ a > b
+𖦹 Idea: Assume the opposite and show a contradiction using WOP
 Step 1: Assume property is false
-𖦹 Suppose no such [yellow]n[/yellow] exists
-• Then for every positive integer [yellow]n[/yellow]: [yellow]n[/yellow] [orange]⋅[/orange] [yellow]a[/yellow] [orange]≤[/orange] [yellow]b[/yellow]
+𖦹 Suppose no such n exists
+• Then for every positive integer n: n ⋅ a ≤ b
 Step 2: Create a set
-𖦹 Define [yellow]S[/yellow] = {[yellow]b[/yellow] [orange]-[/orange] [yellow]n[/yellow] [orange]⋅[/orange] [yellow]a[/yellow] ∣ [yellow]n[/yellow] is a positive integer}
+𖦹 Define S = {b − n ⋅ a ∣ n is a positive integer}
 𖦹 Each element is positive under the assumption
-• So [yellow]S[/yellow] is a non-empty set of positive integers
+• So S is a non-empty set of positive integers
 Step 3: Apply WOP
-𖦹 WOP says [yellow]S[/yellow] has a smallest element
-• Let smallest element be [yellow]b[/yellow] [orange]-[/orange] [yellow]m[/yellow] [orange]⋅[/orange] [yellow]a[/yellow] for some positive integer [yellow]m[/yellow]
+𖦹 WOP says S has a smallest element
+• Let smallest element be b − m ⋅ a for some positive integer m
 Step 4: Find a smaller element
-𖦹 Consider [yellow]b[/yellow] [orange]-[/orange] ([yellow]m[/yellow]+[blue]1[/blue]) [orange]⋅[/orange] [yellow]a[/yellow]
-• Algebra: [yellow]b[/yellow] [orange]-[/orange] ([yellow]m[/yellow]+[blue]1[/blue]) [orange]⋅[/orange] [yellow]a[/yellow] = ([yellow]b[/yellow] [orange]-[/orange] [yellow]m[/yellow] [orange]⋅[/orange] [yellow]a[/yellow]) [orange]-[/orange] [yellow]a[/yellow]
-- Since [yellow]a[/yellow] [orange]>[/orange] [blue]0[/blue], this is smaller than the smallest element, impossible
+𖦹 Consider b − (m+1) ⋅ a
+• Algebra: b − (m+1) ⋅ a = (b − m ⋅ a) − a
+- Since a > 0, this is smaller than the smallest element, impossible
 Step 5: Contradiction
-𖦹 The contradiction comes from assuming no [yellow]n[/yellow] exists
+𖦹 The contradiction comes from assuming no n exists
 𖦹 Therefore, the assumption is wrong and the Archimedean property is true
-INTUITION
-𖦹 Adding [yellow]a[/yellow] repeatedly will eventually pass [yellow]b[/yellow]
+--MATH--END--
+
+5. Intuition
+𖦹 Adding a repeatedly will eventually pass b
 𖦹 WOP ensures a “smallest leftover”; if the property were false, a smaller leftover could be created, which is impossible
---MATH-END--
---END--
