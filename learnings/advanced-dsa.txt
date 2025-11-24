@@ -2562,5 +2562,221 @@ print()
     }
 }
 
+ITERATIVE INORDER AND POSTORDER ROUTINES:
+[pink]void[/pink] [yellow]iterativeInorder[/yellow]([blue]BSTNode*[/blue] [yellow]root[/yellow]) {
+    [pink]if[/pink] (![yellow]root[/yellow]) [pink]return[/pink];
+    [green]stack[/green]<[blue]BSTNode*[/blue]> [yellow]s[/yellow];
+    [blue]BSTNode*[/blue] [yellow]curr[/yellow] = [yellow]root[/yellow];
 
+    [pink]while[/pink] ([yellow]curr[/yellow] != [green]nullptr[/green] || ![yellow]s[/yellow].[green]empty[/green]()) {
+        // Go as left as possible
+        [pink]while[/pink] ([yellow]curr[/yellow] != [green]nullptr[/green]) {
+            [yellow]s[/yellow].[green]push[/green]([yellow]curr[/yellow]);
+            [yellow]curr[/yellow] = [yellow]curr[/yellow]->[yellow]left[/yellow];
+        }
+        // Pop and visit
+        [yellow]curr[/yellow] = [yellow]s[/yellow].[green]top[/green]();
+        [yellow]s[/yellow].[green]pop[/green]();
+        [green]cout[/green] << [yellow]curr[/yellow]->[yellow]key[/yellow] << " ";
+        // Go right
+        [yellow]curr[/yellow] = [yellow]curr[/yellow]->[yellow]right[/yellow];
+    }
+}
+
+[pink]void[/pink] [yellow]iterativePostorder[/yellow]([blue]BSTNode*[/blue] [yellow]root[/yellow]) {
+    [pink]if[/pink] (![yellow]root[/yellow]) [pink]return[/pink];
+    [green]stack[/green]<[blue]BSTNode*[/blue]> [yellow]s[/yellow];
+    [blue]BSTNode*[/blue] [yellow]curr[/yellow] = [yellow]root[/yellow];
+    [blue]BSTNode*[/blue] [yellow]lastVisited[/yellow] = [green]nullptr[/green];
+
+    [pink]while[/pink] ([yellow]curr[/yellow] != [green]nullptr[/green] || ![yellow]s[/yellow].[green]empty[/green]()) {
+        [pink]while[/pink] ([yellow]curr[/yellow] != [green]nullptr[/green]) {
+            [yellow]s[/yellow].[green]push[/green]([yellow]curr[/yellow]);
+            [yellow]curr[/yellow] = [yellow]curr[/yellow]->[yellow]left[/yellow];
+        }
+
+        [blue]BSTNode*[/blue] [yellow]topNode[/yellow] = [yellow]s[/yellow].[green]top[/green]();
+
+        [pink]if[/pink] ([yellow]topNode[/yellow]->[yellow]right[/yellow] != [green]nullptr[/green] && [yellow]lastVisited[/yellow] != [yellow]topNode[/yellow]->[yellow]right[/yellow]) {
+            [yellow]curr[/yellow] = [yellow]topNode[/yellow]->[yellow]right[/yellow];
+        } [pink]else[/pink] {
+            [green]cout[/green] << [yellow]topNode[/yellow]->[yellow]key[/yellow] << " ";
+            [yellow]lastVisited[/yellow] = [yellow]topNode[/yellow];
+            [yellow]s[/yellow].[green]pop[/green]();
+        }
+    }
+}
+
+6. Binary Search Tree (BST)
+𖦹 A BST is a special binary tree where each node has at most two children
+𖦹 BST property:
+• All keys in the left subtree of a node are less than the node’s key
+• All keys in the right subtree of a node are greater than the node’s key
+• This property holds recursively — left and right subtrees are also BSTs
+𖦹 Usually, BSTs do not allow duplicate values or handle them in a specific way
+
+𖦹 Why use a BST?
+• Efficient search, insertion, and deletion: ordering property allows skipping large parts of the tree
+• Sorted data: in-order traversal returns keys in sorted order
+• Dynamic structure: nodes can be inserted or removed, tree grows or shrinks
+• Used in symbol tables and associative arrays
+          50
+        /    \
+      30      70
+     /  \    /  \
+   20   40  60   80
+  /             /  \
+10             75   90
+
+𖦹 Operations on a BST
+• Search:
+- Start at root
+- Compare target key with current node
+- If equal → found
+- If less → go left
+- If greater → go right
+- Repeat until found or null
+• Insertion:
+- Find correct leaf position comparing keys
+- Insert new node while preserving BST property
+• Deletion:
+- No child (leaf): remove node
+- One child: replace node with its child
+- Two children: replace node with minimum in right subtree (successor) or maximum in left subtree (predecessor), then delete that node
+• Traversal:
+- Can traverse in inorder, preorder, postorder
+- Inorder is useful because it returns sorted keys
+
+𖦹 Time & Space Complexity
+• Search / Insert / Delete (average case): O(h), where h = height of BST
+• Balanced BST: height h ≈ O(log n), average complexity O(log n)
+• Worst case (skewed BST): height h = n, operations O(n)
+• Space for recursion: O(n) in worst case due to call stack
+
+𖦹 Limitations / Disadvantages
+• Unbalanced BSTs degrade performance (search, insert, delete → O(n))
+• Managing duplicates can be tricky
+• Guaranteed performance may require self-balancing BSTs like AVL trees or Red-Black trees
+
+7. BST Operations: Insert, Search, Delete
+𖦹 Example BST:
+          50
+        /    \
+      30      70
+     /  \    /  \
+   20   40  60   80
+	         \      \
+	          65      90
+
+𖦹 Insert
+• Routine:
+[pink]BSTNode*[/pink] [yellow]insert[/yellow]([pink]BSTNode*[/pink] [yellow]root[/yellow], [pink]int[/pink] [yellow]key[/yellow]) {
+    [pink]if[/pink]([yellow]root[/yellow] == [green]nullptr[/green]) {
+        [pink]return[/pink] [pink]new[/pink] [pink]BSTNode[/pink]([yellow]key[/yellow]); // Insert here
+    }
+    [pink]if[/pink]([yellow]key[/yellow] < [yellow]root[/yellow]->key) {
+        [yellow]root[/yellow]->left = [yellow]insert[/yellow]([yellow]root[/yellow]->left, [yellow]key[/yellow]);
+    } [pink]else if[/pink]([yellow]key[/yellow] > [yellow]root[/yellow]->key) {
+        [yellow]root[/yellow]->right = [yellow]insert[/yellow]([yellow]root[/yellow]->right, [yellow]key[/yellow]);
+    }
+    [pink]return[/pink] [yellow]root[/yellow];
+}
+• Example: Insert key = 10
+- [yellow]insert[/yellow](50node, 10) → insert(30node, 10) → insert(20node, 10) → insert(null, 10)
+- 20node->left = 10node
+
+𖦹 Search
+• Routine:
+[pink]BSTNode*[/pink] [yellow]searchRecursive[/yellow]([pink]BSTNode*[/pink] [yellow]root[/yellow], [pink]int[/pink] [yellow]key[/yellow]) {
+    [pink]if[/pink]([yellow]root[/yellow] == [green]nullptr[/green] || [yellow]root[/yellow]->key == [yellow]key[/yellow]) {
+        [pink]return[/pink] [yellow]root[/yellow]; // found or reached leaf
+    }
+    [pink]if[/pink]([yellow]key[/yellow] < [yellow]root[/yellow]->key) [pink]return[/pink] [yellow]searchRecursive[/yellow]([yellow]root[/yellow]->left, [yellow]key[/yellow]);
+    [pink]else[/pink] [pink]return[/pink] [yellow]searchRecursive[/yellow]([yellow]root[/yellow]->right, [yellow]key[/yellow]);
+}
+
+𖦹 Delete
+• Three cases:
+- Node is a leaf → delete it
+- Node has one child → replace node with child
+- Node has two children → replace node with inorder successor (smallest in right subtree) or predecessor (largest in left subtree), then delete that node
+• Helper function to find minimum:
+[pink]BSTNode*[/pink] [yellow]findMin[/yellow]([pink]BSTNode*[/pink] [yellow]node[/yellow]) {
+    [pink]while[/pink]([yellow]node[/yellow]->left != [green]nullptr[/green]) {
+        [yellow]node[/yellow] = [yellow]node[/yellow]->left;
+    }
+    [pink]return[/pink] [yellow]node[/yellow];
+}
+• Delete routine:
+[pink]BSTNode*[/pink] [yellow]deleteNode[/yellow]([pink]BSTNode*[/pink] [yellow]root[/yellow], [pink]int[/pink] [yellow]key[/yellow]) {
+    [pink]if[/pink]([yellow]root[/yellow] == [green]nullptr[/green]) [pink]return[/pink] [yellow]root[/yellow]; // Tree empty
+    [pink]if[/pink]([yellow]key[/yellow] < [yellow]root[/yellow]->key) [yellow]root[/yellow]->left = [yellow]deleteNode[/yellow]([yellow]root[/yellow]->left, [yellow]key[/yellow]);
+    [pink]else if[/pink]([yellow]key[/yellow] > [yellow]root[/yellow]->key) [yellow]root[/yellow]->right = [yellow]deleteNode[/yellow]([yellow]root[/yellow]->right, [yellow]key[/yellow]);
+    [pink]else[/pink] {
+        // Node found
+        [pink]if[/pink]([yellow]root[/yellow]->left == [green]nullptr[/green] && [yellow]root[/yellow]->right == [green]nullptr[/green]) {
+            delete [yellow]root[/yellow];
+            [pink]return[/pink] [green]nullptr[/green];
+        } [pink]else if[/pink]([yellow]root[/yellow]->left == [green]nullptr[/green]) {
+            [pink]BSTNode*[/pink] [yellow]temp[/yellow] = [yellow]root[/yellow]->right;
+            delete [yellow]root[/yellow];
+            [pink]return[/pink] [yellow]temp[/yellow];
+        } [pink]else if[/pink]([yellow]root[/yellow]->right == [green]nullptr[/green]) {
+            [pink]BSTNode*[/pink] [yellow]temp[/yellow] = [yellow]root[/yellow]->left;
+            delete [yellow]root[/yellow];
+            [pink]return[/pink] [yellow]temp[/yellow];
+        } [pink]else[/pink] {
+            [pink]BSTNode*[/pink] [yellow]temp[/yellow] = [yellow]findMin[/yellow]([yellow]root[/yellow]->right); // Inorder successor
+            [yellow]root[/yellow]->key = [yellow]temp[/yellow]->key;                 // Copy value
+            [yellow]root[/yellow]->right = [yellow]deleteNode[/yellow]([yellow]root[/yellow]->right, [yellow]temp[/yellow]->key); // Delete successor
+        }
+    }
+    [pink]return[/pink] [yellow]root[/yellow];
+}
+
+8. BST Complexity
+𖦹 Search
+• Can be done recursively or iteratively
+• Logic: start at [yellow]root[/yellow], go left if key is smaller, right if key is larger
+• Time Complexity
+  - Best/Average (balanced BST): O(log n)
+  - Worst (skewed tree): O(n)
+𖦹 Insertion
+• Find correct place according to BST property and insert new node
+• Can be recursive or iterative
+• Time Complexity
+  - Best/Average (balanced BST): O(log n)
+  - Worst (skewed tree): O(n)
+𖦹 Deletion
+• Handle 3 cases
+  • Node is leaf → delete directly
+  • Node has one child → replace node with its child
+  • Node has two children → replace with inorder successor or predecessor, then delete that node
+• Time Complexity
+  - Best/Average (balanced BST): O(log n)
+  - Worst (skewed tree): O(n)
+𖦹 Traversals
+• Preorder ([pink]Root[/pink] → [pink]Left[/pink] → [pink]Right[/pink])
+  - Visit all nodes recursively
+  - Time Complexity: O(n)
+• Inorder ([pink]Left[/pink] → [pink]Root[/pink] → [pink]Right[/pink])
+  - Visit all nodes recursively
+  - Time Complexity: O(n)
+• Postorder ([pink]Left[/pink] → [pink]Right[/pink] → [pink]Root[/pink])
+  - Visit all nodes recursively
+  - Time Complexity: O(n)
+• Level-order (Breadth-first using [green]queue[/green])
+  - Visit all nodes level by level
+  - Time Complexity: O(n)
+𖦹 Space Complexity
+• Preorder/Inorder/Postorder (recursive): O(h), h = tree height
+• Level-order (using [green]queue[/green]): O(width), width = max nodes at any level
+𖦹 TL;DR
+• Search: Best/Average O(log n), Worst O(n)
+• Insert: Best/Average O(log n), Worst O(n)
+• Delete: Best/Average O(log n), Worst O(n)
+• Preorder: O(n), O(n)
+• Inorder: O(n), O(n)
+• Postorder: O(n), O(n)
+• Level-order: O(n), O(n)
 --END--
