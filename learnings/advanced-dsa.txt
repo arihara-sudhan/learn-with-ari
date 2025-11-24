@@ -916,7 +916,7 @@ function reverseLinkedList(head):
 𖦹 Total nodes = n → total space O(n)
 
 36. What is a Skip List
-IMG_URL skiplist.png
+IMG_URL skiplist.gif
 𖦹 An advanced linked list with multiple levels of forward pointers
 𖦹 Faster search, insertion, and deletion using express lanes
 𖦹 Each node has a randomly assigned level
@@ -1638,7 +1638,7 @@ IMG_URL queue.gif
     [green]cout[/green] << q.[yellow]frontElement[/yellow]() << [green]endl[/green];
 }
 
-10. Queue using linked list — C++ program
+10. Queue using linked list: C++ program
 𖦹 Uses nodes; grows until memory ends.
 [pink]#include[/pink] <iostream>
 [pink]using[/pink] [pink]namespace[/pink] std;
@@ -1710,7 +1710,7 @@ IMG_URL queue.gif
     [green]cout[/green] << q.[yellow]frontElement[/yellow]() << [green]endl[/green];
 }
 
-11. Queue vs stack — simple comparison
+11. Queue vs. Stack
 𖦹 Order:
 • Stack → LIFO (last in, first out)
 • Queue → FIFO (first in, first out)
@@ -1726,4 +1726,742 @@ IMG_URL queue.gif
 • Array stack → continuous memory
 • Array queue → may waste front space if many dequeues
 • Linked-list forms → dynamic with pointer cost
+
+12. Priority queue basics
+IMG_URL queue-types.jpg
+𖦹 A priority queue always removes the element with the best priority.
+𖦹 Best priority may mean smallest number or largest number based on rule.
+𖦹 How we store items changes the speed of insert and delete.
+
+13. Unsorted List
+𖦹 Keep items in a normal list without sorting.
+𖦹 Insert is very fast because we just place the new item anywhere.
+𖦹 Remove is slow because we must search the whole list to find the best priority.
+• Insert time: O(1)
+• Delete time: O(n)
+- Explanation: The best priority can be anywhere, so we need a full scan.
+𖦹 Useful when inserts happen many times and deletes happen few times.
+𖦹 Related code:
+
+[pink]#include[/pink] <iostream>
+[pink]using[/pink] [pink]namespace[/pink] std;
+
+[pink]struct[/pink] [yellow]Node[/yellow] {
+    [pink]int[/pink] [yellow]value[/yellow];
+    [pink]int[/pink] [yellow]priority[/yellow];
+    [blue]Node*[/blue] [yellow]next[/yellow];
+    [pink]Node[/pink]([pink]int[/pink] v, [pink]int[/pink] p) : [yellow]value[/yellow](v), [yellow]priority[/yellow](p), [yellow]next[/yellow](nullptr) {}
+};
+
+[pink]class[/pink] [yellow]UnsortedPriorityQueue[/yellow] {
+[pink]private[/pink]:
+    [blue]Node*[/blue] [yellow]head[/yellow];
+
+[pink]public[/pink]:
+    [pink]UnsortedPriorityQueue[/pink]() : [yellow]head[/yellow](nullptr) {}
+
+    // Insert at head
+    [pink]void[/pink] [yellow]enqueue[/yellow]([pink]int[/pink] value, [pink]int[/pink] priority) {
+        [blue]Node*[/blue] [yellow]newNode[/yellow] = [pink]new[/pink] [yellow]Node[/yellow](value, priority);
+        [yellow]newNode[/yellow]->[yellow]next[/yellow] = [yellow]head[/yellow];
+        [yellow]head[/yellow] = [yellow]newNode[/yellow];
+    }
+
+    // Remove highest priority
+    [pink]int[/pink] [yellow]dequeue[/yellow]() {
+        [pink]if[/pink] (![yellow]head[/yellow]) {
+            [green]cout[/green] << "Queue empty\n";
+            [pink]return[/pink] -1;
+        }
+
+        [blue]Node*[/blue] [yellow]best[/yellow] = [yellow]head[/yellow];
+        [blue]Node*[/blue] [yellow]bestPrev[/yellow] = nullptr;
+
+        [blue]Node*[/blue] [yellow]curr[/yellow] = [yellow]head[/yellow]->[yellow]next[/yellow];
+        [blue]Node*[/blue] [yellow]prev[/yellow] = [yellow]head[/yellow];
+
+        [pink]while[/pink] ([yellow]curr[/yellow]) {
+            [pink]if[/pink] ([yellow]curr[/yellow]->[yellow]priority[/yellow] < [yellow]best[/yellow]->[yellow]priority[/yellow]) {
+                [yellow]best[/yellow] = [yellow]curr[/yellow];
+                [yellow]bestPrev[/yellow] = [yellow]prev[/yellow];
+            }
+            [yellow]prev[/yellow] = [yellow]curr[/yellow];
+            [yellow]curr[/yellow] = [yellow]curr[/yellow]->[yellow]next[/yellow];
+        }
+
+        [pink]if[/pink] ([yellow]bestPrev[/yellow]) [yellow]bestPrev[/yellow]->[yellow]next[/yellow] = [yellow]best[/yellow]->[yellow]next[/yellow];
+        [pink]else[/pink] [yellow]head[/yellow] = [yellow]best[/yellow]->[yellow]next[/yellow];
+
+        [pink]int[/pink] [yellow]val[/yellow] = [yellow]best[/yellow]->[yellow]value[/yellow];
+        [pink]delete[/pink] [yellow]best[/yellow];
+        [pink]return[/pink] [yellow]val[/yellow];
+    }
+
+    [pink]bool[/pink] [yellow]isEmpty[/yellow]() {
+        [pink]return[/pink] [yellow]head[/yellow] == nullptr;
+    }
+};
+
+14. Sorted List
+𖦹 Keep items always sorted by priority.
+𖦹 Insert is slow because we must find the correct place.
+𖦹 Remove is fast because the best priority is always stored at one known spot.
+• Insert time: O(n)
+• Delete time: O(1)
+- Explanation: The head keeps the best priority element.
+𖦹 Useful when deletes happen many times and inserts happen few times.
+𖦹 Related code:
+
+[pink]#include[/pink] <iostream>
+[pink]using[/pink] [pink]namespace[/pink] std;
+
+[pink]struct[/pink] [yellow]Node2[/yellow] {
+    [pink]int[/pink] [yellow]value[/yellow];
+    [pink]int[/pink] [yellow]priority[/yellow];
+    [blue]Node2*[/blue] [yellow]next[/yellow];
+    [pink]Node2[/pink]([pink]int[/pink] v, [pink]int[/pink] p) : [yellow]value[/yellow](v), [yellow]priority[/yellow](p), [yellow]next[/yellow](nullptr) {}
+};
+
+[pink]class[/pink] [yellow]SortedPriorityQueue[/yellow] {
+[pink]private[/pink]:
+    [blue]Node2*[/blue] [yellow]head[/yellow];
+
+[pink]public[/pink]:
+    [pink]SortedPriorityQueue[/pink]() : [yellow]head[/yellow](nullptr) {}
+
+    // Insert in sorted order
+    [pink]void[/pink] [yellow]enqueue[/yellow]([pink]int[/pink] value, [pink]int[/pink] priority) {
+        [blue]Node2*[/blue] [yellow]newNode[/yellow] = [pink]new[/pink] [yellow]Node2[/yellow](value, priority);
+
+        [pink]if[/pink] (![yellow]head[/yellow] || priority < [yellow]head[/yellow]->[yellow]priority[/yellow]) {
+            [yellow]newNode[/yellow]->[yellow]next[/yellow] = [yellow]head[/yellow];
+            [yellow]head[/yellow] = [yellow]newNode[/yellow];
+            [pink]return[/pink];
+        }
+
+        [blue]Node2*[/blue] [yellow]curr[/yellow] = [yellow]head[/yellow];
+        [pink]while[/pink] ([yellow]curr[/yellow]->[yellow]next[/yellow] && [yellow]curr[/yellow]->[yellow]next[/yellow]->[yellow]priority[/yellow] <= priority) {
+            [yellow]curr[/yellow] = [yellow]curr[/yellow]->[yellow]next[/yellow];
+        }
+
+        [yellow]newNode[/yellow]->[yellow]next[/yellow] = [yellow]curr[/yellow]->[yellow]next[/yellow];
+        [yellow]curr[/yellow]->[yellow]next[/yellow] = [yellow]newNode[/yellow];
+    }
+
+    // Remove highest priority
+    [pink]int[/pink] [yellow]dequeue[/yellow]() {
+        [pink]if[/pink] (![yellow]head[/yellow]) {
+            [green]cout[/green] << "Queue empty\n";
+            [pink]return[/pink] -1;
+        }
+
+        [blue]Node2*[/blue] [yellow]temp[/yellow] = [yellow]head[/yellow];
+        [yellow]head[/yellow] = [yellow]head[/yellow]->[yellow]next[/yellow];
+
+        [pink]int[/pink] [yellow]val[/yellow] = [yellow]temp[/yellow]->[yellow]value[/yellow];
+        [pink]delete[/pink] [yellow]temp[/yellow];
+        [pink]return[/pink] [yellow]val[/yellow];
+    }
+
+    [pink]bool[/pink] [yellow]isEmpty[/yellow]() {
+        [pink]return[/pink] [yellow]head[/yellow] == nullptr;
+    }
+};
+
+15. Summary table
+𖦹 Unsorted list: fast insert, slow delete.
+𖦹 Sorted list: slow insert, fast delete.
+𖦹 Table:
+
+Structure   Insert   Delete_best   Notes
+Unsorted    O(1)     O(n)          Fast insert, slow delete
+Sorted      O(n)     O(1)          Slow insert, fast delete
+
+16. Using Heap
+𖦹 It must add new elements fast
+𖦹 It must give the most important element fast
+𖦹 It must remove the most important element fast
+• push → add an element
+• top → get highest-priority element
+• pop → remove highest-priority element
+- Binary heap is used because:
+  push = O(log n)
+  pop = O(log n)
+  top = O(1)
+
+17. How priority queue works inside
+𖦹 It is built on top of a binary heap
+𖦹 The heap is kept in an array in level order
+• Example max-heap:
+  Tree:
+         100
+       /     \
+      50      40
+     /  \    /  \
+    45  10  20  30
+  Array:
+  [100, 50, 40, 45, 10, 20, 30]
+
+18. What happens on push()
+𖦹 When we do pq., it goes to the end of the array
+𖦹 Then “bubble-up” runs to fix the heap
+• It swaps with parents until heap rule becomes correct
+- Same as heap push
+
+19. What happens on pop()
+𖦹 pq.[yellow]pop[/yellow]() removes the root (highest priority)
+𖦹 Last element moves to the root
+𖦹 Then “heapify-down” runs
+• It swaps with the larger child until heap rule becomes correct
+- Same as heap pop
+
+20. What top() does
+𖦹 pq.[yellow]top[/yellow]() returns the root element
+𖦹 It only reads heap[0]
+• So it is O(1)
+
+21. How C++ implements priority_queue
+𖦹 It uses a [green]vector[/green] to store the heap
+𖦹 It builds the heap using [green]make_heap[/green]
+• C++ uses:
+  [green]push_heap[/green]() → O(log n)
+  [green]pop_heap[/green]() → O(log n)
+  [green]make_heap[/green]() → O(n)
+
+22. What is a deque
+𖦹 A deque (double-ended queue) allows adding/removing elements from both front and back
+𖦹 It is like a mix of a queue and a stack
+• All operations work in O(1) time (amortized)
+
+23. Why "double-ended"
+𖦹 Normal queue only allows:
+• push at back
+• pop from front
+𖦹 Deque allows:
+• push_front(x)
+• push_back(x)
+• pop_front()
+• pop_back()
+- Both ends are open for insertion and deletion
+
+24. Visual intuition
+𖦹 Think of a line of people
+• People can join from front or back
+• People can leave from front or back
+- Front <--- [ A B C D ] ---> Back
+
+25. Operations supported
+𖦹 push_front(x) → add x at front
+𖦹 push_back(x) → add x at back
+𖦹 pop_front() → remove front element
+𖦹 pop_back() → remove back element
+𖦹 front() → read front element
+𖦹 back() → read back element
+𖦹 empty() → check if deque is empty
+- All O(1) time
+
+26. How a deque is implemented
+𖦹 Doubly linked list:
+• Each node has prev + next
+• Easy to add/remove at both ends
+- Cache performance is poor
+𖦹 Circular array / circular buffer (used in C++):
+• Fixed-size array blocks
+• Head and tail move circularly
+• Very fast and memory-efficient
+
+27. Circular Array (Array-Based) Implementation
+𖦹 A deque can be implemented using a fixed-size circular array
+𖦹 Maintains front and rear indices and moves them circularly using modulo
+• push_front(x) → move front backward circularly and insert x
+• push_back(x) → move rear forward circularly and insert x
+• pop_front() → move front forward circularly
+• pop_back() → move rear backward circularly
+• getFront() → return arr[front]
+• getBack() → return arr[rear]
+- All operations O(1) amortized
+
+#include <iostream>
+using namespace std;
+
+[pink]class[/pink] [yellow]Deque[/yellow] {
+private:
+    [pink]int*[/pink] [yellow]arr[/yellow];
+    [pink]int[/pink] [yellow]front[/yellow], [yellow]rear[/yellow], [yellow]size[/yellow], [yellow]capacity[/yellow];
+
+public:
+    [pink]Deque[/pink]([pink]int[/pink] [yellow]cap[/yellow]) {
+        [yellow]capacity[/yellow] = [yellow]cap[/yellow];
+        [yellow]arr[/yellow] = [pink]new[/pink] [pink]int[/pink][[yellow]cap[/yellow]];
+        [yellow]front[/yellow] = [yellow]rear[/yellow] = -1;
+        [yellow]size[/yellow] = 0;
+    }
+
+    [pink]bool[/pink] [yellow]isEmpty[/yellow]() { return [yellow]size[/yellow] == 0; }
+    [pink]bool[/pink] [yellow]isFull[/yellow]() { return [yellow]size[/yellow] == [yellow]capacity[/yellow]; }
+
+    [pink]void[/pink] [yellow]push_front[/yellow]([pink]int[/pink] [yellow]x[/yellow]) {
+        [pink]if[/pink] ([yellow]isFull[/yellow]()) { cout << "Deque full!\n"; [pink]return[/pink]; }
+        [pink]if[/pink] ([yellow]isEmpty[/yellow]()) [yellow]front[/yellow] = [yellow]rear[/yellow] = 0;
+        [pink]else[/pink] [yellow]front[/yellow] = ([yellow]front[/yellow] - 1 + [yellow]capacity[/yellow]) % [yellow]capacity[/yellow];
+        [yellow]arr[/yellow][[yellow]front[/yellow]] = [yellow]x[/yellow];
+        [yellow]size[/yellow]++;
+    }
+
+    [pink]void[/pink] [yellow]push_back[/yellow]([pink]int[/pink] [yellow]x[/yellow]) {
+        [pink]if[/pink] ([yellow]isFull[/yellow]()) { cout << "Deque full!\n"; [pink]return[/pink]; }
+        [pink]if[/pink] ([yellow]isEmpty[/yellow]()) [yellow]front[/yellow] = [yellow]rear[/yellow] = 0;
+        [pink]else[/pink] [yellow]rear[/yellow] = ([yellow]rear[/yellow] + 1) % [yellow]capacity[/yellow];
+        [yellow]arr[/yellow][[yellow]rear[/yellow]] = [yellow]x[/yellow];
+        [yellow]size[/yellow]++;
+    }
+
+    [pink]void[/pink] [yellow]pop_front[/yellow]() {
+        [pink]if[/pink] ([yellow]isEmpty[/yellow]()) { cout << "Deque empty!\n"; [pink]return[/pink]; }
+        [pink]if[/pink] ([yellow]front[/yellow] == [yellow]rear[/yellow]) [yellow]front[/yellow] = [yellow]rear[/yellow] = -1;
+        [pink]else[/pink] [yellow]front[/yellow] = ([yellow]front[/yellow] + 1) % [yellow]capacity[/yellow];
+        [yellow]size[/yellow]--;
+    }
+
+    [pink]void[/pink] [yellow]pop_back[/yellow]() {
+        [pink]if[/pink] ([yellow]isEmpty[/yellow]()) { cout << "Deque empty!\n"; [pink]return[/pink]; }
+        [pink]if[/pink] ([yellow]front[/yellow] == [yellow]rear[/yellow]) [yellow]front[/yellow] = [yellow]rear[/yellow] = -1;
+        [pink]else[/pink] [yellow]rear[/yellow] = ([yellow]rear[/yellow] - 1 + [yellow]capacity[/yellow]) % [yellow]capacity[/yellow];
+        [yellow]size[/yellow]--;
+    }
+
+    [pink]int[/pink] [yellow]getFront[/yellow]() {
+        [pink]if[/pink] ([yellow]isEmpty[/yellow]()) { cout << "Deque empty!\n"; [pink]return[/pink] -1; }
+        [pink]return[/pink] [yellow]arr[/yellow][[yellow]front[/yellow]];
+    }
+
+    [pink]int[/pink] [yellow]getBack[/yellow]() {
+        [pink]if[/pink] ([yellow]isEmpty[/yellow]()) { cout << "Deque empty!\n"; [pink]return[/pink] -1; }
+        [pink]return[/pink] [yellow]arr[/yellow][[yellow]rear[/yellow]];
+    }
+};
+
+[pink]int[/pink] [yellow]main[/yellow]() {
+     ;
+
+     ;
+     ;
+     ;
+
+    cout << "Front: " << [yellow]dq[/yellow].[yellow]getFront[/yellow]() << "\n";  // 20
+    cout << "Back: " << [yellow]dq[/yellow].[yellow]getBack[/yellow]() << "\n";    // 30
+
+    [yellow]dq[/yellow].[yellow]pop_front[/yellow]();
+    cout << "Front after pop_front: " << [yellow]dq[/yellow].[yellow]getFront[/yellow]() << "\n"; // 10
+
+    [yellow]dq[/yellow].[yellow]pop_back[/yellow]();
+    cout << "Back after pop_back: " << [yellow]dq[/yellow].[yellow]getBack[/yellow]() << "\n";    // 10
+
+    [pink]return[/pink] 0;
+}
+
+28. Doubly Linked List Implementation
+𖦹 A deque can be implemented using a doubly linked list
+𖦹 Each node has prev and next pointers
+• push_front(x) → insert new node at front
+• push_back(x) → insert new node at back
+• pop_front() → remove node from front
+• pop_back() → remove node from back
+• getFront() → return front->data
+• getBack() → return rear->data
+- All operations O(1)
+
+#include <iostream>
+using namespace std;
+
+[pink]struct[/pink] [yellow]Node[/yellow] {
+    [pink]int[/pink] [yellow]data[/yellow];
+    [yellow]Node[/yellow]* [yellow]prev[/yellow];
+    [yellow]Node[/yellow]* [yellow]next[/yellow];
+    [yellow]Node[/yellow]([pink]int[/pink] [yellow]x[/yellow]) : [yellow]data[/yellow]([yellow]x[/yellow]), [yellow]prev[/yellow](nullptr), [yellow]next[/yellow](nullptr) {}
+};
+
+[pink]class[/pink] [yellow]Deque[/yellow] {
+private:
+    [yellow]Node[/yellow]* [yellow]front[/yellow];
+    [yellow]Node[/yellow]* [yellow]rear[/yellow];
+
+public:
+    [pink]Deque[/pink]() {
+        [yellow]front[/yellow] = [yellow]rear[/yellow] = nullptr;
+    }
+
+    [pink]bool[/pink] [yellow]isEmpty[/yellow]() { return [yellow]front[/yellow] == nullptr; }
+
+    [pink]void[/pink] [yellow]push_front[/yellow]([pink]int[/pink] [yellow]x[/yellow]) {
+        [yellow]Node[/yellow]* [yellow]newNode[/yellow] = [pink]new[/pink] [yellow]Node[/yellow]([yellow]x[/yellow]);
+        [pink]if[/pink] ([yellow]isEmpty[/yellow]()) [yellow]front[/yellow] = [yellow]rear[/yellow] = [yellow]newNode[/yellow];
+        [pink]else[/pink] {
+            [yellow]newNode[/yellow]->next = [yellow]front[/yellow];
+            [yellow]front[/yellow]->prev = [yellow]newNode[/yellow];
+            [yellow]front[/yellow] = [yellow]newNode[/yellow];
+        }
+    }
+
+    [pink]void[/pink] [yellow]push_back[/yellow]([pink]int[/pink] [yellow]x[/yellow]) {
+        [yellow]Node[/yellow]* [yellow]newNode[/yellow] = [pink]new[/pink] [yellow]Node[/yellow]([yellow]x[/yellow]);
+        [pink]if[/pink] ([yellow]isEmpty[/yellow]()) [yellow]front[/yellow] = [yellow]rear[/yellow] = [yellow]newNode[/yellow];
+        [pink]else[/pink] {
+            [yellow]rear[/yellow]->next = [yellow]newNode[/yellow];
+            [yellow]newNode[/yellow]->prev = [yellow]rear[/yellow];
+            [yellow]rear[/yellow] = [yellow]newNode[/yellow];
+        }
+    }
+
+    [pink]void[/pink] [yellow]pop_front[/yellow]() {
+        [pink]if[/pink] ([yellow]isEmpty[/yellow]()) { cout << "Deque empty!\n"; [pink]return[/pink]; }
+        [yellow]Node[/yellow]* [yellow]temp[/yellow] = [yellow]front[/yellow];
+        [yellow]front[/yellow] = [yellow]front[/yellow]->next;
+        [pink]if[/pink] ([yellow]front[/yellow]) [yellow]front[/yellow]->prev = nullptr;
+        [pink]else[/pink] [yellow]rear[/yellow] = nullptr;
+        [pink]delete[/pink] [yellow]temp[/yellow];
+    }
+
+    [pink]void[/pink] [yellow]pop_back[/yellow]() {
+        [pink]if[/pink] ([yellow]isEmpty[/yellow]()) { cout << "Deque empty!\n"; [pink]return[/pink]; }
+        [yellow]Node[/yellow]* [yellow]temp[/yellow] = [yellow]rear[/yellow];
+        [yellow]rear[/yellow] = [yellow]rear[/yellow]->prev;
+        [pink]if[/pink] ([yellow]rear[/yellow]) [yellow]rear[/yellow]->next = nullptr;
+        [pink]else[/pink] [yellow]front[/yellow] = nullptr;
+        [pink]delete[/pink] [yellow]temp[/yellow];
+    }
+
+    [pink]int[/pink] [yellow]getFront[/yellow]() {
+        [pink]if[/pink] ([yellow]isEmpty[/yellow]()) { cout << "Deque empty!\n"; [pink]return[/pink] -1; }
+        [pink]return[/pink] [yellow]front[/yellow]->data;
+    }
+
+    [pink]int[/pink] [yellow]getBack[/yellow]() {
+        [pink]if[/pink] ([yellow]isEmpty[/yellow]()) { cout << "Deque empty!\n"; [pink]return[/pink] -1; }
+        [pink]return[/pink] [yellow]rear[/yellow]->data;
+    }
+};
+
+[pink]int[/pink] [yellow]main[/yellow]() {
+    [yellow]Deque[/yellow] [yellow]dq[/yellow];
+
+     ;
+     ;
+     ;
+
+    cout << "Front: " << [yellow]dq[/yellow].[yellow]getFront[/yellow]() << "\n";  // 20
+    cout << "Back: " << [yellow]dq[/yellow].[yellow]getBack[/yellow]() << "\n";    // 30
+
+    [yellow]dq[/yellow].[yellow]pop_front[/yellow]();
+    cout << "Front after pop_front: " << [yellow]dq[/yellow].[yellow]getFront[/yellow]() << "\n"; // 10
+
+    [yellow]dq[/yellow].[yellow]pop_back[/yellow]();
+    cout << "Back after pop_back: " << [yellow]dq[/yellow].[yellow]getBack[/yellow]() << "\n";    // 10
+
+    [pink]return[/pink] 0;
+}
+
+--END--
+--BEGIN--24/11/2025--HEAPS--
+1. Heap
+𖦹 A heap is a tree where each parent is more important than its children
+𖦹 More important means smaller (min-heap) or larger (max-heap)
+𖦹 Two rules must always hold
+• Shape rule: tree must be a complete binary tree (filled left to right)
+• Order rule: parent must follow heap property (≤ for min-heap, ≥ for max-heap)
+- Explanation: if any rule breaks, the tree stops being a heap
+𖦹 A heap only checks parent-child order, not brother-brother order
+𖦹 Because of this, a heap is not a sorted tree
+
+2. Max heap example
+𖦹 Parent is always ≥ children
+𖦹 Example tree
+•       100
+        /   \
+      50    90
+     / \
+    30 20
+
+3. Min heap example
+𖦹 Parent is always ≤ children
+𖦹 Example tree
+•       5
+      /   \
+     7     9
+    / \
+   8  10
+- Explanation: 5 ≤ 7, 5 ≤ 9, 7 ≤ 8, 7 ≤ 10
+
+4. Heap as array form
+𖦹 A min-heap stored in array form
+• Index: 1 2 3 4 5 6 7
+• Value: 2 5 6 8 9 10 11
+𖦹 Same tree shape using array positions
+
+5. Pop operation idea (extract-min)
+𖦹 Remove root (minimum element)
+𖦹 Move last element to root
+𖦹 Heapify down to fix heap property
+- Explanation: each pop removes smallest element in min-heap
+
+6. First pop
+𖦹 Remove 2 and move 11 to root
+𖦹 Heapify by swapping with smaller child until property holds
+𖦹 Tree after moving 11:
+        11
+      /    \
+     5      6
+    / \    / 
+   8  9  10
+𖦹 After swaps:
+        5
+      /    \
+     8      6
+    / \    / 
+   11 9  10
+• Final array: 5 8 6 11 9 10
+
+7. Second pop
+𖦹 Remove 5 and move 10 to root
+𖦹 Tree after moving 10:
+        10
+      /    \
+     8      6
+    / \    / 
+   11 9  
+𖦹 Swap with smaller child 6:
+        6
+      /    \
+     8      10
+    / \    
+   11 9  
+• Final array: 6 8 10 11 9
+
+8. Third pop
+𖦹 Remove 6 and move 9 to root
+𖦹 Tree:
+        9
+      /   \
+     8     10
+    / \    
+   11     
+𖦹 Swap with 8:
+        8
+      /   \
+     9     10
+    /      
+   11     
+• Final array: 8 9 10 11
+
+9. Fourth pop
+𖦹 Remove 8 and move 11 to root
+𖦹 Tree:
+        11
+      /   \
+     9     10
+𖦹 Swap with 9:
+        9
+      /   \
+    11     10
+• Final array: 9 11 10
+
+10. Fifth pop
+𖦹 Remove 9 and move 10 to root
+𖦹 Tree:
+      10
+     /
+    11
+𖦹 10 already satisfies heap property
+• Final array: 10 11
+
+11. Sixth pop
+𖦹 Remove 10 and move 11 to root
+𖦹 Tree:
+      11
+𖦹 No children, heap is fine
+• Final array: 11
+
+12. Seventh pop
+𖦹 Remove 11
+𖦹 Heap becomes empty
+
+13. Final pop order
+𖦹 Values removed one by one in order
+• 2, 5, 6, 8, 9, 10, 11
+- Explanation: min-heap gives ascending order when popping
+
+14. Implementation in C++
+𖦹 We add a dummy value at index 0 so that child and parent formulas become easy
+𖦹 When heap uses 1-based indexing, child and parent math is clean
+• left child = 2*i
+• right child = 2*i + 1
+• parent = i/2
+- No need for +1 or -1 adjustments, so mistakes are fewer
+
+15. The internal structure
+𖦹 The heap is stored in a dynamic array using [blue]vector<int>[/blue] [yellow]heap[/yellow]
+𖦹 Even though it looks like an array, it behaves like a full binary tree
+• index 1 is the root
+• index 2,3 are next level
+• index 4,5,6,7 are next level
+- This shape always stays full from left to right
+
+16. push(x): Adding a value
+𖦹 Step 1: Put new value at end of array using [green]push_back[/green]
+• This is like adding a new leaf in a tree
+𖦹 Step 2: Bubble Up to keep heap rules correct
+• If the child is smaller than the parent, swap and move up
+- This continues until the new value reaches the right place
+
+17. pop(): Removing the smallest value
+𖦹 Step 1: Take out the root and replace it with last element
+• Put last element into root spot
+• Remove last element from array
+𖦹 Step 2: Heapify Down
+• Compare root with its children
+• Swap with the smaller child
+• Keep going down until heap rules are correct
+
+18. top()
+𖦹 Returns the smallest element which is at index 0 (root)
+empty()
+𖦹 Returns true if the array has no elements
+print()
+𖦹 Shows the array that represents the heap
+
+19. Time needed for each action
+𖦹 push(x) takes O(log n)
+𖦹 pop() also takes O(log n)
+𖦹 top() takes O(1)
+𖦹 empty() takes O(1)
+
+20. MinHeap code
+[pink]#include[/pink] <[yellow]iostream[/yellow]>
+[pink]#include[/pink] <[yellow]vector[/yellow]>
+[pink]using[/pink] [pink]namespace[/pink] [yellow]std[/yellow];
+
+[pink]class[/pink] [yellow]MinHeap[/yellow] {
+    [blue]vector<int>[/blue] [yellow]heap[/yellow];
+
+    [pink]int[/pink] [yellow]parent[/yellow]([pink]int[/pink] [yellow]i[/yellow]) { [pink]return[/pink] ([yellow]i[/yellow] - 1) / 2; }
+    [pink]int[/pink] [yellow]left[/yellow]([pink]int[/pink] [yellow]i[/yellow])   { [pink]return[/pink] 2 * [yellow]i[/yellow] + 1; }
+    [pink]int[/pink] [yellow]right[/yellow]([pink]int[/pink] [yellow]i[/yellow])  { [pink]return[/pink] 2 * [yellow]i[/yellow] + 2; }
+
+[pink]public[/pink]:
+
+    // Insert a new value
+    [pink]void[/pink] [yellow]push[/yellow]([pink]int[/pink] [yellow]x[/yellow]) {
+        [yellow]heap[/yellow].[green]push_back[/green]([yellow]x[/yellow]);
+        [pink]int[/pink] [yellow]i[/yellow] = [yellow]heap[/yellow].size() - 1;
+
+        // Bubble up
+        [pink]while[/pink] ([yellow]i[/yellow] != 0 && [yellow]heap[/yellow][parent([yellow]i[/yellow])] > [yellow]heap[/yellow][[yellow]i[/yellow]]) {
+            [green]swap[/green]([yellow]heap[/yellow][[yellow]i[/yellow]], [yellow]heap[/yellow][parent([yellow]i[/yellow])]);
+            [yellow]i[/yellow] = parent([yellow]i[/yellow]);
+        }
+    }
+
+    // Remove minimum (root)
+    [pink]int[/pink] [yellow]pop[/yellow]() {
+        [pink]if[/pink] ([yellow]heap[/yellow].empty()) {
+            [green]cout[/green] << "Heap empty\n";
+            [pink]return[/pink] -1;
+        }
+
+        [pink]int[/pink] [yellow]root[/yellow] = [yellow]heap[/yellow][0];
+        [yellow]heap[/yellow][0] = [yellow]heap[/yellow].back();
+        [yellow]heap[/yellow].[green]pop_back[/green]();
+
+        ;
+        [pink]return[/pink] [yellow]root[/yellow];
+    }
+
+    // Heapify down from i
+    [pink]void[/pink] [yellow]heapify[/yellow]([pink]int[/pink] [yellow]i[/yellow]) {
+        [pink]int[/pink] [yellow]smallest[/yellow] = [yellow]i[/yellow];
+        [pink]int[/pink] [yellow]l[/yellow] = left([yellow]i[/yellow]);
+        [pink]int[/pink] [yellow]r[/yellow] = right([yellow]i[/yellow]);
+
+        [pink]if[/pink] ([yellow]l[/yellow] < [yellow]heap[/yellow].size() && [yellow]heap[/yellow][[yellow]l[/yellow]] < [yellow]heap[/yellow][[yellow]smallest[/yellow]]) [yellow]smallest[/yellow] = [yellow]l[/yellow];
+        [pink]if[/pink] ([yellow]r[/yellow] < [yellow]heap[/yellow].size() && [yellow]heap[/yellow][[yellow]r[/yellow]] < [yellow]heap[/yellow][[yellow]smallest[/yellow]]) [yellow]smallest[/yellow] = [yellow]r[/yellow];
+
+        [pink]if[/pink] ([yellow]smallest[/yellow] != [yellow]i[/yellow]) {
+            [green]swap[/green]([yellow]heap[/yellow][[yellow]i[/yellow]], [yellow]heap[/yellow][[yellow]smallest[/yellow]]);
+            [yellow]heapify[/yellow]([yellow]smallest[/yellow]);
+        }
+    }
+
+    [pink]int[/pink] [yellow]top[/yellow]() {
+        [pink]if[/pink] ([yellow]heap[/yellow].empty()) [pink]return[/pink] -1;
+        [pink]return[/pink] [yellow]heap[/yellow][0];
+    }
+
+    [pink]bool[/pink] [yellow]empty[/yellow]() {
+        [pink]return[/pink] [yellow]heap[/yellow].empty();
+    }
+};
+
+21. MaxHeap code
+[pink]#include[/pink] <[yellow]iostream[/yellow]>
+[pink]#include[/pink] <[yellow]vector[/yellow]>
+[pink]using[/pink] [pink]namespace[/pink] [yellow]std[/yellow];
+
+[pink]class[/pink] [yellow]MaxHeap[/yellow] {
+    [blue]vector<int>[/blue] [yellow]heap[/yellow];
+
+    [pink]int[/pink] [yellow]parent[/yellow]([pink]int[/pink] [yellow]i[/yellow]) { [pink]return[/pink] ([yellow]i[/yellow] - 1) / 2; }
+    [pink]int[/pink] [yellow]left[/yellow]([pink]int[/pink] [yellow]i[/yellow])   { [pink]return[/pink] 2 * [yellow]i[/yellow] + 1; }
+    [pink]int[/pink] [yellow]right[/yellow]([pink]int[/pink] [yellow]i[/yellow])  { [pink]return[/pink] 2 * [yellow]i[/yellow] + 2; }
+
+[pink]public[/pink]:
+
+    [pink]void[/pink] [yellow]push[/yellow]([pink]int[/pink] [yellow]x[/yellow]) {
+        [yellow]heap[/yellow].[green]push_back[/green]([yellow]x[/yellow]);
+        [pink]int[/pink] [yellow]i[/yellow] = [yellow]heap[/yellow].size() - 1;
+
+        // Bubble up
+        [pink]while[/pink] ([yellow]i[/yellow] != 0 && [yellow]heap[/yellow][parent([yellow]i[/yellow])] < [yellow]heap[/yellow][[yellow]i[/yellow]]) {
+            [green]swap[/green]([yellow]heap[/yellow][[yellow]i[/yellow]], [yellow]heap[/yellow][parent([yellow]i[/yellow])]);
+            [yellow]i[/yellow] = parent([yellow]i[/yellow]);
+        }
+    }
+
+    [pink]int[/pink] [yellow]pop[/yellow]() {
+        [pink]if[/pink] ([yellow]heap[/yellow].empty()) {
+            [green]cout[/green] << "Heap empty\n";
+            [pink]return[/pink] -1;
+        }
+
+        [pink]int[/pink] [yellow]root[/yellow] = [yellow]heap[/yellow][0];
+        [yellow]heap[/yellow][0] = [yellow]heap[/yellow].back();
+        [yellow]heap[/yellow].[green]pop_back[/green]();
+
+        ;
+        [pink]return[/pink] [yellow]root[/yellow];
+    }
+
+    [pink]void[/pink] [yellow]heapify[/yellow]([pink]int[/pink] [yellow]i[/yellow]) {
+        [pink]int[/pink] [yellow]largest[/yellow] = [yellow]i[/yellow];
+        [pink]int[/pink] [yellow]l[/yellow] = left([yellow]i[/yellow]);
+        [pink]int[/pink] [yellow]r[/yellow] = right([yellow]i[/yellow]);
+
+        [pink]if[/pink] ([yellow]l[/yellow] < [yellow]heap[/yellow].size() && [yellow]heap[/yellow][[yellow]l[/yellow]] > [yellow]heap[/yellow][[yellow]largest[/yellow]]) [yellow]largest[/yellow] = [yellow]l[/yellow];
+        [pink]if[/pink] ([yellow]r[/yellow] < [yellow]heap[/yellow].size() && [yellow]heap[/yellow][[yellow]r[/yellow]] > [yellow]heap[/yellow][[yellow]largest[/yellow]]) [yellow]largest[/yellow] = [yellow]r[/yellow];
+
+        [pink]if[/pink] ([yellow]largest[/yellow] != [yellow]i[/yellow]) {
+            [green]swap[/green]([yellow]heap[/yellow][[yellow]i[/yellow]], [yellow]heap[/yellow][[yellow]largest[/yellow]]);
+            [yellow]heapify[/yellow]([yellow]largest[/yellow]);
+        }
+    }
+
+    [pink]int[/pink] [yellow]top[/yellow]() {
+        [pink]if[/pink] ([yellow]heap[/yellow].empty()) [pink]return[/pink] -1;
+        [pink]return[/pink] [yellow]heap[/yellow][0];
+    }
+
+    [pink]bool[/pink] [yellow]empty[/yellow]() {
+        [pink]return[/pink] [yellow]heap[/yellow].empty();
+    }
+};
+
 --END--
