@@ -2464,7 +2464,7 @@ print()
     }
 };
 --END--
---BEGIN--24/11/2025--TREES--
+--BEGIN--24/11/2025--BINARY SEARCH TREES--
 1. Trees
 𖦹 A tree organizes data in a hierarchy like a family tree or company structure
 𖦹 It has nodes (data points) and edges/arcs (connections between nodes)
@@ -2779,4 +2779,80 @@ ITERATIVE INORDER AND POSTORDER ROUTINES:
 • Inorder: O(n), O(n)
 • Postorder: O(n), O(n)
 • Level-order: O(n), O(n)
+
+9. Why Balance a Tree
+𖦹 Trees make searching faster than linked lists
+𖦹 Lopsided trees act like linked lists → searching becomes slow
+• Example: inserting elements in ascending order → tree becomes long chain
+𖦹 Balanced tree
+• Keeps height difference between left and right subtrees ≤ 1
+• Perfectly balanced tree: all levels fully filled except maybe last
+• Searching is fast because tree height is minimal
+• Formula: Max nodes in tree of height h → 2^h - 1
+• Example: 10,000 elements → balanced tree height ≈ 14 → only 14 comparisons needed
+• Linked list → worst case 10,000 comparisons
+𖦹 How to build a balanced tree
+• Sort data first (if not already sorted)
+• Pick middle element → root
+• Divide array into left half and right half
+• Middle of left → left child
+• Middle of right → right child
+• Repeat recursively for all subarrays until all elements inserted
+𖦹 Balancing BST: Code Example
+[green]#include[/green] <iostream>
+[green]using namespace[/green] std;
+// Node of BST
+[pink]struct[/pink] [yellow]BSTNode[/yellow] {
+    [pink]int[/pink] [yellow]key[/yellow];
+    [blue]BSTNode*[/blue] [yellow]left[/yellow];
+    [blue]BSTNode*[/blue] [yellow]right[/yellow];
+    [yellow]BSTNode[/yellow]([pink]int[/pink] [yellow]k[/yellow]) : [yellow]key[/yellow]([yellow]k[/yellow]), [yellow]left[/yellow]([green]nullptr[/green]), [yellow]right[/yellow]([green]nullptr[/green]) {}
+};
+// BST root
+[blue]BSTNode*[/blue] [yellow]root[/yellow] = [green]nullptr[/green];
+// Insert function for BST
+[blue]BSTNode*[/blue] [yellow]insert[/yellow]([blue]BSTNode*[/blue] [yellow]node[/yellow], [pink]int[/pink] [yellow]key[/yellow]) {
+    [pink]if[/pink]([yellow]node[/yellow] == [green]nullptr[/green]) {
+        [pink]return[/pink] [pink]new[/pink] [yellow]BSTNode[/yellow]([yellow]key[/yellow]); // create new node
+    }
+    [pink]if[/pink]([yellow]key[/yellow] < [yellow]node[/yellow]->key) {
+        [yellow]node[/yellow]->left = [yellow]insert[/yellow]([yellow]node[/yellow]->left, [yellow]key[/yellow]);
+    } [pink]else if[/pink]([yellow]key[/yellow] > [yellow]node[/yellow]->key) {
+        [yellow]node[/yellow]->right = [yellow]insert[/yellow]([yellow]node[/yellow]->right, [yellow]key[/yellow]);
+    }
+    [pink]return[/pink] [yellow]node[/yellow];
+}
+// Wrapper insert to use global root
+[pink]void[/pink] [yellow]insert[/yellow]([pink]int[/pink] [yellow]key[/yellow]) {
+    [yellow]root[/yellow] = [yellow]insert[/yellow]([yellow]root[/yellow], [yellow]key[/yellow]);
+}
+// Build balanced BST from sorted array
+[pink]void[/pink] [yellow]balance[/yellow]([pink]int[/pink] [yellow]data[/yellow][], [pink]int[/pink] [yellow]first[/yellow], [pink]int[/pink] [yellow]last[/yellow]) {
+    [pink]if[/pink]([yellow]first[/yellow] <= [yellow]last[/yellow]) {
+        [pink]int[/pink] [yellow]middle[/yellow] = ([yellow]first[/yellow] + [yellow]last[/yellow]) / 2;
+        [yellow]insert[/yellow]([yellow]data[/yellow][[yellow]middle[/yellow]]);             // insert middle as root/subroot
+        [yellow]balance[/yellow]([yellow]data[/yellow], [yellow]first[/yellow], [yellow]middle[/yellow] - 1);  // left subtree
+        [yellow]balance[/yellow]([yellow]data[/yellow], [yellow]middle[/yellow] + 1, [yellow]last[/yellow]);   // right subtree
+    }
+}
+// Inorder traversal to verify BST
+[pink]void[/pink] [yellow]inorder[/yellow]([blue]BSTNode*[/blue] [yellow]node[/yellow]) {
+    [pink]if[/pink](![yellow]node[/yellow]) [pink]return[/pink];
+    [yellow]inorder[/yellow]([yellow]node[/yellow]->left);
+    [green]cout[/green] << [yellow]node[/yellow]->key << " ";
+    [yellow]inorder[/yellow]([yellow]node[/yellow]->right);
+}
+[pink]int[/pink] [pink]main[/pink]() {
+    [pink]int[/pink] [yellow]data[/yellow][] = {0,1,2,3,4,5,6,7,8,9}; // sorted array
+    [pink]int[/pink] [yellow]n[/yellow] = sizeof([yellow]data[/yellow]) / sizeof([yellow]data[/yellow][0]);
+
+    [yellow]balance[/yellow]([yellow]data[/yellow], 0, [yellow]n[/yellow] - 1);  // build balanced BST
+
+    [green]cout[/green] << "Inorder of balanced BST: ";
+    [yellow]inorder[/yellow]([yellow]root[/yellow]);
+    [green]cout[/green] << endl;
+
+    [pink]return[/pink] 0;
+}
+
 --END--
