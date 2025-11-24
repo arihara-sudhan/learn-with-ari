@@ -12,6 +12,7 @@ SOURCE: SEVENTH EDITION - ELEMENTARY NUMBER THEORY by DAVID M. BURTON
 3. Archimedean property
 𖦹 For any positive numbers [yellow]x[/yellow] and [yellow]y[/yellow], there exists a [pink]natural number[/pink] [yellow]n[/yellow] such that [yellow]n[/yellow] [orange]⋅[/orange] [yellow]x[/yellow] [orange]>[/orange] [yellow]y[/yellow]
 𖦹 Using WOP, if no such [yellow]n[/yellow] existed, a set without a smallest element could be formed, which is impossible
+--MATH-START--
 PROOF:
 𖦹 If [yellow]a[/yellow] and [yellow]b[/yellow] are positive numbers, there exists a positive integer [yellow]n[/yellow] such that [yellow]n[/yellow] [orange]⋅[/orange] [yellow]a[/yellow] [orange]>[/orange] [yellow]b[/yellow]
 IDEA:
@@ -36,4 +37,5 @@ Step 5: Contradiction
 INTUITION
 𖦹 Adding [yellow]a[/yellow] repeatedly will eventually pass [yellow]b[/yellow]
 𖦹 WOP ensures a “smallest leftover”; if the property were false, a smaller leftover could be created, which is impossible
+--MATH-END--
 --END--
