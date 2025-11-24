@@ -13,7 +13,6 @@
 𖦹 Using WOP, if no such n existed, a set without a smallest element could be formed, which is impossible
 
 4. Proof of Archimedean property
---MATH--START--
 𖦹 If a and b are positive numbers, there exists a positive integer n such that n ⋅ a > b
 𖦹 Idea: Assume the opposite and show a contradiction using WOP
 Step 1: Assume property is false
@@ -33,7 +32,6 @@ Step 4: Find a smaller element
 Step 5: Contradiction
 𖦹 The contradiction comes from assuming no n exists
 𖦹 Therefore, the assumption is wrong and the Archimedean property is true
---MATH--END--
 
 5. Intuition
 𖦹 Adding a repeatedly will eventually pass b
