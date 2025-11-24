@@ -1,3 +1,4 @@
+--BEGIN--24/11/2025--WELL ORDERING PRINCIPLE--
 1. Number theory and natural numbers
 𖦹 Number theory studies integers, mainly positive ones: 1, 2, 3, …
 𖦹 Positive integers are also called natural numbers
@@ -37,3 +38,4 @@ Step 5: Contradiction
 5. Intuition
 𖦹 Adding a repeatedly will eventually pass b
 𖦹 WOP ensures a “smallest leftover”; if the property were false, a smaller leftover could be created, which is impossible
+--END--
