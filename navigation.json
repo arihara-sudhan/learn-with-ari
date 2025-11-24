@@ -12,6 +12,10 @@
         "label": "RAG"
     },
     {
+        "id": "number-theory",
+        "label": "Number Theory"
+    },
+    {
         "id": "advanced-dsa",
         "label": "Advanced DSA"
     },

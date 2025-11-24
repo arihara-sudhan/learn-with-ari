@@ -1,0 +1,39 @@
+SOURCE: SEVENTH EDITION - ELEMENTARY NUMBER THEORY by DAVID M. BURTON
+--BEGIN--24/11/2025--WELL ORDERING PRINCIPLE--
+1. Number theory and natural numbers
+𖦹 [pink]Number theory[/pink] studies [pink]integers[/pink], mainly positive ones: [blue]1[/blue], [blue]2[/blue], [blue]3[/blue], …
+𖦹 Positive integers are also called [pink]natural numbers[/pink]
+
+2. Well-Ordering Principle (WOP)
+𖦹 Every non-empty set [yellow]S[/yellow] of nonnegative [pink]integers[/pink] has a smallest element
+• There is some [yellow]a[/yellow] in [yellow]S[/yellow] such that [yellow]a[/yellow] [orange]≤[/orange] [yellow]b[/yellow] for all [yellow]b[/yellow] in [yellow]S[/yellow]
+- [gray]This means you can always find the least number in any set of positive integers[/gray]
+
+3. Archimedean property
+𖦹 For any positive numbers [yellow]x[/yellow] and [yellow]y[/yellow], there exists a [pink]natural number[/pink] [yellow]n[/yellow] such that [yellow]n[/yellow] [orange]⋅[/orange] [yellow]x[/yellow] [orange]>[/orange] [yellow]y[/yellow]
+𖦹 Using WOP, if no such [yellow]n[/yellow] existed, a set without a smallest element could be formed, which is impossible
+PROOF:
+𖦹 If [yellow]a[/yellow] and [yellow]b[/yellow] are positive numbers, there exists a positive integer [yellow]n[/yellow] such that [yellow]n[/yellow] [orange]⋅[/orange] [yellow]a[/yellow] [orange]>[/orange] [yellow]b[/yellow]
+IDEA:
+𖦹 Assume the opposite and show a contradiction using WOP
+Step 1: Assume property is false
+𖦹 Suppose no such [yellow]n[/yellow] exists
+• Then for every positive integer [yellow]n[/yellow]: [yellow]n[/yellow] [orange]⋅[/orange] [yellow]a[/yellow] [orange]≤[/orange] [yellow]b[/yellow]
+Step 2: Create a set
+𖦹 Define [yellow]S[/yellow] = {[yellow]b[/yellow] [orange]-[/orange] [yellow]n[/yellow] [orange]⋅[/orange] [yellow]a[/yellow] ∣ [yellow]n[/yellow] is a positive integer}
+𖦹 Each element is positive under the assumption
+• So [yellow]S[/yellow] is a non-empty set of positive integers
+Step 3: Apply WOP
+𖦹 WOP says [yellow]S[/yellow] has a smallest element
+• Let smallest element be [yellow]b[/yellow] [orange]-[/orange] [yellow]m[/yellow] [orange]⋅[/orange] [yellow]a[/yellow] for some positive integer [yellow]m[/yellow]
+Step 4: Find a smaller element
+𖦹 Consider [yellow]b[/yellow] [orange]-[/orange] ([yellow]m[/yellow]+[blue]1[/blue]) [orange]⋅[/orange] [yellow]a[/yellow]
+• Algebra: [yellow]b[/yellow] [orange]-[/orange] ([yellow]m[/yellow]+[blue]1[/blue]) [orange]⋅[/orange] [yellow]a[/yellow] = ([yellow]b[/yellow] [orange]-[/orange] [yellow]m[/yellow] [orange]⋅[/orange] [yellow]a[/yellow]) [orange]-[/orange] [yellow]a[/yellow]
+- Since [yellow]a[/yellow] [orange]>[/orange] [blue]0[/blue], this is smaller than the smallest element, impossible
+Step 5: Contradiction
+𖦹 The contradiction comes from assuming no [yellow]n[/yellow] exists
+𖦹 Therefore, the assumption is wrong and the Archimedean property is true
+INTUITION
+𖦹 Adding [yellow]a[/yellow] repeatedly will eventually pass [yellow]b[/yellow]
+𖦹 WOP ensures a “smallest leftover”; if the property were false, a smaller leftover could be created, which is impossible
+--END--
