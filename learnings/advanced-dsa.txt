@@ -2463,5 +2463,104 @@ print()
         [pink]return[/pink] [yellow]heap[/yellow].empty();
     }
 };
+--END--
+--BEGIN--24/11/2025--TREES--
+1. Trees
+𖦹 A tree organizes data in a hierarchy like a family tree or company structure
+𖦹 It has nodes (data points) and edges/arcs (connections between nodes)
+𖦹 The root is the top node and has no parent
+𖦹 Leaves are nodes with no children
+𖦹 A path is the sequence of edges from the root to a node
+𖦹 The level of a node is its distance from the root (root = level 1)
+𖦹 The height of a tree is the largest level in the tree
+• Example:
+- Root (level 1)
+  ├─ Child 1 (level 2)
+  └─ Child 2 (level 2)
+
+2. Why use trees instead of lists
+𖦹 In a linked list, finding an element may require checking every node
+𖦹 Trees can make searching faster if organized properly
+• Especially ordered trees
+
+3. Binary Trees
+𖦹 A binary tree is a tree where each node has at most two children: left and right
+• Example:
+-       10
+        /  \
+       5    15
+𖦹 Complete binary tree: all levels full except possibly last, nodes as far left as possible
+𖦹 Number of nodes at level i is at most 2^i
+
+4. Binary Search Trees (BSTs)
+𖦹 A BST is a binary tree with an ordering rule:
+• Left child < parent
+• Right child > parent
+𖦹 Ordering makes searching, inserting, deleting faster
+• Example:
+-        10
+         /  \
+        5    20
+       / \   / \
+      2   7 15 25
+𖦹 Searching is efficient because at each step you choose left or right instead of checking all nodes
+
+5. Tree Traversals
+𖦹 There are three main recursive traversals and one level-order traversal
+• Preorder: visits root first, then recursively goes left and right
+• Inorder: goes all the way left, backtracks to root, then goes right
+• Postorder: goes all the way left and right, then backtracks to visit root
+• Level-order: visits nodes level by level; uses BFS, useful for shortest path
+𖦹 Example tree:
+          50
+        /    \
+      30      70
+     /  \    /  \
+   20   40  60   80
+  /         \      \
+10          65      90
+
+𖦹 Traversals for the tree:
+• PREORDER: 50 → 30 → 20 → 10 → 40 → 70 → 60 → 65 → 80 → 90
+• INORDER: 10 → 20 → 30 → 40 → 50 → 60 → 65 → 70 → 80 → 90
+• POSTORDER: 10 → 20 → 40 → 30 → 65 → 60 → 80 → 90 → 70 → 50
+• LEVELORDER: 50 → 30 → 70 → 20 → 40 → 60 → 80 → 10 → 65 → 90
+
+𖦹 Pre Order (Root → Left → Right)
+[pink]void[/pink] [yellow]preorder[/yellow]([blue]BSTNode*[/blue] [yellow]node[/yellow]){
+    [pink]if[/pink]([yellow]node[/yellow] == [green]nullptr[/green]) [pink]return[/pink];        // base case
+    [green]cout[/green] << [yellow]node[/yellow]->data << " → ";                           // visit root
+    [yellow]preorder[/yellow]([yellow]node[/yellow]->left);                                // go left
+    [yellow]preorder[/yellow]([yellow]node[/yellow]->right);                               // go right
+}
+𖦹 In Order (Left → Root → Right)
+[pink]void[/pink] [yellow]inorder[/yellow]([blue]BSTNode*[/blue] [yellow]node[/yellow]){
+    [pink]if[/pink]([yellow]node[/yellow] == [green]nullptr[/green]) [pink]return[/pink];        // base case
+    [yellow]inorder[/yellow]([yellow]node[/yellow]->left);                                     // go left
+    [green]cout[/green] << [yellow]node[/yellow]->data << " → ";                                // visit root
+    [yellow]inorder[/yellow]([yellow]node[/yellow]->right);                                    // go right
+}
+𖦹 Post Order (Left → Right → Root)
+[pink]void[/pink] [yellow]postorder[/yellow]([blue]BSTNode*[/blue] [yellow]node[/yellow]){
+    [pink]if[/pink]([yellow]node[/yellow] == [green]nullptr[/green]) [pink]return[/pink];        // base case
+    [yellow]postorder[/yellow]([yellow]node[/yellow]->left);                                    // go left
+    [yellow]postorder[/yellow]([yellow]node[/yellow]->right);                                   // go right
+    [green]cout[/green] << [yellow]node[/yellow]->data << " → ";                                // visit root
+}
+𖦹 Level Order
+[green]#include[/green] <queue>
+[pink]void[/pink] [yellow]levelOrder[/yellow]([blue]BSTNode*[/blue] [yellow]root[/yellow]){
+    [pink]if[/pink]([yellow]root[/yellow] == [green]nullptr[/green]) [pink]return[/pink];
+    [green]queue[/green]<[blue]BSTNode*[/blue]> [yellow]q[/yellow];
+    [yellow]q[/yellow].push([yellow]root[/yellow]);
+    [pink]while[/pink](![yellow]q[/yellow].empty()){
+        [blue]BSTNode*[/blue] [yellow]node[/yellow] = [yellow]q[/yellow].front();
+        [yellow]q[/yellow].pop();
+        [green]cout[/green] << [yellow]node[/yellow]->data << " → ";
+        [pink]if[/pink]([yellow]node[/yellow]->left != [green]nullptr[/green]) [yellow]q[/yellow].push([yellow]node[/yellow]->left);
+        [pink]if[/pink]([yellow]node[/yellow]->right != [green]nullptr[/green]) [yellow]q[/yellow].push([yellow]node[/yellow]->right);
+    }
+}
+
 
 --END--
