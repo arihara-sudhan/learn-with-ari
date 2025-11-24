@@ -916,6 +916,7 @@ function reverseLinkedList(head):
 𖦹 Total nodes = n → total space O(n)
 
 36. What is a Skip List
+IMG_URL skiplist.png
 𖦹 An advanced linked list with multiple levels of forward pointers
 𖦹 Faster search, insertion, and deletion using express lanes
 𖦹 Each node has a randomly assigned level
@@ -1064,6 +1065,7 @@ public:
 𖦹 Works logically but practically slower for large lists
 
 53. Unrolled Linked List
+IMG_URL unrolled_ll.png
 𖦹 A linked list variation where each node stores multiple elements in an array plus a pointer to next node.
 𖦹 Purpose: reduce pointer overhead, improve cache performance, and reduce wasted memory.
 𖦹 Acts like a mix between arrays and linked lists: dynamic insertion/deletion like linked lists but stores chunks to reduce overhead.
@@ -1223,24 +1225,25 @@ public:
     [pink]return[/pink] 0;
 }
 
-44. XOR Linked List – Simple Explanation
+66. XOR Linked List
+IMG_URL xorll.png
 𖦹 A normal doubly linked list has two pointers per node: next (points to next node) and prev (points to previous node)
 𖦹 XOR linked list reduces this to one pointer per node by storing XOR(prev, next)
 • Each node has [blue]Node*[/blue] [yellow]npx[/yellow] = prev XOR next
 - Using XOR, if you know one node (prev or next), you can compute the other
 
-45. How it works
+67. How it works
 𖦹 XOR is a bitwise operation: a XOR b lets you reconstruct a or b if the other is known
 𖦹 To move forward: [yellow]next[/yellow] = [yellow]prev[/yellow] XOR [yellow]npx[/yellow]
 𖦹 To move backward: [yellow]prev[/yellow] = [yellow]next[/yellow] XOR [yellow]npx[/yellow]
 
-46. Traversal example
+68. Traversal example
 𖦹 Suppose list is A <-> B <-> C
 𖦹 Node B stores: [yellow]B.npx[/yellow] = A XOR C
 𖦹 If you are at B and came from A: [yellow]next[/yellow] = B.npx XOR prev → (A XOR C) XOR A = C
 - This lets traversal use only one pointer per node
 
-47. Pros & Cons
+69. Pros & Cons
 𖦹 Pros
 • Saves memory: one pointer instead of two per node
 • Clever low-level technique
@@ -1250,7 +1253,7 @@ public:
 • Not suitable for garbage-collected languages
 • Insertions and deletions are tricky
 
-48. Key Idea
+70. Key Idea
 𖦹 Each node keeps combined XOR of prev and next
 𖦹 Always need one known node (prev or next) to find the other
 𖦹 Traversal is sequential but memory usage is reduced
@@ -1259,7 +1262,7 @@ public:
 • To go forward: next = prev XOR npx
 • To go backward: prev = next XOR npx
 
-49. C++ Implementation
+71. C++ Implementation
 [pink]#include[/pink] <[green]iostream[/green]>
 [pink]using[/pink] [pink]namespace[/pink] [green]std[/green];
 
@@ -1327,4 +1330,400 @@ public:
 
     [pink]return[/pink] 0;
 }
+--END--
+--BEGIN--24/11/2025--STACKS--
+1. A Stack
+IMG_URL stack.gif
+𖦹 A stack is a list where you add or remove only at the top.
+𖦹 push means you add at the top.
+𖦹 pop means you remove from the top.
+𖦹 topEl means you look at the top without removing.
+𖦹 Last added is first removed, so it is LIFO.
+
+2. Stack operations
+𖦹 clear() means make stack empty.
+𖦹 isEmpty() means check if stack has no items.
+𖦹 push(x) means put x on top.
+𖦹 pop() means remove the top item.
+𖦹 topEl() means see the top item without removing.
+
+3. Example of push and pop
+𖦹 Start empty.
+𖦹 push 10 → stack becomes [10].
+𖦹 push 5 → stack becomes [10, 5].
+𖦹 pop removes 5 → stack becomes [10].
+𖦹 push 15 → stack becomes [10, 15].
+𖦹 push 7 → stack becomes [10, 15, 7].
+𖦹 pop removes 7 → stack becomes [10, 15].
+
+4. Checking brackets using stack
+𖦹 Used to match brackets like (), [], {} and block comments.
+𖦹 For code like:
+[yellow]while[/yellow] ([yellow]m[/yellow] < ([yellow]n[/yellow][8] + [yellow]o[/yellow])) { [yellow]p[/yellow] = 7; }
+• When you see opening bracket, push it.
+• When you see closing bracket, pop and check if types match.
+- If mismatch, it is an error.
+- If stack ends empty, everything matches.
+𖦹 Helps because inner brackets must match before outer ones.
+
+5. Adding very large numbers
+𖦹 When numbers are too big for normal number types, treat them as strings.
+𖦹 Push digits of each number into two stacks.
+𖦹 Pop from each stack to add from right to left.
+
+6. JVM use of stacks
+𖦹 JVM pushes a frame when a method starts.
+𖦹 JVM pops the frame when method ends.
+𖦹 Inside each frame, JVM uses an operand stack for calculations.
+𖦹 For example:
+[pink]imul[/pink] pops two numbers, multiplies them, and pushes the result.
+
+7. Ways to implement a stack
+𖦹 Using [yellow]ArrayList[/yellow].
+• Fast, needs resizing when full.
+• push/pop usually O(1).
+𖦹 Using [yellow]LinkedList[/yellow].
+• No resizing needed.
+• push/pop always O(1).
+• Very close to real stack behavior.
+
+8. Stack implementation using array or linked list
+𖦹 Both array stack and linked-list stack give O(1) time for push, pop, top, and isEmpty.
+𖦹 Array stack uses a fixed-size array decided early.
+• Very fast and uses less memory.
+• Items are in continuous memory, so it is cache-friendly.
+• Can overflow if array becomes full.
+• Can waste memory if chosen size is too big.
+𖦹 Linked-list stack grows and shrinks as needed.
+• Does not overflow unless whole system runs out of memory.
+• A bit slower because each push needs dynamic memory work.
+• Each node stores an extra pointer, so it uses more memory and is less cache-friendly.
+𖦹 Summary: array stack is faster but fixed in size; linked-list stack is flexible but slower and uses more memory.
+
+9. Implementing stack
+𖦹 A stack can be made using array.
+𖦹 A stack can also be made using linked list.
+𖦹 Both methods are simple and complete.
+
+10. Stack using array (C++ code)
+𖦹 Uses a fixed-size array.
+𖦹 top moves up and down when pushing or popping.
+𖦹 Code:
+/* array stack */
+[pink]#include[/pink] <[yellow]iostream[/yellow]>
+[pink]using[/pink] [pink]namespace[/pink] [yellow]std[/yellow];
+
+[pink]class[/pink] [yellow]Stack[/yellow] {
+[pink]private[/pink]:
+    [blue]int[/blue] [yellow]arr[/yellow][100];
+    [blue]int[/blue] [yellow]top[/yellow];
+
+[pink]public[/pink]:
+    [yellow]Stack[/yellow]() { [yellow]top[/yellow] = -1; }
+
+    [blue]bool[/blue] [yellow]isEmpty[/yellow]() {
+        [pink]return[/pink] [yellow]top[/yellow] == -1;
+    }
+
+    [blue]bool[/blue] [yellow]isFull[/yellow]() {
+        [pink]return[/pink] [yellow]top[/yellow] == 99;
+    }
+
+    [pink]void[/pink] [yellow]push[/yellow]([blue]int[/blue] x) {
+        [pink]if[/pink] ([yellow]isFull[/yellow]()) {
+            [green]cout[/green] << "Stack Overflow\n";
+            [pink]return[/pink];
+        }
+        [yellow]arr[/yellow][++[yellow]top[/yellow]] = x;
+    }
+
+    [pink]void[/pink] [yellow]pop[/yellow]() {
+        [pink]if[/pink] ([yellow]isEmpty[/yellow]()) {
+            [green]cout[/green] << "Stack Underflow\n";
+            [pink]return[/pink];
+        }
+        [yellow]top[/yellow]--;
+    }
+
+    [blue]int[/blue] [yellow]topElement[/yellow]() {
+        [pink]if[/pink] ([yellow]isEmpty[/yellow]()) {
+            [green]cout[/green] << "Stack is Empty\n";
+            [pink]return[/pink] -1;
+        }
+        [pink]return[/pink] [yellow]arr[/yellow][[yellow]top[/yellow]];
+    }
+};
+
+[pink]int[/pink] [pink]main[/pink]() {
+    [yellow]Stack[/yellow] s;
+    s.push(10);
+    s.push(20);
+    s.push(30);
+    [green]cout[/green] << s.[yellow]topElement[/yellow]() << [green]endl[/green];
+    s.[yellow]pop[/yellow]();
+    [green]cout[/green] << s.[yellow]topElement[/yellow]() << [green]endl[/green];
+}
+
+11. Stack using linked list (C++ code)
+𖦹 Uses nodes that link together.
+𖦹 No fixed size; grows and shrinks freely.
+𖦹 Code:
+/* linked list stack */
+[pink]#include[/pink] <[yellow]iostream[/yellow]>
+[pink]using[/pink] [pink]namespace[/pink] [yellow]std[/yellow];
+
+[pink]class[/pink] [yellow]Node[/yellow] {
+[pink]public[/pink]:
+    [blue]int[/blue] [yellow]data[/yellow];
+    [yellow]Node[/yellow]* [yellow]next[/yellow];
+};
+
+[pink]class[/pink] [yellow]Stack[/yellow] {
+[pink]private[/pink]:
+    [yellow]Node[/yellow]* [yellow]top[/yellow];
+
+[pink]public[/pink]:
+    [yellow]Stack[/yellow]() { [yellow]top[/yellow] = [green]nullptr[/green]; }
+
+    [blue]bool[/blue] [yellow]isEmpty[/yellow]() {
+        [pink]return[/pink] [yellow]top[/yellow] == [green]nullptr[/green];
+    }
+
+    [pink]void[/pink] [yellow]push[/yellow]([blue]int[/blue] x) {
+        [yellow]Node[/yellow]* [yellow]temp[/yellow] = [pink]new[/pink] [yellow]Node[/yellow]();
+        [yellow]temp[/yellow]->[yellow]data[/yellow] = x;
+        [yellow]temp[/yellow]->[yellow]next[/yellow] = [yellow]top[/yellow];
+        [yellow]top[/yellow] = [yellow]temp[/yellow];
+    }
+
+    [pink]void[/pink] [yellow]pop[/yellow]() {
+        [pink]if[/pink] ([yellow]isEmpty[/yellow]()) {
+            [green]cout[/green] << "Stack Underflow\n";
+            [pink]return[/pink];
+        }
+        [yellow]Node[/yellow]* [yellow]temp[/yellow] = [yellow]top[/yellow];
+        [yellow]top[/yellow] = [yellow]top[/yellow]->[yellow]next[/yellow];
+        [pink]delete[/pink] [yellow]temp[/yellow];
+    }
+
+    [blue]int[/blue] [yellow]topElement[/yellow]() {
+        [pink]if[/pink] ([yellow]isEmpty[/yellow]()) {
+            [green]cout[/green] << "Stack is Empty\n";
+            [pink]return[/pink] -1;
+        }
+        [pink]return[/pink] [yellow]top[/yellow]->[yellow]data[/yellow];
+    }
+};
+
+[pink]int[/pink] [pink]main[/pink]() {
+    [yellow]Stack[/yellow] s;
+    s.push(10);
+    s.push(20);
+    s.push(30);
+    [green]cout[/green] << s.[yellow]topElement[/yellow]() << [green]endl[/green];
+    s.[yellow]pop[/yellow]();
+    [green]cout[/green] << s.[yellow]topElement[/yellow]() << [green]endl[/green];
+}
+--END--
+--BEGIN--24/11/2025--QUEUES--
+1. A Queue
+IMG_URL queue.gif
+𖦹 A queue stores items in the order they arrive.
+𖦹 It follows FIFO (first in, first out).
+• First added item is removed first.
+- Explanation: works like people standing in a line.
+
+2. Queue operations
+𖦹 Enqueue(x): add an item at the back.
+𖦹 Dequeue(): remove an item from the front.
+𖦹 Front() / Peek(): show front item without removing it.
+𖦹 isEmpty(): check if queue has no items.
+𖦹 isFull(): only for array version; checks if space is over.
+
+3. How a queue is built
+𖦹 We keep two positions: [yellow]front[/yellow] and [yellow]rear[/yellow].
+• [yellow]front[/yellow] → first item
+• [yellow]rear[/yellow] → last item
+𖦹 Two ways to build it:
+• Array queue: use an array and move [yellow]rear[/yellow] for enqueue, move [yellow]front[/yellow] for dequeue.
+- Problem: if many operations happen, array may show overflow even when free space exists at the start.
+• Linked-list queue: each node has [yellow]data[/yellow] and [yellow]next[/yellow].
+- [yellow]front[/yellow] is head, [yellow]rear[/yellow] is tail.
+- Enqueue at tail, dequeue at head.
+
+4. Queue behaviour
+𖦹 Works like real-life waiting lines.
+• Examples: ticket counter, printer jobs, server requests, CPU task list.
+- Explanation: items leave in same order they came.
+
+5. Time complexity of queue operations
+𖦹 Array queue: all operations O(1).
+𖦹 Linked-list queue: all operations O(1).
+• isFull() only applies to array queue.
+
+6. Memory use
+𖦹 Array queue: fixed size; no extra memory per item; may waste space.
+𖦹 Linked-list queue: grows and shrinks; uses extra pointer memory; no wasted space.
+
+7. Where we use queues
+𖦹 CPU scheduling.
+𖦹 Printer jobs.
+𖦹 Web server request management.
+𖦹 BFS in graphs/trees.
+𖦹 Real-time buffering.
+- Purpose: keep items in same order while giving fast insert and remove.
+
+8. Why queue is important
+𖦹 It models natural waiting.
+𖦹 Many systems need FIFO order.
+• Gives fast insert and delete at ends.
+• Simple and powerful for many tasks.
+
+9. Queue using array — C++ program
+𖦹 Simple linear array queue with fixed size.
+[pink]#include[/pink] <iostream>
+[pink]using[/pink] [pink]namespace[/pink] std;
+
+[pink]class[/pink] [yellow]Queue[/yellow] {
+[pink]private[/pink]:
+    [pink]int[/pink] [yellow]arr[/yellow][100];
+    [pink]int[/pink] [yellow]front[/yellow], [yellow]rear[/yellow];
+
+[pink]public[/pink]:
+    [yellow]Queue[/yellow]() {
+        [yellow]front[/yellow] = 0;
+        [yellow]rear[/yellow] = -1;
+    }
+
+    [pink]bool[/pink] [yellow]isEmpty[/yellow]() {
+        [pink]return[/pink] [yellow]front[/yellow] > [yellow]rear[/yellow];
+    }
+
+    [pink]bool[/pink] [yellow]isFull[/yellow]() {
+        [pink]return[/pink] [yellow]rear[/yellow] == 99;
+    }
+
+    [pink]void[/pink] [yellow]enqueue[/yellow]([pink]int[/pink] [yellow]x[/yellow]) {
+        [pink]if[/pink] ([yellow]isFull[/yellow]()) {
+            [green]cout[/green] << "Queue Overflow\n";
+            [pink]return[/pink];
+        }
+        [yellow]arr[/yellow][++[yellow]rear[/yellow]] = [yellow]x[/yellow];
+    }
+
+    [pink]void[/pink] [yellow]dequeue[/yellow]() {
+        [pink]if[/pink] ([yellow]isEmpty[/yellow]()) {
+            [green]cout[/green] << "Queue Underflow\n";
+            [pink]return[/pink];
+        }
+        [yellow]front[/yellow]++;
+    }
+
+    [pink]int[/pink] [yellow]frontElement[/yellow]() {
+        [pink]if[/pink] ([yellow]isEmpty[/yellow]()) {
+            [green]cout[/green] << "Queue is Empty\n";
+            [pink]return[/pink] -1;
+        }
+        [pink]return[/pink] [yellow]arr[/yellow][[yellow]front[/yellow]];
+    }
+};
+
+[pink]int[/pink] [pink]main[/pink]() {
+    [yellow]Queue[/yellow] q;
+    q.enqueue(10);
+    q.enqueue(20);
+    q.enqueue(30);
+    [green]cout[/green] << q.[yellow]frontElement[/yellow]() << [green]endl[/green];
+    q.[yellow]dequeue[/yellow]();
+    [green]cout[/green] << q.[yellow]frontElement[/yellow]() << [green]endl[/green];
+}
+
+10. Queue using linked list — C++ program
+𖦹 Uses nodes; grows until memory ends.
+[pink]#include[/pink] <iostream>
+[pink]using[/pink] [pink]namespace[/pink] std;
+
+[pink]class[/pink] [yellow]Node[/yellow] {
+[pink]public[/pink]:
+    [pink]int[/pink] [yellow]data[/yellow];
+    [yellow]Node[/yellow]* [yellow]next[/yellow];
+};
+
+[pink]class[/pink] [yellow]Queue[/yellow] {
+[pink]private[/pink]:
+    [yellow]Node[/yellow]* [yellow]front[/yellow];
+    [yellow]Node[/yellow]* [yellow]rear[/yellow];
+
+[pink]public[/pink]:
+    [yellow]Queue[/yellow]() {
+        [yellow]front[/yellow] = [yellow]rear[/yellow] = [green]nullptr[/green];
+    }
+
+    [pink]bool[/pink] [yellow]isEmpty[/yellow]() {
+        [pink]return[/pink] [yellow]front[/yellow] == [green]nullptr[/green];
+    }
+
+    [pink]void[/pink] [yellow]enqueue[/yellow]([pink]int[/pink] [yellow]x[/yellow]) {
+        [yellow]Node[/yellow]* [yellow]temp[/yellow] = [pink]new[/pink] [yellow]Node[/yellow]();
+        [yellow]temp[/yellow]->[yellow]data[/yellow] = [yellow]x[/yellow];
+        [yellow]temp[/yellow]->[yellow]next[/yellow] = [green]nullptr[/green];
+
+        [pink]if[/pink] ([yellow]rear[/yellow] == [green]nullptr[/green]) {
+            [yellow]front[/yellow] = [yellow]rear[/yellow] = [yellow]temp[/yellow];
+        } [pink]else[/pink] {
+            [yellow]rear[/yellow]->[yellow]next[/yellow] = [yellow]temp[/yellow];
+            [yellow]rear[/yellow] = [yellow]temp[/yellow];
+        }
+    }
+
+    [pink]void[/pink] [yellow]dequeue[/yellow]() {
+        [pink]if[/pink] ([yellow]isEmpty[/yellow]()) {
+            [green]cout[/green] << "Queue Underflow\n";
+            [pink]return[/pink];
+        }
+        [yellow]Node[/yellow]* [yellow]temp[/yellow] = [yellow]front[/yellow];
+        [yellow]front[/yellow] = [yellow]front[/yellow]->[yellow]next[/yellow];
+
+        [pink]if[/pink] ([yellow]front[/yellow] == [green]nullptr[/green]) {
+            [yellow]rear[/yellow] = [green]nullptr[/green];
+        }
+
+        [pink]delete[/pink] [yellow]temp[/yellow];
+    }
+
+    [pink]int[/pink] [yellow]frontElement[/yellow]() {
+        [pink]if[/pink] ([yellow]isEmpty[/yellow]()) {
+            [green]cout[/green] << "Queue is Empty\n";
+            [pink]return[/pink] -1;
+        }
+        [pink]return[/pink] [yellow]front[/yellow]->[yellow]data[/yellow];
+    }
+};
+
+[pink]int[/pink] [pink]main[/pink]() {
+    [yellow]Queue[/yellow] q;
+    q.enqueue(5);
+    q.enqueue(15);
+    q.enqueue(25);
+    [green]cout[/green] << q.[yellow]frontElement[/yellow]() << [green]endl[/green];
+    q.[yellow]dequeue[/yellow]();
+    [green]cout[/green] << q.[yellow]frontElement[/yellow]() << [green]endl[/green];
+}
+
+11. Queue vs stack — simple comparison
+𖦹 Order:
+• Stack → LIFO (last in, first out)
+• Queue → FIFO (first in, first out)
+𖦹 Operations:
+• Stack → push, pop, top
+• Queue → enqueue, dequeue, front
+𖦹 Uses:
+• Stack → function calls, undo, expression work, DFS
+• Queue → CPU tasks, printers, BFS, servers
+𖦹 Speed:
+• Both give O(1) operations.
+𖦹 Memory:
+• Array stack → continuous memory
+• Array queue → may waste front space if many dequeues
+• Linked-list forms → dynamic with pointer cost
 --END--
