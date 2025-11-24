@@ -13,27 +13,36 @@
 𖦹 Using WOP, if no such n existed, a set without a smallest element could be formed, which is impossible
 
 4. Proof of Archimedean property
-𖦹 If a and b are positive numbers, there exists a positive integer n such that n ⋅ a > b
-𖦹 Idea: Assume the opposite and show a contradiction using WOP
-Step 1: Assume property is false
-𖦹 Suppose no such n exists
-• Then for every positive integer n: n ⋅ a ≤ b
-Step 2: Create a set
-𖦹 Define S = {b − n ⋅ a ∣ n is a positive integer}
-𖦹 Each element is positive under the assumption
-• So S is a non-empty set of positive integers
-Step 3: Apply WOP
-𖦹 WOP says S has a smallest element
-• Let smallest element be b − m ⋅ a for some positive integer m
-Step 4: Find a smaller element
-𖦹 Consider b − (m+1) ⋅ a
-• Algebra: b − (m+1) ⋅ a = (b − m ⋅ a) − a
-- Since a > 0, this is smaller than the smallest element, impossible
-Step 5: Contradiction
-𖦹 The contradiction comes from assuming no n exists
-𖦹 Therefore, the assumption is wrong and the Archimedean property is true
+IMG_URL archimedean_proof.jpg
+--END--
+--BEGIN--24/11/2025--MATHEMATICAL INDUCTION--
+IMG_URL domino.gif
+1. Mathematical induction
+𖦹 [red]Mathematical induction is a way to prove statements for all positive integers[/red]
+𖦹 It is like a row of dominoes
+• If the first domino falls, and every domino knocks down the next one
+- Then all dominoes will eventually fall
+𖦹 Here, the dominoes are numbers 1, 2, 3, …
+• “Falling” means the statement is true for that number
 
-5. Intuition
-𖦹 Adding a repeatedly will eventually pass b
-𖦹 WOP ensures a “smallest leftover”; if the property were false, a smaller leftover could be created, which is impossible
+2. First Principle of Finite Induction (Basic Induction)
+𖦹 Suppose S is a set of positive integers
+𖦹 Base Case: The first number (usually 1) is in S
+𖦹 Induction Step: If k is in S, then k+1 is also in S
+An Example: Sum of the squares of the first n natural numbers
+IMG_URL sum_of_squares.jpg
+
+3. Second Principle of Induction (Strong Induction)
+𖦹 Base Case: 1 is in S
+𖦹 Strong Induction Step: If all numbers from 1 to k are in S, then k+1 is in S
+- This is stronger because it uses all previous numbers, not just k
+An Example: Proving inequality in Lucas Sequence
+IMG_URL lucas_sequence.jpg
+
+4. Induction for Definitions (Example: Factorials)
+𖦹 Factorial n! is defined using induction
+𖦹 Base Case: 1! = 1
+𖦹 Induction Step: n! = n ⋅ (n−1)! for n > 1
+- This builds n! step by step for all positive integers
+
 --END--
