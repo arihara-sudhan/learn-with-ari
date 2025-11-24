@@ -4,12 +4,12 @@
 𖦹 Positive integers are also called natural numbers
 
 2. Well-Ordering Principle (WOP)
-𖦹 [red]Every non-empty set S of nonnegative integers has a smallest element[/red]
+𖦹 [yellow]Every non-empty set S of nonnegative integers has a smallest element[/yellow]
 • There is some a in S such that a ≤ b for all b in S
 - You can always find the least number in any set of positive integers
 
 3. Archimedean property
-𖦹 [red]For any positive numbers x and y, there exists a natural number n such that n ⋅ x > y[/red]
+𖦹 [yellow]For any positive numbers x and y, there exists a natural number n such that n ⋅ x > y[/yellow]
 𖦹 Using WOP, if no such n existed, a set without a smallest element could be formed, which is impossible
 
 4. Proof of Archimedean property
