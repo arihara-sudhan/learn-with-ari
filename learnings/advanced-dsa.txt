@@ -2608,7 +2608,9 @@ ITERATIVE INORDER AND POSTORDER ROUTINES:
     }
 }
 
-6. Binary Search Tree (BST)
+--END--
+--BEGIN--24/11/2025--BINARY SEARCH TREE--
+1. Binary Search Tree (BST)
 𖦹 A BST is a special binary tree where each node has at most two children
 𖦹 BST property:
 • All keys in the left subtree of a node are less than the node’s key
@@ -2659,7 +2661,7 @@ ITERATIVE INORDER AND POSTORDER ROUTINES:
 • Managing duplicates can be tricky
 • Guaranteed performance may require self-balancing BSTs like AVL trees or Red-Black trees
 
-7. BST Operations: Insert, Search, Delete
+2. BST Operations: Insert, Search, Delete
 𖦹 Example BST:
           50
         /    \
@@ -2735,7 +2737,7 @@ ITERATIVE INORDER AND POSTORDER ROUTINES:
     [pink]return[/pink] [yellow]root[/yellow];
 }
 
-8. BST Complexity
+3. BST Complexity
 𖦹 Search
 • Can be done recursively or iteratively
 • Logic: start at [yellow]root[/yellow], go left if key is smaller, right if key is larger
@@ -2781,7 +2783,9 @@ ITERATIVE INORDER AND POSTORDER ROUTINES:
 • Postorder: O(n), O(n)
 • Level-order: O(n), O(n)
 
-9. Why Balance a Tree
+--END--
+--BEGIN--24/11/2025--BALANCING TREES--
+1. Why Balance a Tree
 𖦹 Trees make searching faster than linked lists
 𖦹 Lopsided trees act like linked lists → searching becomes slow
 • Example: inserting elements in ascending order → tree becomes long chain
@@ -2855,14 +2859,15 @@ ITERATIVE INORDER AND POSTORDER ROUTINES:
 
     [pink]return[/pink] 0;
 }
-
-10. AVL Tree Basics
+--END--
+--BEGIN--24/11/2025--AVL TREES--
+1. AVL Tree Basics
 𖦹 An AVL tree is a binary search tree that keeps itself balanced.
 𖦹 Balance is important because a long, skinny tree makes searching slow.
 • Balanced trees keep search fast: O(log n) time.
 𖦹 AVL trees fix themselves after inserting or deleting nodes.
 
-11. AVL Tree Rules
+2. AVL Tree Rules
 𖦹 AVL = BST + height rule
 𖦹 Must satisfy BST ordering.
 𖦹 Balance rule: For every node, |height(left) – height(right)| ≤ 1
@@ -2870,11 +2875,11 @@ ITERATIVE INORDER AND POSTORDER ROUTINES:
 • Allowed values: –1, 0, +1
 𖦹 If balance factor becomes –2 or +2 → tree is unbalanced and must be fixed.
 
-12. When AVL Tree Needs Fixing
+3. When AVL Tree Needs Fixing
 𖦹 Tree becomes unbalanced after inserting or deleting a node.
 𖦹 There are 4 rotation cases (2 main + 2 mirror images).
 
-13. LL Rotation (Left-Left)
+4. LL Rotation (Left-Left)
 𖦹 Happens when insertion is in left subtree of left child.
 • Fix: Right rotation on P
 BEFORE
@@ -2888,7 +2893,7 @@ AFTER
      / \
     R   P
 
-14. RR Rotation (Right-Right)
+5. RR Rotation (Right-Right)
 𖦹 Happens when insertion is in right subtree of right child.
 • Fix: Left rotation on P
 BEFORE
@@ -2902,7 +2907,7 @@ AFTER
      / \
     P   R
 
-15. LR Rotation (Left-Right)
+6. LR Rotation (Left-Right)
 𖦹 Happens when insertion is in right subtree of left child.
 • Fix: Double rotation → Left rotation on Q, Right rotation on P
 BEFORE
@@ -2916,7 +2921,7 @@ AFTER
      / \
     Q   P
 
-16. RL Rotation (Right-Left)
+7. RL Rotation (Right-Left)
 𖦹 Happens when insertion is in left subtree of right child.
 • Fix: Double rotation → Right rotation on Q, Left rotation on P
 BEFORE
@@ -2930,13 +2935,13 @@ AFTER
      / \
     P   Q
 
-17. Rotation Summary
+8. Rotation Summary
 𖦹 LL: Right rotate P → Root becomes Q
 𖦹 RR: Left rotate P → Root becomes Q
 𖦹 LR: Rotate Q → Rotate P → Root becomes R
 𖦹 RL: Rotate Q → Rotate P → Root becomes R
 
-18. Node Definition in C++
+9. Node Definition in C++
 𖦹 [pink]struct[/pink] [yellow]Node[/yellow] {
   [pink]int[/pink] [yellow]key[/yellow];
   [pink]Node*[/pink] [yellow]left[/yellow];
@@ -2949,12 +2954,12 @@ AFTER
   }
 };
 
-19. Helper Functions
+10. Helper Functions
 𖦹 [pink]int[/pink] [yellow]height[/yellow]([pink]Node*[/pink] [yellow]n[/yellow]) { if (![yellow]n[/yellow]) return 0; return [yellow]n[/yellow]->height; }
 𖦹 [pink]int[/pink] [yellow]getBalance[/yellow]([pink]Node*[/pink] [yellow]n[/yellow]) { if (![yellow]n[/yellow]) return 0; return height([yellow]n[/yellow]->right) - height([yellow]n[/yellow]->left); }
 𖦹 void [yellow]updateHeight[/yellow]([pink]Node*[/pink] [yellow]n[/yellow]) { [yellow]n[/yellow]->height = 1 + [green]max[/green](height([yellow]n[/yellow]->left), height([yellow]n[/yellow]->right)); }
 
-20. Rotations
+11. Rotations
 𖦹 Right rotation (LL)
 [pink]Node*[/pink] [yellow]rightRotate[/yellow]([pink]Node*[/pink] [yellow]y[/yellow]) {
   [pink]Node*[/pink] [yellow]x[/yellow] = [yellow]y[/yellow]->left;
@@ -2974,7 +2979,7 @@ AFTER
   return [yellow]y[/yellow];
 }
 
-21. Insertion with AVL Balancing
+12. Insertion with AVL Balancing
 𖦹 [pink]Node*[/pink] [yellow]insert[/yellow]([pink]Node*[/pink] [yellow]node[/yellow], [pink]int[/pink] [yellow]key[/yellow]) {
   if (![yellow]node[/yellow]) return new [yellow]Node[/yellow]([yellow]key[/yellow]);
   if ([yellow]key[/yellow] < [yellow]node[/yellow]->key) [yellow]node[/yellow]->left = insert([yellow]node[/yellow]->left, [yellow]key[/yellow]);
@@ -2988,10 +2993,10 @@ AFTER
   return [yellow]node[/yellow];
 }
 
-22. Utility: Inorder Traversal
+13. Utility: Inorder Traversal
 𖦹 void [yellow]inorder[/yellow]([pink]Node*[/pink] [yellow]root[/yellow]) { if (![yellow]root[/yellow]) return; inorder([yellow]root[/yellow]->left); [green]cout[/green] << [yellow]root[/yellow]->key << " "; inorder([yellow]root[/yellow]->right); }
 
-23. Example Usage
+14. Example Usage
 𖦹 [pink]int[/pink] [yellow]main[/yellow]() {
   [pink]Node*[/pink] [yellow]root[/yellow] = [green]nullptr[/green];
   [pink]int[/pink] [yellow]nums[/yellow][] = {10, 20, 30, 40, 50, 25};
@@ -3002,7 +3007,7 @@ AFTER
   return 0;
 }
 
-24. Example 1: Inserting Nodes in Ascending Order
+15. Example 1: Inserting Nodes in Ascending Order
 𖦹 Insert nodes: 10, 20, 30, 40, 50, 25
 • Step 1: Insert 10, 20, 30
 - Insert 10 → tree: 10
@@ -3052,7 +3057,7 @@ AFTER
   10   25    50
 ✅ Balanced AVL tree
 
-25. Example 2: Complex LR Case
+16. Example 2: Complex LR Case
 𖦹 Insert nodes: 50, 30, 70, 20, 40, 35
 • Step 1: Build initial tree
     50
@@ -3092,8 +3097,9 @@ AFTER
            /
          40
 ✅ Balanced AVL tree again
-
-26. Red Black Tree
+--END--
+--BEGIN--24/11/2025--RED BLACK TREES--
+1. Red Black Tree
 𖦹 It is a special binary search tree that keeps its height small.
 𖦹 Every node has a color: red or black.
 𖦹 The color rules keep the tree almost balanced.
@@ -3105,20 +3111,20 @@ AFTER
 𖦹 So the height h ≤ 2 × log₂(n+1).
 𖦹 It supports fast search, insert, and delete in O(log n).
 
-27. Red black tree worries removed
+2. Red black tree worries removed
 𖦹 You do not need to arrange colors or rotations by yourself.
 𖦹 The rules will always fix the tree to keep height low.
 𖦹 The operations are always near log time.
 𖦹 You just use insert and delete; balancing happens inside.
 
-28. Operations needed
+3. Operations needed
 𖦹 You need: left rotate, right rotate.
 𖦹 You need: color flip or recolor.
 𖦹 Insert and delete use these to fix problems automatically.
 𖦹 The property “no two reds in a row” is always checked and repaired.
 𖦹 The black-height rule is also kept.
 
-29. C++ code: Node structure
+4. C++ code: Node structure
 𖦹 Here is the simple node structure.
 <blue>struct</blue> Node {
     <green>int</green> data;
@@ -3128,7 +3134,7 @@ AFTER
     Node* parent;
 };
 
-30. C++ code: Left rotate
+5. C++ code: Left rotate
 𖦹 This rotation moves a child up and shifts nodes to the side.
 <blue>void</blue> leftRotate(Node* <purple>&root</purple>, Node* <purple>x</purple>) {
     Node* y = x->right;
@@ -3146,7 +3152,7 @@ AFTER
     x->parent = y;
 }
 
-31. C++ code: Right rotate
+6. C++ code: Right rotate
 𖦹 This rotation is the mirror of left rotate.
 <blue>void</blue> rightRotate(Node* <purple>&root</purple>, Node* <purple>y</purple>) {
     Node* x = y->left;
@@ -3164,7 +3170,7 @@ AFTER
     y->parent = x;
 }
 
-32. C++ code: Fix insert
+7. C++ code: Fix insert
 𖦹 When a new node is inserted, it may break red-black rules.
 𖦹 This function repairs it.
 <blue>void</blue> fixInsert(Node* <purple>&root</purple>, Node* <purple>z</purple>) {
@@ -3206,7 +3212,7 @@ AFTER
     root->color = <brown>0</brown>;
 }
 
-33. C++ code: Insert function
+8. C++ code: Insert function
 𖦹 This inserts normally like a BST.
 𖦹 Then fixInsert() repairs the tree.
 <blue>void</blue> insert(Node* <purple>&root</purple>, <green>int</green> data) {
@@ -3229,19 +3235,20 @@ AFTER
         y->right = z;
     fixInsert(root, z);
 }
-
-34. Self-Adjusting Trees
+--END--
+--BEGIN--24/11/2025--SELF ADJUSTING TREES--
+1. Self-Adjusting Trees
 𖦹 When a node is accessed, move it closer to the root.
 𖦹 Frequently accessed nodes stay near the top; rarely used nodes stay deeper.
 𖦹 This makes searches faster for important elements.
 
-35. Deciding which nodes to move
+2. Deciding which nodes to move
 𖦹 Two ways:
 • Using counters: each node tracks access count; nodes with high count move toward root.
 • Simple assumption: move accessed node up immediately, assuming it will be used again.
 𖦹 The tree acts like a priority tree with most used nodes near the root.
 
-36. Single Rotation
+3. Single Rotation
 𖦹 Move a node up by one step.
 𖦹 Example: accessing node 2 in this tree:
       10
@@ -3259,7 +3266,7 @@ AFTER
         7
 𖦹 Node 2 moved closer to root. Repeated accesses can move it further.
 
-37. Move-to-Root
+4. Move-to-Root
 𖦹 Move a node all the way to root in one access.
 𖦹 Example: accessing node 2:
 Step 1: rotate 2 with 5
@@ -3279,13 +3286,14 @@ Step 2: rotate 2 with 10
        \
         7
 𖦹 Node 2 becomes root immediately; next access is very fast.
-
-38. Splaying
+--END--
+--BEGIN--24/11/2025--SPLAYING TREES--
+1. Splaying
 𖦹 A smarter move-to-root method using pairs of rotations.
 𖦹 Rotations depend on the node's parent and grandparent.
 𖦹 This flattens the tree and makes frequently accessed nodes easier to reach.
 
-39. Splay Case 1: Parent is root
+2. Splay Case 1: Parent is root
 𖦹 Node R with parent Q:
 Initial:
    Q
@@ -3297,7 +3305,7 @@ Initial:
      Q
 𖦹 Node R becomes root.
 
-40. Splay Case 2: Homogeneous (zig-zig)
+3. Splay Case 2: Homogeneous (zig-zig)
 𖦹 Left-left example: node R under Q under P
 Initial:
      P
@@ -3318,7 +3326,7 @@ Step 2: Rotate R with Q
 𖦹 Node R moves up two levels; tree is flatter.
 𖦹 Right-right is symmetric.
 
-41. Splay Case 3: Heterogeneous (zig-zag)
+4. Splay Case 3: Heterogeneous (zig-zag)
 𖦹 Left-right example: node R under Q under P
 Initial:
      P
@@ -3338,5 +3346,4 @@ Step 2: Rotate R with P
   Q   P
 𖦹 Node R is closer to root; tree is flatter.
 TO LEARN: DELETION BY COPYING, MERGING AND POLISH AND REVERSE POLISH NOTATIONS
-
 --END--
