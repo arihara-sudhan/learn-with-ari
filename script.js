@@ -21,6 +21,7 @@ const getImageBaseUrl = () => {
 };
 let activeButton = null;
 const contentCache = new Map();
+let navigationItems = []; // Store navigation items from navigation.json
 const DATE_REGEX = /(-+\s*\[(\d{2}\/\d{2}\/\d{4})\])/g;
 const SOURCE_REGEX = /^SOURCE:\s*(.+?)(?:\r?\n|$)/m;
 const DASH_LINE_REGEX = /^[- ]+$/;
@@ -404,24 +405,34 @@ function updateActiveButton(topic) {
 function updateRoute(fileName) {
     const currentPath = window.location.pathname;
     
-    // Get base path (everything except the route)
+    // Get navigation IDs from loaded navigation items
+    const navigationIds = navigationItems.map(item => item.id);
+    
+    // Split path and filter out empty strings and index.html
     const pathParts = currentPath.split('/').filter(p => p && p !== 'index.html');
     
-    // Determine base path
-    let basePath = '';
-    if (pathParts.length > 0) {
-        // If current route is one of the navigation items, remove it to get base
-        const navigationIds = ['nlp', 'classicalml', 'rag', 'linear-algebra', 'advanced-dsa', 'advanced-db', 'crispr'];
-        if (pathParts.length > 0 && navigationIds.includes(pathParts[pathParts.length - 1])) {
-            // Current path has a route, remove it to get base
-            pathParts.pop();
+    // Find the base path: everything before the first navigation ID
+    let basePathParts = [];
+    let foundRoute = false;
+    
+    for (let i = 0; i < pathParts.length; i++) {
+        if (navigationIds.includes(pathParts[i])) {
+            // Found a route, stop here - base path is everything before this
+            foundRoute = true;
+            break;
         }
-        // Construct base path from remaining parts
-        if (pathParts.length > 0) {
-            basePath = '/' + pathParts.join('/');
-        }
+        basePathParts.push(pathParts[i]);
     }
     
+    // If no route found, the entire path is the base (or empty if root)
+    if (!foundRoute) {
+        basePathParts = pathParts;
+    }
+    
+    // Construct base path
+    const basePath = basePathParts.length > 0 ? '/' + basePathParts.join('/') : '';
+    
+    // New path: base + single route (replace any existing route)
     const newPath = basePath ? `${basePath}/${fileName}` : `/${fileName}`;
     
     // Only update if path is different
@@ -479,7 +490,7 @@ async function loadNavigation() {
         if (!response.ok) {
             throw new Error(`HTTP Error! Status: ${response.status}`);
         }
-        const navigationItems = await response.json();
+        navigationItems = await response.json(); // Store globally
         const tagsDiv = document.getElementById('tags');
         
         navigationItems.forEach(item => {
