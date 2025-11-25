@@ -44,5 +44,38 @@ IMG_URL lucas_sequence.jpg
 𖦹 Base Case: 1! = 1
 𖦹 Induction Step: n! = n ⋅ (n−1)! for n > 1
 - This builds n! step by step for all positive integers
+--END--
+--BEGIN--25/11/2025--DIVISIBILITY ALGORITHM--
+1. Division rule for integers
+𖦹 [yellow]For any integers a and b with b > 0, we can find integers q and r such that a = qb + r and 0 ≤ r < b[/yellow]
+𖦹 q is called the quotient
+𖦹 r is called the remainder
+• This means every number can be split into "multiples of b" plus a small leftover r
+- r is always smaller than b
 
+2. Example for better understanding
+𖦹 Take a = 17 and b = 5
+𖦹 17 = 5 × 3 + 2
+• So q = 3, r = 2
+- Check: 0 ≤ 2 < 5, so it follows the rule
+
+3. In essence
+𖦹 Any integer a can be written as:
+    a = (divisor × quotient) + remainder
+• The remainder is always less than the divisor
+IMG_URL div_proof.jpg
+
+4. Meaning of modular form a ≡ b (mod m)
+𖦹 [yellow]a ≡ b (mod m) does not mean a = b[/yellow]
+𖦹 It means a and b give the same remainder when divided by m
+• They behave the same under division by m
+- This is called "modulo m"
+
+5. Examples to understand
+𖦹 10 ≡ 1 (mod 3)
+• Both 10 and 1 leave remainder 1 when divided by 3
+𖦹 17 ≡ 2 (mod 5)
+• 17 = 5 × 3 + 2, so remainder is 2
+--END--
+--BEGIN--25/11/2025--EUCLIDEAN ALGORITHM--
 --END--
