@@ -58,8 +58,7 @@ function processCarousel(images, fileName, carouselId) {
     
     const imageBaseUrl = getImageBaseUrl();
     
-    let carouselHTML = `<div class="carousel-container" id="${carouselId}">`;
-    carouselHTML += '<div class="carousel-wrapper">';
+    let carouselHTML = `<div class="carousel-container" id="${carouselId}"><div class="carousel-wrapper">`;
     
     images.forEach((img, index) => {
         const trimmedImg = img.trim();
@@ -71,17 +70,10 @@ function processCarousel(images, fileName, carouselId) {
         }
         
         const activeClass = index === 0 ? 'active' : '';
-        carouselHTML += `
-            <div class="carousel-slide ${activeClass}">
-                <img src="${url}" loading="lazy" alt="Carousel image ${index + 1}" />
-            </div>
-        `;
+        carouselHTML += `<div class="carousel-slide ${activeClass}"><img src="${url}" loading="lazy" alt="Carousel image ${index + 1}" /></div>`;
     });
     
-    carouselHTML += '</div>';
-    carouselHTML += '<button class="carousel-btn carousel-btn-prev" onclick="carouselPrev(\'' + carouselId + '\')">‹</button>';
-    carouselHTML += '<button class="carousel-btn carousel-btn-next" onclick="carouselNext(\'' + carouselId + '\')">›</button>';
-    carouselHTML += '</div>';
+    carouselHTML += `</div><button class="carousel-btn carousel-btn-prev" onclick="carouselPrev('${carouselId}')">‹</button><button class="carousel-btn carousel-btn-next" onclick="carouselNext('${carouselId}')">›</button></div>`;
     
     return carouselHTML;
 }
@@ -126,7 +118,7 @@ function processContentLines(lines, fileName) {
                         const imageBaseUrl = getImageBaseUrl();
                         url = `${imageBaseUrl}${fileName}/${imgValue}`;
                     }
-                    result.push(`<img src="${url}" loading="lazy" style="border-radius:0.5rem;margin-top:0.2rem;margin-bottom:0.2rem;margin-left:auto;margin-right:auto;width:100%;max-width:100%;display:block;" />`);
+                    result.push(`<img src="${url}" loading="lazy" style="border-radius:0.5rem;margin-top:0.2rem;margin-bottom:0;margin-left:auto;margin-right:auto;width:100%;max-width:100%;display:block;" />`);
                     continue;
                 }
             }

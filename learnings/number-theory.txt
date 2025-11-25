@@ -45,7 +45,7 @@ IMG_URL lucas_sequence.jpg
 𖦹 Induction Step: n! = n ⋅ (n−1)! for n > 1
 - This builds n! step by step for all positive integers
 
-5. Solved Problems
+5. SOLVED PROBLEMS
 --CAROUSEL--
 induction-solved-1.jpg
 induction-solved-2.jpg
