@@ -2164,6 +2164,7 @@ public:
 --END--
 --BEGIN--24/11/2025--HEAPS--
 1. Heap
+IMG_URL heaps.png
 𖦹 A heap is a tree where each parent is more important than its children
 𖦹 More important means smaller (min-heap) or larger (max-heap)
 𖦹 Two rules must always hold
