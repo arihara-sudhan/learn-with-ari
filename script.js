@@ -33,6 +33,7 @@ const SNIPPET_BEGIN_REGEX = /--BEGIN--(?:(\d{2}\/\d{2}\/\d{4})--([^--]+)--|([^--
 const SNIPPET_END_REGEX = /--END--/g;
 const CAROUSEL_BEGIN_REGEX = /^--CAROUSEL--$/i;
 const CAROUSEL_END_REGEX = /^--CAROUSEL--$/i;
+const EMBED_GIT_REGEX = /^--EMBED-GIT--$/i;
 const VALID_COLOR_NAMES = ['pink', 'yellow', 'blue', 'green', 'red', 'orange', 'purple', 'cyan', 'gray', 'grey', 'white', 'black', 'lightblue', 'lightgreen', 'lightyellow', 'lightpink', 'lightcyan', 'lightgray', 'lightgrey', 'darkblue', 'darkgreen', 'darkred', 'darkorange', 'darkpurple', 'brown', 'gold', 'silver', 'magenta', 'lime', 'aqua', 'navy', 'teal', 'maroon', 'olive', 'coral', 'salmon', 'violet', 'indigo', 'turquoise', 'tan', 'beige', 'khaki', 'plum', 'orchid', 'crimson', 'azure'];
 const BRACKET_COLOR_REGEX = new RegExp(`\\[(${VALID_COLOR_NAMES.join('|')})\\](.*?)\\[/\\1\\]`, 'gis');
 
@@ -78,17 +79,19 @@ function processCarousel(images, fileName, carouselId) {
     return carouselHTML;
 }
 
-function processContentLines(lines, fileName) {
+async function processContentLines(lines, fileName) {
     const result = [];
     let inCarousel = false;
     let carouselImages = [];
     let carouselId = null;
+    let waitingForEmbedUrl = false;
     
     for (let i = 0; i < lines.length; i++) {
         const line = lines[i];
         const trimmedLine = line.trim();
         const isCarouselBegin = CAROUSEL_BEGIN_REGEX.test(trimmedLine);
         const isCarouselEnd = CAROUSEL_END_REGEX.test(trimmedLine);
+        const isEmbedGit = EMBED_GIT_REGEX.test(trimmedLine);
         
         if (isCarouselBegin && !inCarousel) {
             inCarousel = true;
@@ -104,6 +107,18 @@ function processContentLines(lines, fileName) {
         } else if (inCarousel) {
             if (trimmedLine) {
                 carouselImages.push(trimmedLine);
+            }
+        } else if (isEmbedGit) {
+            waitingForEmbedUrl = true;
+        } else if (waitingForEmbedUrl) {
+            // Next line after --EMBED-GIT-- should be the URL
+            if (trimmedLine && /^https?:\/\//.test(trimmedLine)) {
+                const codeHtml = await fetchAndEmbedCode(trimmedLine);
+                result.push(codeHtml);
+                waitingForEmbedUrl = false;
+            } else {
+                // Invalid URL, skip
+                waitingForEmbedUrl = false;
             }
         } else {
             // Regular content processing
@@ -133,6 +148,44 @@ function processContentLines(lines, fileName) {
     }
     
     return result.join('\n');
+}
+
+function convertGitHubUrlToRaw(url) {
+    // Convert GitHub blob URL to raw URL
+    // https://github.com/user/repo/blob/branch/path -> https://raw.githubusercontent.com/user/repo/branch/path
+    if (url.includes('github.com') && url.includes('/blob/')) {
+        url = url.replace('github.com', 'raw.githubusercontent.com');
+        url = url.replace('/blob/', '/');
+    }
+    return url;
+}
+
+async function fetchAndEmbedCode(url) {
+    try {
+        const rawUrl = convertGitHubUrlToRaw(url);
+        const response = await fetch(rawUrl);
+        if (!response.ok) {
+            throw new Error(`Failed to fetch: ${response.status}`);
+        }
+        const code = await response.text();
+        
+        // Determine file extension for syntax highlighting
+        const urlParts = rawUrl.split('/');
+        const fileName = urlParts[urlParts.length - 1];
+        const extension = fileName.includes('.') ? fileName.split('.').pop() : '';
+        
+        // Create code block with syntax highlighting class
+        const langClass = extension ? `language-${extension}` : '';
+        return `<pre class="code-embed"><code class="${langClass}">${escapeHtml(code)}</code></pre>`;
+    } catch (error) {
+        return `<pre class="code-embed-error">Error loading code from ${url}: ${error.message}</pre>`;
+    }
+}
+
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
 }
 
 function extractSnippets(text) {
@@ -279,7 +332,7 @@ async function loadLearnings(fileName) {
                 
                 // Process content lines with carousel support
                 const allLines = snippetContent.split('\n');
-                const processedContent = processContentLines(allLines, fileName);
+                const processedContent = await processContentLines(allLines, fileName);
                 
                 if (processedContent.trim().length > 0) {
                     // Wrap snippet in div with black background and green text
@@ -340,7 +393,7 @@ async function loadLearnings(fileName) {
                     htmlContent += `<h2 id="source">${source}</h2>`;
                 }
                 const contentLines = firstSection.split('\n');
-                let content = processContentLines(contentLines, fileName);
+                let content = await processContentLines(contentLines, fileName);
                 htmlContent += `<div class="code-content">${content}</div>`;
             } else if (source) {
                 // If only source exists without content, still show the source
@@ -376,7 +429,7 @@ async function loadLearnings(fileName) {
             if (content_cleaned && content_cleaned.replace(/\s+/g, '').length > 0) {
                 // Process content lines with carousel support
                 const contentLines = content_cleaned.split('\n');
-                content_cleaned = processContentLines(contentLines, fileName);
+                content_cleaned = await processContentLines(contentLines, fileName);
 
                 htmlContent += `
                     <div class="section">

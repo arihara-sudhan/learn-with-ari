@@ -211,3 +211,38 @@ img {
     }
 }
 
+/* Code Embed Styles */
+.code-embed {
+    background: black;
+    padding: 1rem;
+    color: lawngreen;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-size: 1rem;
+    border-radius: 0.5rem;
+    margin: 0.2rem 0 0 0;
+    overflow-x: auto;
+    font-family: consolas, monospace;
+    line-height: 1.4;
+}
+
+.code-embed code {
+    background: transparent;
+    padding: 0;
+    color: inherit;
+    font-size: inherit;
+    font-family: inherit;
+}
+
+.code-embed-error {
+    background: black;
+    padding: 1rem;
+    color: red;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-size: 1rem;
+    border-radius: 0.5rem;
+    margin: 0.2rem 0 0 0;
+    font-family: consolas, monospace;
+}
+
