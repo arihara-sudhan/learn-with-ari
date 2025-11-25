@@ -2465,7 +2465,7 @@ print()
     }
 };
 --END--
---BEGIN--24/11/2025--BINARY SEARCH TREES--
+--BEGIN--24/11/2025--TREES--
 1. Trees
 𖦹 A tree organizes data in a hierarchy like a family tree or company structure
 𖦹 It has nodes (data points) and edges/arcs (connections between nodes)
@@ -2855,5 +2855,488 @@ ITERATIVE INORDER AND POSTORDER ROUTINES:
 
     [pink]return[/pink] 0;
 }
+
+10. AVL Tree Basics
+𖦹 An AVL tree is a binary search tree that keeps itself balanced.
+𖦹 Balance is important because a long, skinny tree makes searching slow.
+• Balanced trees keep search fast: O(log n) time.
+𖦹 AVL trees fix themselves after inserting or deleting nodes.
+
+11. AVL Tree Rules
+𖦹 AVL = BST + height rule
+𖦹 Must satisfy BST ordering.
+𖦹 Balance rule: For every node, |height(left) – height(right)| ≤ 1
+• Difference is called balance factor: balance factor = height(right) – height(left)
+• Allowed values: –1, 0, +1
+𖦹 If balance factor becomes –2 or +2 → tree is unbalanced and must be fixed.
+
+12. When AVL Tree Needs Fixing
+𖦹 Tree becomes unbalanced after inserting or deleting a node.
+𖦹 There are 4 rotation cases (2 main + 2 mirror images).
+
+13. LL Rotation (Left-Left)
+𖦹 Happens when insertion is in left subtree of left child.
+• Fix: Right rotation on P
+BEFORE
+      P
+     /
+    Q
+   /
+  R
+AFTER
+      Q
+     / \
+    R   P
+
+14. RR Rotation (Right-Right)
+𖦹 Happens when insertion is in right subtree of right child.
+• Fix: Left rotation on P
+BEFORE
+  P
+   \
+    Q
+     \
+      R
+AFTER
+      Q
+     / \
+    P   R
+
+15. LR Rotation (Left-Right)
+𖦹 Happens when insertion is in right subtree of left child.
+• Fix: Double rotation → Left rotation on Q, Right rotation on P
+BEFORE
+      P
+     /
+    Q
+     \
+      R
+AFTER
+      R
+     / \
+    Q   P
+
+16. RL Rotation (Right-Left)
+𖦹 Happens when insertion is in left subtree of right child.
+• Fix: Double rotation → Right rotation on Q, Left rotation on P
+BEFORE
+    P
+     \
+      Q
+     /
+    R
+AFTER
+      R
+     / \
+    P   Q
+
+17. Rotation Summary
+𖦹 LL: Right rotate P → Root becomes Q
+𖦹 RR: Left rotate P → Root becomes Q
+𖦹 LR: Rotate Q → Rotate P → Root becomes R
+𖦹 RL: Rotate Q → Rotate P → Root becomes R
+
+18. Node Definition in C++
+𖦹 [pink]struct[/pink] [yellow]Node[/yellow] {
+  [pink]int[/pink] [yellow]key[/yellow];
+  [pink]Node*[/pink] [yellow]left[/yellow];
+  [pink]Node*[/pink] [yellow]right[/yellow];
+  [pink]int[/pink] [yellow]height[/yellow];
+  [pink]Node[/pink]([pink]int[/pink] [yellow]k[/yellow]) {
+    [yellow]key[/yellow] = [yellow]k[/yellow];
+    [yellow]left[/yellow] = [yellow]right[/yellow] = [green]nullptr[/green];
+    [yellow]height[/yellow] = 1;
+  }
+};
+
+19. Helper Functions
+𖦹 [pink]int[/pink] [yellow]height[/yellow]([pink]Node*[/pink] [yellow]n[/yellow]) { if (![yellow]n[/yellow]) return 0; return [yellow]n[/yellow]->height; }
+𖦹 [pink]int[/pink] [yellow]getBalance[/yellow]([pink]Node*[/pink] [yellow]n[/yellow]) { if (![yellow]n[/yellow]) return 0; return height([yellow]n[/yellow]->right) - height([yellow]n[/yellow]->left); }
+𖦹 void [yellow]updateHeight[/yellow]([pink]Node*[/pink] [yellow]n[/yellow]) { [yellow]n[/yellow]->height = 1 + [green]max[/green](height([yellow]n[/yellow]->left), height([yellow]n[/yellow]->right)); }
+
+20. Rotations
+𖦹 Right rotation (LL)
+[pink]Node*[/pink] [yellow]rightRotate[/yellow]([pink]Node*[/pink] [yellow]y[/yellow]) {
+  [pink]Node*[/pink] [yellow]x[/yellow] = [yellow]y[/yellow]->left;
+  [pink]Node*[/pink] [yellow]T2[/yellow] = [yellow]x[/yellow]->right;
+  [yellow]x[/yellow]->right = [yellow]y[/yellow];
+  [yellow]y[/yellow]->left = [yellow]T2[/yellow];
+  updateHeight([yellow]y[/yellow]); updateHeight([yellow]x[/yellow]);
+  return [yellow]x[/yellow];
+}
+𖦹 Left rotation (RR)
+[pink]Node*[/pink] [yellow]leftRotate[/yellow]([pink]Node*[/pink] [yellow]x[/yellow]) {
+  [pink]Node*[/pink] [yellow]y[/yellow] = [yellow]x[/yellow]->right;
+  [pink]Node*[/pink] [yellow]T2[/yellow] = [yellow]y[/yellow]->left;
+  [yellow]y[/yellow]->left = [yellow]x[/yellow];
+  [yellow]x[/yellow]->right = [yellow]T2[/yellow];
+  updateHeight([yellow]x[/yellow]); updateHeight([yellow]y[/yellow]);
+  return [yellow]y[/yellow];
+}
+
+21. Insertion with AVL Balancing
+𖦹 [pink]Node*[/pink] [yellow]insert[/yellow]([pink]Node*[/pink] [yellow]node[/yellow], [pink]int[/pink] [yellow]key[/yellow]) {
+  if (![yellow]node[/yellow]) return new [yellow]Node[/yellow]([yellow]key[/yellow]);
+  if ([yellow]key[/yellow] < [yellow]node[/yellow]->key) [yellow]node[/yellow]->left = insert([yellow]node[/yellow]->left, [yellow]key[/yellow]);
+  else [yellow]node[/yellow]->right = insert([yellow]node[/yellow]->right, [yellow]key[/yellow]);
+  updateHeight([yellow]node[/yellow]);
+  [pink]int[/pink] [yellow]balance[/yellow] = getBalance([yellow]node[/yellow]);
+  if ([yellow]balance[/yellow] < -1 && [yellow]key[/yellow] < [yellow]node[/yellow]->left->key) return rightRotate([yellow]node[/yellow]);
+  if ([yellow]balance[/yellow] > 1 && [yellow]key[/yellow] > [yellow]node[/yellow]->right->key) return leftRotate([yellow]node[/yellow]);
+  if ([yellow]balance[/yellow] < -1 && [yellow]key[/yellow] > [yellow]node[/yellow]->left->key) { [yellow]node[/yellow]->left = leftRotate([yellow]node[/yellow]->left); return rightRotate([yellow]node[/yellow]); }
+  if ([yellow]balance[/yellow] > 1 && [yellow]key[/yellow] < [yellow]node[/yellow]->right->key) { [yellow]node[/yellow]->right = rightRotate([yellow]node[/yellow]->right); return leftRotate([yellow]node[/yellow]); }
+  return [yellow]node[/yellow];
+}
+
+22. Utility: Inorder Traversal
+𖦹 void [yellow]inorder[/yellow]([pink]Node*[/pink] [yellow]root[/yellow]) { if (![yellow]root[/yellow]) return; inorder([yellow]root[/yellow]->left); [green]cout[/green] << [yellow]root[/yellow]->key << " "; inorder([yellow]root[/yellow]->right); }
+
+23. Example Usage
+𖦹 [pink]int[/pink] [yellow]main[/yellow]() {
+  [pink]Node*[/pink] [yellow]root[/yellow] = [green]nullptr[/green];
+  [pink]int[/pink] [yellow]nums[/yellow][] = {10, 20, 30, 40, 50, 25};
+  for ([pink]int[/pink] [yellow]key[/yellow] : [yellow]nums[/yellow]) [yellow]root[/yellow] = insert([yellow]root[/yellow], [yellow]key[/yellow]);
+  [green]cout[/green] << "Inorder traversal of AVL tree: ";
+  inorder([yellow]root[/yellow]);
+  [green]cout[/green] << [green]endl[/green];
+  return 0;
+}
+
+24. Example 1: Inserting Nodes in Ascending Order
+𖦹 Insert nodes: 10, 20, 30, 40, 50, 25
+• Step 1: Insert 10, 20, 30
+- Insert 10 → tree: 10
+- Insert 20 → tree: 10 → 20
+- Insert 30 → tree becomes unbalanced (RR case at 10)
+- Fix RR rotation at 10 → new root = 20
+      20
+     /  \
+   10    30
+✅ Now balanced
+• Step 2: Insert 40, 50
+- Insert 40 → tree:
+      20
+     /  \
+   10    30
+           \
+            40
+- Insert 50 → tree unbalanced (RR case at 30)
+- Fix RR rotation at 30 → 40 becomes new subtree root
+      20
+     /  \
+   10    40
+        /  \
+      30    50
+✅ Still AVL balanced
+• Step 3: Insert 25
+- Insert 25 under 30:
+      20
+     /  \
+   10    40
+        /  \
+      30    50
+     /
+   25
+- Check balance:
+  • Node 30: left height 1, right height 0 → balance = -1 → fine
+  • Node 40: left height 2, right height 1 → balance = +1 → fine
+  • Node 20: left height 1, right height 3 → balance = +2 → unbalanced
+- This is RL case at 20:
+  • Step 1: Right rotate on 40's left child (30)
+  • Step 2: Left rotate on 20
+- After rotations:
+        30
+       /  \
+     20    40
+    / \      \
+  10   25    50
+✅ Balanced AVL tree
+
+25. Example 2: Complex LR Case
+𖦹 Insert nodes: 50, 30, 70, 20, 40, 35
+• Step 1: Build initial tree
+    50
+   /
+  30
+ /
+20
+- LL case at 50 → right rotate 50
+    30
+   /  \
+ 20    50
+• Step 2: Insert 40, then 35
+      30
+     /  \
+   20    50
+        /
+      40
+     /
+   35
+- Check balance:
+  • Node 50: left height 2, right height 0 → balance = -2 → unbalanced
+- This is LR case at 50 (left-right heavy):
+  • Step 1: Left rotate on 40 → 35 becomes left child of 50
+      30
+     /  \
+   20    50
+        /
+      35
+        \
+        40
+  • Step 2: Right rotate on 50 → 35 becomes new subtree root
+      30
+     /  \
+   20    35
+           \
+            50
+           /
+         40
+✅ Balanced AVL tree again
+
+26. Red Black Tree
+𖦹 It is a special binary search tree that keeps its height small.
+𖦹 Every node has a color: red or black.
+𖦹 The color rules keep the tree almost balanced.
+• Rule: Every node is either red or black.
+• Rule: The root is always black.
+• Rule: Red node cannot have a red child.
+• Rule: Every path from a node to its leaf-null has the same number of black nodes.
+𖦹 Because of these rules, the longest path is at most twice the shortest path.
+𖦹 So the height h ≤ 2 × log₂(n+1).
+𖦹 It supports fast search, insert, and delete in O(log n).
+
+27. Red black tree worries removed
+𖦹 You do not need to arrange colors or rotations by yourself.
+𖦹 The rules will always fix the tree to keep height low.
+𖦹 The operations are always near log time.
+𖦹 You just use insert and delete; balancing happens inside.
+
+28. Operations needed
+𖦹 You need: left rotate, right rotate.
+𖦹 You need: color flip or recolor.
+𖦹 Insert and delete use these to fix problems automatically.
+𖦹 The property “no two reds in a row” is always checked and repaired.
+𖦹 The black-height rule is also kept.
+
+29. C++ code: Node structure
+𖦹 Here is the simple node structure.
+<blue>struct</blue> Node {
+    <green>int</green> data;
+    <blue>bool</blue> <orange>color</orange>; <grey>// 0 = black, 1 = red</grey>
+    Node* left;
+    Node* right;
+    Node* parent;
+};
+
+30. C++ code: Left rotate
+𖦹 This rotation moves a child up and shifts nodes to the side.
+<blue>void</blue> leftRotate(Node* <purple>&root</purple>, Node* <purple>x</purple>) {
+    Node* y = x->right;
+    x->right = y->left;
+    <yellow>if</yellow> (y->left != <red>nullptr</red>)
+        y->left->parent = x;
+    y->parent = x->parent;
+    <yellow>if</yellow> (x->parent == <red>nullptr</red>)
+        root = y;
+    <yellow>else if</yellow> (x == x->parent->left)
+        x->parent->left = y;
+    <yellow>else</yellow>
+        x->parent->right = y;
+    y->left = x;
+    x->parent = y;
+}
+
+31. C++ code: Right rotate
+𖦹 This rotation is the mirror of left rotate.
+<blue>void</blue> rightRotate(Node* <purple>&root</purple>, Node* <purple>y</purple>) {
+    Node* x = y->left;
+    y->left = x->right;
+    <yellow>if</yellow> (x->right != <red>nullptr</red>)
+        x->right->parent = y;
+    x->parent = y->parent;
+    <yellow>if</yellow> (y->parent == <red>nullptr</red>)
+        root = x;
+    <yellow>else if</yellow> (y == y->parent->right)
+        y->parent->right = x;
+    <yellow>else</yellow>
+        y->parent->left = x;
+    x->right = y;
+    y->parent = x;
+}
+
+32. C++ code: Fix insert
+𖦹 When a new node is inserted, it may break red-black rules.
+𖦹 This function repairs it.
+<blue>void</blue> fixInsert(Node* <purple>&root</purple>, Node* <purple>z</purple>) {
+    <yellow>while</yellow> (z->parent != <red>nullptr</red> && z->parent->color == <brown>1</brown>) {
+        <yellow>if</yellow> (z->parent == z->parent->parent->left) {
+            Node* y = z->parent->parent->right;
+            <yellow>if</yellow> (y != <red>nullptr</red> && y->color == <brown>1</brown>) {
+                z->parent->color = <brown>0</brown>;
+                y->color = <brown>0</brown>;
+                z->parent->parent->color = <brown>1</brown>;
+                z = z->parent->parent;
+            } <yellow>else</yellow> {
+                <yellow>if</yellow> (z == z->parent->right) {
+                    z = z->parent;
+                    leftRotate(root, z);
+                }
+                z->parent->color = <brown>0</brown>;
+                z->parent->parent->color = <brown>1</brown>;
+                rightRotate(root, z->parent->parent);
+            }
+        } <yellow>else</yellow> {
+            Node* y = z->parent->parent->left;
+            <yellow>if</yellow> (y != <red>nullptr</red> && y->color == <brown>1</brown>) {
+                z->parent->color = <brown>0</brown>;
+                y->color = <brown>0</brown>;
+                z->parent->parent->color = <brown>1</brown>;
+                z = z->parent->parent;
+            } <yellow>else</yellow> {
+                <yellow>if</yellow> (z == z->parent->left) {
+                    z = z->parent;
+                    rightRotate(root, z);
+                }
+                z->parent->color = <brown>0</brown>;
+                z->parent->parent->color = <brown>1</brown>;
+                leftRotate(root, z->parent->parent);
+            }
+        }
+    }
+    root->color = <brown>0</brown>;
+}
+
+33. C++ code: Insert function
+𖦹 This inserts normally like a BST.
+𖦹 Then fixInsert() repairs the tree.
+<blue>void</blue> insert(Node* <purple>&root</purple>, <green>int</green> data) {
+    Node* z = <blue>new</blue> Node{data, <brown>1</brown>, <red>nullptr</red>, <red>nullptr</red>, <red>nullptr</red>};
+    Node* y = <red>nullptr</red>;
+    Node* x = root;
+    <yellow>while</yellow> (x != <red>nullptr</red>) {
+        y = x;
+        <yellow>if</yellow> (z->data < x->data)
+            x = x->left;
+        <yellow>else</yellow>
+            x = x->right;
+    }
+    z->parent = y;
+    <yellow>if</yellow> (y == <red>nullptr</red>)
+        root = z;
+    <yellow>else if</yellow> (z->data < y->data)
+        y->left = z;
+    <yellow>else</yellow>
+        y->right = z;
+    fixInsert(root, z);
+}
+
+34. Self-Adjusting Trees
+𖦹 When a node is accessed, move it closer to the root.
+𖦹 Frequently accessed nodes stay near the top; rarely used nodes stay deeper.
+𖦹 This makes searches faster for important elements.
+
+35. Deciding which nodes to move
+𖦹 Two ways:
+• Using counters: each node tracks access count; nodes with high count move toward root.
+• Simple assumption: move accessed node up immediately, assuming it will be used again.
+𖦹 The tree acts like a priority tree with most used nodes near the root.
+
+36. Single Rotation
+𖦹 Move a node up by one step.
+𖦹 Example: accessing node 2 in this tree:
+      10
+     /  \
+    5    20
+   / \
+  2   7
+𖦹 Rotate 2 with its parent 5:
+      10
+     /  \
+    2    20
+     \
+      5
+       \
+        7
+𖦹 Node 2 moved closer to root. Repeated accesses can move it further.
+
+37. Move-to-Root
+𖦹 Move a node all the way to root in one access.
+𖦹 Example: accessing node 2:
+Step 1: rotate 2 with 5
+      10
+     /  \
+    2    20
+     \
+      5
+       \
+        7
+Step 2: rotate 2 with 10
+      2
+       \
+        10
+       /  \
+      5    20
+       \
+        7
+𖦹 Node 2 becomes root immediately; next access is very fast.
+
+38. Splaying
+𖦹 A smarter move-to-root method using pairs of rotations.
+𖦹 Rotations depend on the node's parent and grandparent.
+𖦹 This flattens the tree and makes frequently accessed nodes easier to reach.
+
+39. Splay Case 1: Parent is root
+𖦹 Node R with parent Q:
+Initial:
+   Q
+  /
+ R
+𖦹 Rotate R with Q:
+   R
+    \
+     Q
+𖦹 Node R becomes root.
+
+40. Splay Case 2: Homogeneous (zig-zig)
+𖦹 Left-left example: node R under Q under P
+Initial:
+     P
+    /
+   Q
+  /
+ R
+Step 1: Rotate Q with P
+   Q
+  / \
+ R   P
+Step 2: Rotate R with Q
+     R
+      \
+       Q
+        \
+         P
+𖦹 Node R moves up two levels; tree is flatter.
+𖦹 Right-right is symmetric.
+
+41. Splay Case 3: Heterogeneous (zig-zag)
+𖦹 Left-right example: node R under Q under P
+Initial:
+     P
+    /
+   Q
+    \
+     R
+Step 1: Rotate R with Q
+     P
+    /
+   R
+  /
+ Q
+Step 2: Rotate R with P
+    R
+   / \
+  Q   P
+𖦹 Node R is closer to root; tree is flatter.
+
 
 --END--
