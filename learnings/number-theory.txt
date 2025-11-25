@@ -44,6 +44,14 @@ IMG_URL lucas_sequence.jpg
 𖦹 Base Case: 1! = 1
 𖦹 Induction Step: n! = n ⋅ (n−1)! for n > 1
 - This builds n! step by step for all positive integers
+
+5. Solved Problems
+--CAROUSEL--
+induction-solved-1.jpg
+induction-solved-2.jpg
+induction-solved-3.jpg
+induction-solved-4.jpg
+--CAROUSEL--
 --END--
 --BEGIN--25/11/2025--DIVISIBILITY ALGORITHM--
 1. Division rule for integers

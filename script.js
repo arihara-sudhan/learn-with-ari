@@ -31,6 +31,8 @@ const IMG_URL_REGEX = /^IMG_URL\s*@?\s*(.+)$/i;
 // Updated to allow spaces in topic names (e.g., "TIME COMPLEXITY")
 const SNIPPET_BEGIN_REGEX = /--BEGIN--(?:(\d{2}\/\d{2}\/\d{4})--([^--]+)--|([^--]+)--(\d{2}\/\d{2}\/\d{4}))/g;
 const SNIPPET_END_REGEX = /--END--/g;
+const CAROUSEL_BEGIN_REGEX = /^--CAROUSEL--$/i;
+const CAROUSEL_END_REGEX = /^--CAROUSEL--$/i;
 const VALID_COLOR_NAMES = ['pink', 'yellow', 'blue', 'green', 'red', 'orange', 'purple', 'cyan', 'gray', 'grey', 'white', 'black', 'lightblue', 'lightgreen', 'lightyellow', 'lightpink', 'lightcyan', 'lightgray', 'lightgrey', 'darkblue', 'darkgreen', 'darkred', 'darkorange', 'darkpurple', 'brown', 'gold', 'silver', 'magenta', 'lime', 'aqua', 'navy', 'teal', 'maroon', 'olive', 'coral', 'salmon', 'violet', 'indigo', 'turquoise', 'tan', 'beige', 'khaki', 'plum', 'orchid', 'crimson', 'azure'];
 const BRACKET_COLOR_REGEX = new RegExp(`\\[(${VALID_COLOR_NAMES.join('|')})\\](.*?)\\[/\\1\\]`, 'gis');
 
@@ -49,6 +51,96 @@ function colorizeText(text) {
     });
     
     return processed;
+}
+
+function processCarousel(images, fileName, carouselId) {
+    if (!images || images.length === 0) return '';
+    
+    const imageBaseUrl = getImageBaseUrl();
+    
+    let carouselHTML = `<div class="carousel-container" id="${carouselId}">`;
+    carouselHTML += '<div class="carousel-wrapper">';
+    
+    images.forEach((img, index) => {
+        const trimmedImg = img.trim();
+        if (!trimmedImg) return;
+        
+        let url = trimmedImg;
+        if (!/^https?:\/\//.test(trimmedImg) && !trimmedImg.includes('/')) {
+            url = `${imageBaseUrl}${fileName}/${trimmedImg}`;
+        }
+        
+        const activeClass = index === 0 ? 'active' : '';
+        carouselHTML += `
+            <div class="carousel-slide ${activeClass}">
+                <img src="${url}" loading="lazy" alt="Carousel image ${index + 1}" />
+            </div>
+        `;
+    });
+    
+    carouselHTML += '</div>';
+    carouselHTML += '<button class="carousel-btn carousel-btn-prev" onclick="carouselPrev(\'' + carouselId + '\')">‹</button>';
+    carouselHTML += '<button class="carousel-btn carousel-btn-next" onclick="carouselNext(\'' + carouselId + '\')">›</button>';
+    carouselHTML += '</div>';
+    
+    return carouselHTML;
+}
+
+function processContentLines(lines, fileName) {
+    const result = [];
+    let inCarousel = false;
+    let carouselImages = [];
+    let carouselId = null;
+    
+    for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+        const trimmedLine = line.trim();
+        const isCarouselBegin = CAROUSEL_BEGIN_REGEX.test(trimmedLine);
+        const isCarouselEnd = CAROUSEL_END_REGEX.test(trimmedLine);
+        
+        if (isCarouselBegin && !inCarousel) {
+            inCarousel = true;
+            carouselImages = [];
+            carouselId = `carousel-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+        } else if (isCarouselEnd && inCarousel) {
+            inCarousel = false;
+            if (carouselImages.length > 0) {
+                result.push(processCarousel(carouselImages, fileName, carouselId));
+            }
+            carouselImages = [];
+            carouselId = null;
+        } else if (inCarousel) {
+            if (trimmedLine) {
+                carouselImages.push(trimmedLine);
+            }
+        } else {
+            // Regular content processing
+            // Check if line starts with IMG_URL
+            if (/^IMG_URL/i.test(trimmedLine)) {
+                IMG_URL_REGEX.lastIndex = 0;
+                const imgMatch = trimmedLine.match(IMG_URL_REGEX);
+                if (imgMatch) {
+                    const imgValue = imgMatch[1].trim();
+                    let url = imgValue;
+                    if (!/^https?:\/\//.test(imgValue) && !imgValue.includes('/')) {
+                        const imageBaseUrl = getImageBaseUrl();
+                        url = `${imageBaseUrl}${fileName}/${imgValue}`;
+                    }
+                    result.push(`<img src="${url}" loading="lazy" style="border-radius:0.5rem;margin-top:0.2rem;margin-bottom:0.2rem;margin-left:auto;margin-right:auto;width:100%;max-width:100%;display:block;" />`);
+                    continue;
+                }
+            }
+            // Return line with colorization
+            result.push(colorizeText(line));
+        }
+    }
+    
+    // Handle case where carousel wasn't closed
+    if (inCarousel && carouselImages.length > 0) {
+        result.push(processCarousel(carouselImages, fileName, carouselId));
+    }
+    
+    return result.join('\n');
 }
 
 function extractSnippets(text) {
@@ -193,27 +285,9 @@ async function loadLearnings(fileName) {
                 // Remove SOURCE lines from snippet content (don't show them inside snippets)
                 snippetContent = snippetContent.replace(SOURCE_REGEX, '');
                 
-                // Process content lines exactly as they appear in the file
+                // Process content lines with carousel support
                 const allLines = snippetContent.split('\n');
-                const processedContent = allLines.map(line => {
-                    // Check if line starts with IMG_URL (case-insensitive) - only trim for detection
-                    const trimmedLine = line.trim();
-                    if (/^IMG_URL/i.test(trimmedLine)) {
-                        IMG_URL_REGEX.lastIndex = 0;
-                        const imgMatch = trimmedLine.match(IMG_URL_REGEX);
-                        if (imgMatch) {
-                            const imgValue = imgMatch[1].trim();
-                            let url = imgValue;
-                            if (!/^https?:\/\//.test(imgValue) && !imgValue.includes('/')) {
-                                const imageBaseUrl = getImageBaseUrl();
-                                url = `${imageBaseUrl}${fileName}/${imgValue}`;
-                            }
-                            return `<img src="${url}" loading="lazy" style="border-radius:0.5rem;margin-top:0.2rem;margin-bottom:0.2rem;margin-left:auto;margin-right:auto;width:100%;max-width:100%;display:block;" />`;
-                        }
-                    }
-                    // Return line exactly as it is, preserving all spaces
-                    return colorizeText(line);
-                }).join('\n');
+                const processedContent = processContentLines(allLines, fileName);
                 
                 if (processedContent.trim().length > 0) {
                     // Wrap snippet in div with black background and green text
@@ -273,26 +347,8 @@ async function loadLearnings(fileName) {
                 if (source) {
                     htmlContent += `<h2 id="source">${source}</h2>`;
                 }
-                const contentLines = firstSection.split('\n').filter(line => line.trim().length > 0);
-                let content = contentLines.map(line => {
-                    const trimmedLine = line.trim();
-                    // Check if line starts with IMG_URL (case-insensitive)
-                    if (/^IMG_URL/i.test(trimmedLine)) {
-                        IMG_URL_REGEX.lastIndex = 0; // Reset regex
-                        const imgMatch = trimmedLine.match(IMG_URL_REGEX);
-                        if (imgMatch) {
-                            const imgValue = imgMatch[1].trim();
-                            let url = imgValue;
-                            // If it's not already a full URL, construct the path
-                            if (!/^https?:\/\//.test(imgValue) && !imgValue.includes('/')) {
-                                const imageBaseUrl = getImageBaseUrl();
-                                url = `${imageBaseUrl}${fileName}/${imgValue}`;
-                            }
-                            return `<img src="${url}" loading="lazy" style="border-radius:0.5rem;margin-top:0.2rem;margin-bottom:0.2rem;margin-left:auto;margin-right:auto;width:100%;max-width:100%;display:block;" />`;
-                        }
-                    }
-                    return colorizeText(line);
-                }).join('\n');
+                const contentLines = firstSection.split('\n');
+                let content = processContentLines(contentLines, fileName);
                 htmlContent += `<div class="code-content">${content}</div>`;
             } else if (source) {
                 // If only source exists without content, still show the source
@@ -326,27 +382,9 @@ async function loadLearnings(fileName) {
             
             // Only create section if there's actual content (not just whitespace)
             if (content_cleaned && content_cleaned.replace(/\s+/g, '').length > 0) {
-                // Process content lines (filter out empty lines first)
-                const validLines = content_cleaned.split('\n').filter(line => line.trim().length > 0);
-                content_cleaned = validLines.map(line => {
-                    const trimmedLine = line.trim();
-                    // Check if line starts with IMG_URL (case-insensitive)
-                    if (/^IMG_URL/i.test(trimmedLine)) {
-                        IMG_URL_REGEX.lastIndex = 0; // Reset regex
-                        const imgMatch = trimmedLine.match(IMG_URL_REGEX);
-                        if (imgMatch) {
-                            const imgValue = imgMatch[1].trim();
-                            let url = imgValue;
-                            // If it's not already a full URL, construct the path
-                            if (!/^https?:\/\//.test(imgValue) && !imgValue.includes('/')) {
-                                const imageBaseUrl = getImageBaseUrl();
-                                url = `${imageBaseUrl}${fileName}/${imgValue}`;
-                            }
-                            return `<img src="${url}" loading="lazy" style="border-radius:0.5rem;margin-top:0.2rem;margin-bottom:0.2rem;margin-left:auto;margin-right:auto;width:100%;max-width:100%;display:block;" />`;
-                        }
-                    }
-                    return colorizeText(line);
-                }).join('\n');
+                // Process content lines with carousel support
+                const contentLines = content_cleaned.split('\n');
+                content_cleaned = processContentLines(contentLines, fileName);
 
                 htmlContent += `
                     <div class="section">
@@ -525,6 +563,55 @@ async function loadNavigation() {
         tagsDiv.innerHTML = '<pre style="color:red;">Error loading navigation. Please check navigation.json exists.</pre>';
         console.error('Navigation loading error:', error);
     }
+}
+
+// Carousel navigation functions
+function carouselPrev(carouselId) {
+    const carousel = document.getElementById(carouselId);
+    if (!carousel) return;
+    
+    const slides = carousel.querySelectorAll('.carousel-slide');
+    if (slides.length === 0) return;
+    
+    let currentIndex = -1;
+    slides.forEach((slide, index) => {
+        if (slide.classList.contains('active')) {
+            currentIndex = index;
+        }
+    });
+    
+    if (currentIndex === -1) return;
+    
+    // Remove active class from current slide
+    slides[currentIndex].classList.remove('active');
+    
+    // Calculate previous index (wrap around)
+    const prevIndex = (currentIndex - 1 + slides.length) % slides.length;
+    slides[prevIndex].classList.add('active');
+}
+
+function carouselNext(carouselId) {
+    const carousel = document.getElementById(carouselId);
+    if (!carousel) return;
+    
+    const slides = carousel.querySelectorAll('.carousel-slide');
+    if (slides.length === 0) return;
+    
+    let currentIndex = -1;
+    slides.forEach((slide, index) => {
+        if (slide.classList.contains('active')) {
+            currentIndex = index;
+        }
+    });
+    
+    if (currentIndex === -1) return;
+    
+    // Remove active class from current slide
+    slides[currentIndex].classList.remove('active');
+    
+    // Calculate next index (wrap around)
+    const nextIndex = (currentIndex + 1) % slides.length;
+    slides[nextIndex].classList.add('active');
 }
 
 document.addEventListener("DOMContentLoaded", function () {
