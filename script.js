@@ -213,71 +213,24 @@ async function fetchAndEmbedCode(url) {
         
         const language = languageMap[extension] || extension || 'plain';
         
-        // Create a temporary element to use Prism highlighting
-        let highlightedCode = '';
-        if (typeof Prism !== 'undefined') {
-            // Try to highlight with Prism
-            try {
-                // Check if language is available
-                if (Prism.languages[language]) {
-                    highlightedCode = Prism.highlight(code, Prism.languages[language], language);
-                    console.log('Highlighted with Prism, language:', language);
-                } else {
-                    // Try common fallbacks
-                    if (language === 'markup' && Prism.languages.markup) {
-                        highlightedCode = Prism.highlight(code, Prism.languages.markup, 'markup');
-                        console.log('Highlighted with markup fallback');
-                    } else if (language === 'javascript' && Prism.languages.javascript) {
-                        highlightedCode = Prism.highlight(code, Prism.languages.javascript, 'javascript');
-                        console.log('Highlighted with javascript fallback');
-                    } else if (language === 'css' && Prism.languages.css) {
-                        highlightedCode = Prism.highlight(code, Prism.languages.css, 'css');
-                        console.log('Highlighted with css fallback');
-                    } else {
-                        // Fallback: escape HTML
-                        console.warn('Language not found, using plain text. Language:', language, 'Available:', Object.keys(Prism.languages));
-                        highlightedCode = escapeHtml(code);
-                    }
-                }
-            } catch (e) {
-                console.warn('Prism highlighting failed:', e);
-                highlightedCode = escapeHtml(code);
-            }
-        } else {
-            // Prism not loaded, escape HTML
-            console.warn('Prism is not defined');
-            highlightedCode = escapeHtml(code);
-        }
-        
-        // Split code into lines first (before highlighting)
-        const codeLines = code.split('\n');
-        
-        // Highlight each line separately to preserve token structure
-        const highlightedLines = [];
-        for (let i = 0; i < codeLines.length; i++) {
-            const line = codeLines[i];
-            let highlightedLine = '';
-            
-            if (typeof Prism !== 'undefined' && Prism.languages[language]) {
-                try {
-                    highlightedLine = Prism.highlight(line, Prism.languages[language], language);
-                } catch (e) {
-                    highlightedLine = escapeHtml(line);
-                }
-            } else {
-                highlightedLine = escapeHtml(line);
-            }
-            
-            highlightedLines.push(highlightedLine);
-        }
+        // Escape code and split into lines
+        // We'll highlight after insertion when Prism language components are loaded
+        const escapedCode = escapeHtml(code);
+        const codeLines = escapedCode.split(/\r?\n/);
         
         // Create Gist-style embed with header and line numbers
-        const langClass = language ? `language-${language}` : '';
-        let gistHtml = `<div class="gist-container"><div class="gist-header"><span class="gist-file-name">${escapeHtml(fileName)}</span></div><div class="gist-content"><table class="gist-table"><tbody>`;
+        // Store full code in data attribute for highlighting after language loads
+        // Use a temporary div to properly escape for HTML attribute
+        const tempDiv = document.createElement('div');
+        tempDiv.textContent = code;
+        const escapedCodeForAttr = tempDiv.innerHTML.replace(/"/g, '&quot;');
         
-        highlightedLines.forEach((line, index) => {
+        const langClass = language ? `language-${language}` : '';
+        let gistHtml = `<div class="gist-container" data-full-code="${escapedCodeForAttr}" data-language="${language}"><div class="gist-header"><span class="gist-file-name">${escapeHtml(fileName)}</span></div><div class="gist-content"><table class="gist-table"><tbody>`;
+        
+        codeLines.forEach((line, index) => {
             const lineNumber = index + 1;
-            // Line contains HTML from Prism highlighting
+            // Insert plain text first, will be highlighted after language loads
             gistHtml += `<tr><td class="gist-line-number" data-line-number="${lineNumber}"></td><td class="gist-line-content ${langClass}" data-language="${language}">${line || ' '}</td></tr>`;
         });
         
@@ -295,34 +248,40 @@ function escapeHtml(text) {
 }
 
 function highlightCodeBlocks(container) {
-    if (typeof Prism === 'undefined') return;
+    if (typeof Prism === 'undefined') {
+        console.warn('Prism not available');
+        return;
+    }
     
     // Find all gist containers
     const gistContainers = container.querySelectorAll('.gist-container');
     
     gistContainers.forEach(gistContainer => {
-        const codeCells = gistContainer.querySelectorAll('.gist-line-content');
-        if (codeCells.length === 0) return;
+        const language = gistContainer.getAttribute('data-language');
+        const fullCode = gistContainer.getAttribute('data-full-code');
         
-        // Get language from first cell
-        const firstCell = codeCells[0];
-        const language = firstCell.getAttribute('data-language') || 
-                       Array.from(firstCell.classList).find(cls => cls.startsWith('language-'))?.replace('language-', '');
+        if (!language || !fullCode) return;
         
-        if (!language || !Prism.languages[language]) {
-            // Language not loaded yet, try again after a delay for autoloader
-            setTimeout(() => highlightCodeBlocks(container), 200);
+        // Check if language is loaded
+        if (!Prism.languages[language]) {
+            // Language not loaded yet, wait for autoloader
+            // Prism autoloader loads when it sees language-* classes
+            // Try again after a delay
+            setTimeout(() => highlightCodeBlocks(container), 300);
             return;
         }
         
-        // Reconstruct code from all cells
-        const codeLines = Array.from(codeCells).map(cell => cell.textContent);
-        const fullCode = codeLines.join('\n');
+        // Language is loaded, highlight the code
+        // Decode the HTML entity-encoded code from data attribute
+        const decodeDiv = document.createElement('div');
+        decodeDiv.innerHTML = fullCode;
+        const decodedCode = decodeDiv.textContent;
         
-        // Highlight the full code
         try {
-            const highlighted = Prism.highlight(fullCode, Prism.languages[language], language);
+            const highlighted = Prism.highlight(decodedCode, Prism.languages[language], language);
             const highlightedLines = highlighted.split('\n');
+            
+            const codeCells = gistContainer.querySelectorAll('.gist-line-content');
             
             // Update each cell with highlighted version
             codeCells.forEach((cell, index) => {
@@ -330,8 +289,10 @@ function highlightCodeBlocks(container) {
                     cell.innerHTML = highlightedLines[index] || ' ';
                 }
             });
+            
+            console.log('Code highlighted successfully for language:', language);
         } catch (e) {
-            console.warn('Failed to highlight code:', e);
+            console.warn('Failed to highlight code:', e, 'Language:', language, 'Available:', Object.keys(Prism.languages));
         }
     });
 }

@@ -4,8 +4,6 @@
 𖦹 For small data, these differences are small; for large data, the differences grow.
 • Computational complexity
 - Shows how much effort an algorithm needs in terms of time or space.
---EMBED-GIT--
-https://github.com/arihara-sudhan/blog/blob/main/index.html
 2. Time and space as efficiency measures
 𖦹 Time is usually more important than space when judging an algorithm.
 𖦹 Actual run time depends on the machine used.
