@@ -3641,7 +3641,7 @@ IMG_URL seek-rotation-transfer.png
 𖦹 B-trees and multiway trees store many keys in one node/block.
 𖦹 This reduces block reads and improves performance on large datasets.
 --END--
---BEGIN--25/11/2025--WHY B TREES?--
+--BEGIN--25/11/2025--B TREES--
 1. B-tree = Multiway search tree
 𖦹 A B-tree is a multiway tree where each node can have more than 2 children.
 𖦹 In a B-tree of order m:
