@@ -211,27 +211,138 @@ img {
     }
 }
 
-/* Code Embed Styles */
-.code-embed {
+/* Code Embed Styles - Gist-like */
+.gist-container {
     background: black;
-    padding: 1rem;
-    color: lawngreen;
-    white-space: pre-wrap;
-    word-wrap: break-word;
-    font-size: 1rem;
-    border-radius: 0.5rem;
+    border: 1px solid #333;
+    border-radius: 6px;
     margin: 0.2rem 0 0 0;
-    overflow-x: auto;
-    font-family: consolas, monospace;
-    line-height: 1.4;
+    overflow: hidden;
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
 }
 
-.code-embed code {
-    background: transparent;
-    padding: 0;
-    color: inherit;
-    font-size: inherit;
-    font-family: inherit;
+.gist-header {
+    background: #111;
+    border-bottom: 1px solid #333;
+    padding: 0.5rem 1rem;
+    display: flex;
+    align-items: center;
+}
+
+.gist-file-name {
+    color: lightgreen;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.gist-content {
+    overflow-x: auto;
+    background: black;
+}
+
+.gist-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0;
+}
+
+.gist-table tbody tr {
+    border: none;
+}
+
+.gist-line-number {
+    width: 1%;
+    min-width: 50px;
+    padding: 0 0.625rem 0 1rem;
+    text-align: right;
+    color: #666;
+    user-select: none;
+    background: #111;
+    border-right: 1px solid #333;
+    font-size: 0.75rem;
+    line-height: 1.45;
+    vertical-align: top;
+    position: relative;
+}
+
+.gist-line-number::before {
+    content: attr(data-line-number);
+}
+
+.gist-line-content {
+    padding: 0 1rem;
+    color: lawngreen; /* Fallback color - only used if no tokens */
+    font-size: 0.75rem;
+    line-height: 1.45;
+    white-space: pre;
+    word-wrap: normal;
+    overflow-wrap: normal;
+    vertical-align: top;
+    background: black;
+}
+
+/* Prism token colors - use !important to override any other styles */
+.gist-line-content .token.comment,
+.gist-line-content .token.prolog,
+.gist-line-content .token.doctype,
+.gist-line-content .token.cdata {
+    color: #6a9955 !important;
+}
+
+.gist-line-content .token.punctuation {
+    color: #d4d4d4 !important;
+}
+
+.gist-line-content .token.property,
+.gist-line-content .token.tag,
+.gist-line-content .token.boolean,
+.gist-line-content .token.number,
+.gist-line-content .token.constant,
+.gist-line-content .token.symbol,
+.gist-line-content .token.deleted {
+    color: #569cd6 !important;
+}
+
+.gist-line-content .token.selector,
+.gist-line-content .token.attr-name,
+.gist-line-content .token.string,
+.gist-line-content .token.char,
+.gist-line-content .token.builtin,
+.gist-line-content .token.inserted {
+    color: #ce9178 !important;
+}
+
+.gist-line-content .token.operator,
+.gist-line-content .token.entity,
+.gist-line-content .token.url,
+.gist-line-content .language-css .token.string,
+.gist-line-content .style .token.string {
+    color: #d4d4d4 !important;
+}
+
+.gist-line-content .token.atrule,
+.gist-line-content .token.attr-value,
+.gist-line-content .token.keyword {
+    color: #c586c0 !important;
+}
+
+.gist-line-content .token.function,
+.gist-line-content .token.class-name {
+    color: #dcdcaa !important;
+}
+
+.gist-line-content .token.regex,
+.gist-line-content .token.important,
+.gist-line-content .token.variable {
+    color: #d16969 !important;
+}
+
+.gist-table tbody tr:hover .gist-line-content {
+    background: #111;
+}
+
+.gist-table tbody tr:hover .gist-line-number {
+    background: #1a1a1a;
 }
 
 .code-embed-error {

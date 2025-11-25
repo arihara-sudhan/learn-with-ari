@@ -169,14 +169,120 @@ async function fetchAndEmbedCode(url) {
         }
         const code = await response.text();
         
-        // Determine file extension for syntax highlighting
+        // Extract filename from URL
         const urlParts = rawUrl.split('/');
         const fileName = urlParts[urlParts.length - 1];
-        const extension = fileName.includes('.') ? fileName.split('.').pop() : '';
+        const extension = fileName.includes('.') ? fileName.split('.').pop().toLowerCase() : '';
         
-        // Create code block with syntax highlighting class
-        const langClass = extension ? `language-${extension}` : '';
-        return `<pre class="code-embed"><code class="${langClass}">${escapeHtml(code)}</code></pre>`;
+        // Map file extensions to Prism language names
+        const languageMap = {
+            'js': 'javascript',
+            'jsx': 'jsx',
+            'ts': 'typescript',
+            'tsx': 'tsx',
+            'py': 'python',
+            'java': 'java',
+            'c': 'c',
+            'cpp': 'cpp',
+            'cs': 'csharp',
+            'php': 'php',
+            'rb': 'ruby',
+            'go': 'go',
+            'rs': 'rust',
+            'swift': 'swift',
+            'kt': 'kotlin',
+            'scala': 'scala',
+            'sh': 'bash',
+            'bash': 'bash',
+            'html': 'markup',
+            'xml': 'markup',
+            'css': 'css',
+            'scss': 'scss',
+            'sass': 'sass',
+            'json': 'json',
+            'yaml': 'yaml',
+            'yml': 'yaml',
+            'md': 'markdown',
+            'sql': 'sql',
+            'r': 'r',
+            'm': 'objectivec',
+            'mm': 'objectivec',
+            'vue': 'vue',
+            'svelte': 'svelte'
+        };
+        
+        const language = languageMap[extension] || extension || 'plain';
+        
+        // Create a temporary element to use Prism highlighting
+        let highlightedCode = '';
+        if (typeof Prism !== 'undefined') {
+            // Try to highlight with Prism
+            try {
+                // Check if language is available
+                if (Prism.languages[language]) {
+                    highlightedCode = Prism.highlight(code, Prism.languages[language], language);
+                    console.log('Highlighted with Prism, language:', language);
+                } else {
+                    // Try common fallbacks
+                    if (language === 'markup' && Prism.languages.markup) {
+                        highlightedCode = Prism.highlight(code, Prism.languages.markup, 'markup');
+                        console.log('Highlighted with markup fallback');
+                    } else if (language === 'javascript' && Prism.languages.javascript) {
+                        highlightedCode = Prism.highlight(code, Prism.languages.javascript, 'javascript');
+                        console.log('Highlighted with javascript fallback');
+                    } else if (language === 'css' && Prism.languages.css) {
+                        highlightedCode = Prism.highlight(code, Prism.languages.css, 'css');
+                        console.log('Highlighted with css fallback');
+                    } else {
+                        // Fallback: escape HTML
+                        console.warn('Language not found, using plain text. Language:', language, 'Available:', Object.keys(Prism.languages));
+                        highlightedCode = escapeHtml(code);
+                    }
+                }
+            } catch (e) {
+                console.warn('Prism highlighting failed:', e);
+                highlightedCode = escapeHtml(code);
+            }
+        } else {
+            // Prism not loaded, escape HTML
+            console.warn('Prism is not defined');
+            highlightedCode = escapeHtml(code);
+        }
+        
+        // Split code into lines first (before highlighting)
+        const codeLines = code.split('\n');
+        
+        // Highlight each line separately to preserve token structure
+        const highlightedLines = [];
+        for (let i = 0; i < codeLines.length; i++) {
+            const line = codeLines[i];
+            let highlightedLine = '';
+            
+            if (typeof Prism !== 'undefined' && Prism.languages[language]) {
+                try {
+                    highlightedLine = Prism.highlight(line, Prism.languages[language], language);
+                } catch (e) {
+                    highlightedLine = escapeHtml(line);
+                }
+            } else {
+                highlightedLine = escapeHtml(line);
+            }
+            
+            highlightedLines.push(highlightedLine);
+        }
+        
+        // Create Gist-style embed with header and line numbers
+        const langClass = language ? `language-${language}` : '';
+        let gistHtml = `<div class="gist-container"><div class="gist-header"><span class="gist-file-name">${escapeHtml(fileName)}</span></div><div class="gist-content"><table class="gist-table"><tbody>`;
+        
+        highlightedLines.forEach((line, index) => {
+            const lineNumber = index + 1;
+            // Line contains HTML from Prism highlighting
+            gistHtml += `<tr><td class="gist-line-number" data-line-number="${lineNumber}"></td><td class="gist-line-content ${langClass}" data-language="${language}">${line || ' '}</td></tr>`;
+        });
+        
+        gistHtml += `</tbody></table></div></div>`;
+        return gistHtml;
     } catch (error) {
         return `<pre class="code-embed-error">Error loading code from ${url}: ${error.message}</pre>`;
     }
@@ -186,6 +292,48 @@ function escapeHtml(text) {
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
+}
+
+function highlightCodeBlocks(container) {
+    if (typeof Prism === 'undefined') return;
+    
+    // Find all gist containers
+    const gistContainers = container.querySelectorAll('.gist-container');
+    
+    gistContainers.forEach(gistContainer => {
+        const codeCells = gistContainer.querySelectorAll('.gist-line-content');
+        if (codeCells.length === 0) return;
+        
+        // Get language from first cell
+        const firstCell = codeCells[0];
+        const language = firstCell.getAttribute('data-language') || 
+                       Array.from(firstCell.classList).find(cls => cls.startsWith('language-'))?.replace('language-', '');
+        
+        if (!language || !Prism.languages[language]) {
+            // Language not loaded yet, try again after a delay for autoloader
+            setTimeout(() => highlightCodeBlocks(container), 200);
+            return;
+        }
+        
+        // Reconstruct code from all cells
+        const codeLines = Array.from(codeCells).map(cell => cell.textContent);
+        const fullCode = codeLines.join('\n');
+        
+        // Highlight the full code
+        try {
+            const highlighted = Prism.highlight(fullCode, Prism.languages[language], language);
+            const highlightedLines = highlighted.split('\n');
+            
+            // Update each cell with highlighted version
+            codeCells.forEach((cell, index) => {
+                if (highlightedLines[index] !== undefined) {
+                    cell.innerHTML = highlightedLines[index] || ' ';
+                }
+            });
+        } catch (e) {
+            console.warn('Failed to highlight code:', e);
+        }
+    });
 }
 
 function extractSnippets(text) {
@@ -347,6 +495,10 @@ async function loadLearnings(fileName) {
             }
             
             contentDiv.innerHTML = htmlContent;
+            
+            // Highlight code blocks with Prism after insertion
+            highlightCodeBlocks(contentDiv);
+            
             contentCache.set(fileName, htmlContent);
             updateActiveButton(fileName);
             updateRoute(fileName);
@@ -442,6 +594,9 @@ async function loadLearnings(fileName) {
         }
 
         contentDiv.innerHTML = htmlContent;
+        
+        // Highlight code blocks with Prism after insertion
+        highlightCodeBlocks(contentDiv);
         
         // Cache the parsed content
         contentCache.set(fileName, htmlContent);

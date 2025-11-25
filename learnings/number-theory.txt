@@ -70,7 +70,7 @@ induction-solved-4.jpg
 𖦹 Any integer a can be written as:
     a = (divisor × quotient) + remainder
 • The remainder is always less than the divisor
-IMG_URL div_proof.jpg
+IMG_URL divalgoproof.jpg
 
 4. Meaning of modular form a ≡ b (mod m)
 𖦹 [yellow]a ≡ b (mod m) does not mean a = b[/yellow]
