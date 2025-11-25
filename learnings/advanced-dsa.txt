@@ -3347,3 +3347,212 @@ Step 2: Rotate R with P
 𖦹 Node R is closer to root; tree is flatter.
 TO LEARN: DELETION BY COPYING, MERGING AND POLISH AND REVERSE POLISH NOTATIONS
 --END--
+--BEGIN--25/11/2025--TREAPS--
+1. Treap
+IMG_URL treap.gif
+𖦹 A treap is a data structure that mixes a binary search tree idea (sorted by key) and a heap idea (ordered by priority).
+𖦹 Each node has a key for searching and a priority for balancing.
+𖦹 The tree stays balanced on average because priorities are random.
+• A treap follows two rules:
+  - Binary search tree rule: left child key < node key < right child key.
+  - Heap rule: parent priority is smaller than children.
+• Insert, delete, and search take O(log n) on average.
+• Insert first follows BST rule, then rotations fix the heap rule.
+• Random priorities keep the shape balanced without complex rules.
+
+2. How a treap works
+𖦹 Sorted by key decides left or right child.
+𖦹 Ordered by priority decides how high or low the node sits.
+𖦹 After inserting by key, rotations fix any heap-rule break.
+• Random priorities:
+  - Make the tree balanced on average.
+  - Avoid complex rules used in other balanced BSTs.
+
+3. Node information
+𖦹 Each node has (key, priority).
+𖦹 Smaller priority means the node should be higher in the tree.
+• Example keys:
+  - 42, 7, 55, 13, 90, 31
+• Example priorities:
+  - (42,80), (7,10), (55,60), (13,30), (90,90), (31,40)
+
+4. BST insertion step
+𖦹 Insert based on key as in a binary search tree.
+𖦹 Example order: 42 → 7 → 55 → 13 → 90 → 31
+𖦹 The BST shape forms by key only.
+
+5. Heap fixing step
+𖦹 Smaller priority means better position.
+𖦹 Each node rotates upward if its priority is smaller than the parent.
+𖦹 Final treap shape follows both BST and heap rules.
+• Example final shape:
+  - (7,10) → (13,30) → (31,40) → (42,80) → (55,60) → (90,90)
+• This forms a chain because keys and priorities increased in similar order by chance.
+
+6. Use of a treap
+𖦹 Gives all BST operations (search, insert, delete).
+𖦹 Maintains O(log n) expected time.
+𖦹 Simpler code compared to AVL or Red-Black trees.
+• It stays balanced automatically because priorities are random.
+  - Height stays close to log n.
+  - Makes operations fast.
+  - Long chains are rare on average.
+
+7. Main operations
+𖦹 Fast search
+• Works using keys like a normal BST.
+𖦹 Fast insert
+  - Random priority + rotations keep balance.
+𖦹 Fast delete
+  - Rotate the node down until it becomes a leaf, then remove.
+𖦹 Split and merge
+  - Split makes two treaps: keys < x, and keys ≥ x.
+  - Merge joins two treaps if all keys in the first are < all keys in the second.
+  - Both operations take O(log n).
+  - Other balanced trees cannot do this easily.
+
+8. What you can build with treaps
+𖦹 Ordered sets or maps
+• Similar to C++ set/map but simpler to code.
+𖦹 Range queries
+  - You can store subtree sum, max, count, lazy flags, etc.
+𖦹 Interval trees
+  - Useful for overlapping intervals, scheduling, compilers.
+𖦹 Rope structure
+  - Used in editors, versioning, undo/redo, and long strings.
+𖦹 Randomized balanced BST
+  - Common in competitive programming.
+𖦹 Implicit treap
+  - Index acts like the key.
+  - Helps with cutting arrays, reversing ranges, inserting in the middle, splitting strings, merging strings in O(log n).
+
+9. Implementation in C++
+[pink]#include[/pink] <bits/stdc++.h>
+[pink]using[/pink] [pink]namespace[/pink] std;
+
+[pink]struct[/pink] [blue]Treap[/blue] {
+    [pink]int[/pink] [yellow]key[/yellow], [yellow]priority[/yellow];
+    [blue]Treap[/blue] *[yellow]left[/yellow], *[yellow]right[/yellow];
+
+    [blue]Treap[/blue]([pink]int[/pink] [yellow]k[/yellow]) {
+        [yellow]key[/yellow] = [yellow]k[/yellow];
+        [yellow]priority[/yellow] = [green]rand[/green]();  [gray]// random priority[/gray]
+        [yellow]left[/yellow] = [yellow]right[/yellow] = [green]NULL[/green];
+    }
+};
+
+[gray]// Right rotation[/gray]
+[blue]Treap[/blue]* rotateRight([blue]Treap[/blue]* [yellow]y[/yellow]) {
+    [blue]Treap[/blue]* [yellow]x[/yellow] = [yellow]y[/yellow]->left;
+    [blue]Treap[/blue]* [yellow]T[/yellow] = [yellow]x[/yellow]->right;
+
+    [yellow]x[/yellow]->right = [yellow]y[/yellow];
+    [yellow]y[/yellow]->left = [yellow]T[/yellow];
+    [pink]return[/pink] [yellow]x[/yellow];
+}
+
+[gray]// Left rotation[/gray]
+[blue]Treap[/blue]* rotateLeft([blue]Treap[/blue]* [yellow]x[/yellow]) {
+    [blue]Treap[/blue]* [yellow]y[/yellow] = [yellow]x[/yellow]->right;
+    [blue]Treap[/blue]* [yellow]T[/yellow] = [yellow]y[/yellow]->left;
+
+    [yellow]y[/yellow]->left = [yellow]x[/yellow];
+    [yellow]x[/yellow]->right = [yellow]T[/yellow];
+    [pink]return[/pink] [yellow]y[/yellow];
+}
+
+[gray]// Insert key into treap[/gray]
+[blue]Treap[/blue]* insert([blue]Treap[/blue]* [yellow]root[/yellow], [pink]int[/pink] [yellow]key[/yellow]) {
+    [pink]if[/pink] (![yellow]root[/yellow]) [pink]return[/pink] [pink]new[/pink] [blue]Treap[/blue]([yellow]key[/yellow]);
+
+    [pink]if[/pink] ([yellow]key[/yellow] < [yellow]root[/yellow]->key) {
+        [yellow]root[/yellow]->left = insert([yellow]root[/yellow]->left, [yellow]key[/yellow]);
+
+        [pink]if[/pink] ([yellow]root[/yellow]->left->priority > [yellow]root[/yellow]->priority)
+            [yellow]root[/yellow] = rotateRight([yellow]root[/yellow]);
+
+    } [pink]else[/pink] {
+        [yellow]root[/yellow]->right = insert([yellow]root[/yellow]->right, [yellow]key[/yellow]);
+
+        [pink]if[/pink] ([yellow]root[/yellow]->right->priority > [yellow]root[/yellow]->priority)
+            [yellow]root[/yellow] = rotateLeft([yellow]root[/yellow]);
+    }
+
+    [pink]return[/pink] [yellow]root[/yellow];
+}
+
+[gray]// Delete a key from treap[/gray]
+[blue]Treap[/blue]* remove([blue]Treap[/blue]* [yellow]root[/yellow], [pink]int[/pink] [yellow]key[/yellow]) {
+    [pink]if[/pink] (![yellow]root[/yellow]) [pink]return[/pink] [yellow]root[/yellow];
+
+    [pink]if[/pink] ([yellow]key[/yellow] < [yellow]root[/yellow]->key) {
+        [yellow]root[/yellow]->left = remove([yellow]root[/yellow]->left, [yellow]key[/yellow]);
+
+    } [pink]else if[/pink] ([yellow]key[/yellow] > [yellow]root[/yellow]->key) {
+        [yellow]root[/yellow]->right = remove([yellow]root[/yellow]->right, [yellow]key[/yellow]);
+
+    } [pink]else[/pink] { 
+        [pink]if[/pink] (![yellow]root[/yellow]->left) {
+            [blue]Treap[/blue]* [yellow]r[/yellow] = [yellow]root[/yellow]->right;
+            [pink]delete[/pink] [yellow]root[/yellow];
+            [pink]return[/pink] [yellow]r[/yellow];
+
+        } [pink]else if[/pink] (![yellow]root[/yellow]->right) {
+            [blue]Treap[/blue]* [yellow]l[/yellow] = [yellow]root[/yellow]->left;
+            [pink]delete[/pink] [yellow]root[/yellow];
+            [pink]return[/pink] [yellow]l[/yellow];
+
+        } [pink]else[/pink] {
+            [pink]if[/pink] ([yellow]root[/yellow]->left->priority > [yellow]root[/yellow]->right->priority) {
+                [yellow]root[/yellow] = rotateRight([yellow]root[/yellow]);
+                [yellow]root[/yellow]->right = remove([yellow]root[/yellow]->right, [yellow]key[/yellow]);
+            } [pink]else[/pink] {
+                [yellow]root[/yellow] = rotateLeft([yellow]root[/yellow]);
+                [yellow]root[/yellow]->left = remove([yellow]root[/yellow]->left, [yellow]key[/yellow]);
+            }
+        }
+    }
+    [pink]return[/pink] [yellow]root[/yellow];
+}
+
+[gray]// Search a key[/gray]
+[pink]bool[/pink] search([blue]Treap[/blue]* [yellow]root[/yellow], [pink]int[/pink] [yellow]key[/yellow]) {
+    [pink]if[/pink] (![yellow]root[/yellow]) [pink]return false[/pink];
+    [pink]if[/pink] ([yellow]root[/yellow]->key == [yellow]key[/yellow]) [pink]return true[/pink];
+    [pink]if[/pink] ([yellow]key[/yellow] < [yellow]root[/yellow]->key) [pink]return[/pink] search([yellow]root[/yellow]->left, [yellow]key[/yellow]);
+    [pink]return[/pink] search([yellow]root[/yellow]->right, [yellow]key[/yellow]);
+}
+
+[gray]// Inorder traversal[/gray]
+[pink]void[/pink] inorder([blue]Treap[/blue]* [yellow]root[/yellow]) {
+    [pink]if[/pink] (![yellow]root[/yellow]) [pink]return[/pink];
+    inorder([yellow]root[/yellow]->left);
+    [green]cout[/green] << "(" << [yellow]root[/yellow]->key << ", p=" << [yellow]root[/yellow]->priority << ") ";
+    inorder([yellow]root[/yellow]->right);
+}
+
+[pink]int[/pink] main() {
+    [green]srand[/green]([green]time[/green]([green]NULL[/green]));
+
+    [blue]Treap[/blue]* [yellow]root[/yellow] = [green]NULL[/green];
+
+    [yellow]root[/yellow] = insert([yellow]root[/yellow], 5);
+    [yellow]root[/yellow] = insert([yellow]root[/yellow], 2);
+    [yellow]root[/yellow] = insert([yellow]root[/yellow], 8);
+    [yellow]root[/yellow] = insert([yellow]root[/yellow], 1);
+    [yellow]root[/yellow] = insert([yellow]root[/yellow], 3);
+
+    [green]cout[/green] << "Treap inorder: ";
+    inorder([yellow]root[/yellow]);
+    [green]cout[/green] << "\n";
+
+    [green]cout[/green] << "Search 3: " << search([yellow]root[/yellow], 3) << "\n";
+    [green]cout[/green] << "Search 10: " << search([yellow]root[/yellow], 10) << "\n";
+
+    [yellow]root[/yellow] = remove([yellow]root[/yellow], 2);
+
+    [green]cout[/green] << "After deleting 2: ";
+    inorder([yellow]root[/yellow]);
+    [green]cout[/green] << "\n";
+}
+--END--
