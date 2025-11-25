@@ -17,7 +17,7 @@ IMG_URL archimedean_proof.jpg
 --END--
 --BEGIN--24/11/2025--MATHEMATICAL INDUCTION--
 1. Mathematical induction
-𖦹 [red]Mathematical induction is a way to prove statements for all positive integers[/red]
+𖦹 [yellow]Mathematical induction is a way to prove statements for all positive integers[/yellow]
 𖦹 It is like a row of dominoes
 • If the first domino falls, and every domino knocks down the next one
 - Then all dominoes will eventually fall

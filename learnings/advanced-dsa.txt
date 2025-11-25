@@ -325,93 +325,12 @@ IMG_URL sll.png
 4. Singly Linked List (SLL) implementation
 𖦹 Demonstrates creating and linking nodes in a singly linked list.
 𖦹 Code example:
-[pink]#include[/pink] <[green]iostream[/green]>
-[pink]using[/pink] [pink]namespace[/pink] [green]std[/green];
-
-[pink]class[/pink] [yellow]SLLNode[/yellow] {
-    [pink]public[/pink]:
-        [blue]int[/blue] [yellow]data[/yellow];
-        [yellow]SLLNode*[/yellow] [yellow]next[/yellow];
-        [yellow]SLLNode[/yellow]([blue]int[/blue] [yellow]data[/yellow], [yellow]SLLNode*[/yellow] [yellow]next[/yellow]=[green]nullptr[/green]){
-            [pink]this[/pink]->[yellow]data[/yellow] = [yellow]data[/yellow];
-            [pink]this[/pink]->[yellow]next[/yellow] = [yellow]next[/yellow];
-        }
-};
-
-[pink]int[/pink] [pink]main[/pink]() {
-     ;
-    [yellow]SLLNode*[/yellow] [yellow]firstNode[/yellow] = [pink]new[/pink] [yellow]SLLNode[/yellow](2, [yellow]secondNode[/yellow]);
-    [green]cout[/green]<<[yellow]firstNode[/yellow]->[yellow]data[/yellow]<<"\n";
-    [green]cout[/green]<<[yellow]firstNode[/yellow]->[yellow]next[/yellow]->[yellow]data[/yellow];
-    [pink]delete[/pink] [yellow]secondNode[/yellow];
-    [pink]delete[/pink] [yellow]firstNode[/yellow];
-    [pink]return[/pink] 0;
-}
-𖦹 Creates two nodes with data 2 and 3.
-𖦹 Links first node to second node.
-𖦹 Prints data of first and second node.
-𖦹 Frees memory using delete to avoid memory leaks.
+--EMBED-GIT--
+https://github.com/arihara-sudhan/dsa/blob/main/data-structures/linked-list/sll.cpp
 
 5. Adding a Node to Singly Linked List
 𖦹 A singly linked list has a head pointer pointing to the first node.
 𖦹 Each node stores data and a pointer to the next node.
-𖦹 Example C++ implementation:
-
-[pink]#include[/pink] [yellow]<iostream>[/yellow]
-[yellow]using namespace std;[/yellow]
-
-[pink]class[/pink] SLLNode {
-    [pink]public[/pink]:
-        [pink]int[/pink] data;
-        SLLNode* next;
-        SLLNode([pink]int[/pink] data, SLLNode* next = [green]nullptr[/green]) {
-            this->data = data;
-            this->next = next;
-        }
-};
-
-[pink]class[/pink] SinglyLinkedList {
-    [pink]private[/pink]:
-        SLLNode* head;
-    [pink]public[/pink]:
-        SinglyLinkedList() {
-            head = [green]nullptr[/green];
-        }
-        void printAll() {
-            SLLNode* temp = head;
-            while(temp != [green]nullptr[/green]) {
-                [green]cout[/green] << temp->data << "->";
-                temp = temp->next;
-            }
-            [green]cout[/green] << "END\n";
-        }
-        void addNode([pink]int[/pink] value) {
-            SLLNode* newNode = [pink]new[/pink] SLLNode(value);
-            if(head == [green]nullptr[/green]) {
-                head = newNode;
-            } else {
-                SLLNode* temp = head;
-                while(temp->next != [green]nullptr[/green]) {
-                    temp = temp->next;
-                }
-                temp->next = newNode;
-            }
-        }
-};
-
-[pink]int[/pink] [pink]main[/pink]() {
-    SinglyLinkedList sll;
-    sll.addNode(1);
-    sll.addNode(2);
-    sll.addNode(3);
-    sll.printAll();
-    [pink]return[/pink] 0;
-}
-
-𖦹 [pink]addNode[/pink] creates a new node with the given value.
-𖦹 If the list is empty, the new node becomes the head.
-𖦹 If not empty, traverse to the last node and link the new node.
-𖦹 [pink]printAll[/pink] traverses the list and prints all node data followed by "END".
 
 6. Deleting a Node from Singly Linked List
 𖦹 A singly linked list has a head pointer pointing to the first node.
