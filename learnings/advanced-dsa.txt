@@ -3556,3 +3556,243 @@ IMG_URL treap.gif
     [green]cout[/green] << "\n";
 }
 --END--
+--BEGIN--25/11/2025--MULTIWAY TREES--
+1. Multiway tree
+IMG_URL mway-tree.png
+𖦹 A multiway tree is a tree where one node can have many children.
+𖦹 If a node can have m children, it is called an m-way tree.
+• Example:
+  - A 4-way tree means each node can have up to 4 children.
+- A multiway tree becomes shorter because more keys fit in one node.
+
+2. Why use multiway trees
+𖦹 Binary trees may become very tall when unbalanced.
+𖦹 Multiway trees are shorter because many keys are stored in one node.
+• Shorter height means faster search, which is important for disks and large databases.
+
+3. m-way search tree
+𖦹 It is a multiway tree with ordering rules for fast search.
+𖦹 Each node stores m – 1 keys and m children.
+- Searching works like a BST but with more children.
+
+4. Rules of an m-way search tree
+𖦹 Rule 1: Each node has m children and m – 1 keys.
+• Example for m = 4:
+  - Node has 3 keys and 4 children.
+𖦹 Rule 2: Keys in a node are sorted in ascending order.
+• Example: [30, 50, 80]
+𖦹 Rule 3: Keys in the first i children are smaller than the i-th key.
+• Example:
+  - Keys: 30  50  80
+  - Children: C1 C2 C3 C4
+  - All keys in C1 < 30
+  - All keys in C2 are between 30 and 50
+  - All keys in C3 are between 50 and 80
+𖦹 Rule 4: Keys in the last m – i children are larger than the i-th key.
+• Example:
+  - All keys in C4 > 80
+
+5. Why we need m-way search trees
+𖦹 Binary search trees often become unbalanced.
+𖦹 If unbalanced, some elements take many steps to find.
+• This makes the height large and slows search on disk.
+𖦹 Better balanced multiway trees fix this for large data.
+• Examples:
+  - B-trees
+  - B+-trees
+  - 2-3 trees
+  - 2-3-4 trees
+--END--
+--BEGIN--25/11/2025--WHY B TREES?--
+1. How disks work
+IMG_URL seek-rotation-transfer.png
+𖦹 Disks are divided into blocks for reading and writing data.
+𖦹 When accessing data, the whole block is read into memory.
+𖦹 When storing data, the entire block is written to disk.
+
+2. Disk access is slow
+𖦹 Disk access is slower than memory because disks have mechanical parts.
+𖦹 Total access time = seek time + rotational delay + transfer time.
+• Seek time: moving disk head to correct track.
+• Rotational delay (latency): waiting for correct block to spin under head.
+• Transfer time: moving data to memory.
+• Example:
+  - Seek time = 40 ms
+  - Latency = 10 ms
+  - Transfer 5KB = 5 ms
+  - Total access time = 55 ms
+
+3. Memory vs disk
+𖦹 CPU works in microseconds or nanoseconds, much faster than disk.
+𖦹 Disk works in milliseconds.
+𖦹 Accessing data from disk is 1,000 to 1,000,000 times slower than memory operations.
+
+4. Problem with binary search trees on disk
+𖦹 Each BST node may be in a different disk block.
+𖦹 Searching, inserting, or deleting may need many block reads.
+𖦹 Result: BSTs fast in memory become slow on disk.
+
+5. Accessing large chunks is faster
+𖦹 Reading more data at once reduces disk access overhead.
+• Example:
+  - 10KB at once → 40 + 10 + 10 = 60 ms
+  - Two 5KB pieces → 2 × (40 + 10 + 5) = 110 ms
+𖦹 Key idea: Minimize the number of disk accesses in data structures.
+𖦹 B-trees and multiway trees store many keys in one node/block.
+𖦹 This reduces block reads and improves performance on large datasets.
+--END--
+--BEGIN--25/11/2025--WHY B TREES?--
+1. B-tree = Multiway search tree
+𖦹 A B-tree is a multiway tree where each node can have more than 2 children.
+𖦹 In a B-tree of order m:
+• Each node can have at most m children.
+• Each node can have at most m-1 keys.
+- Keys divide the children. Example: a node with 3 keys can have 4 children.
+
+2. What’s in a node
+𖦹 Each node contains:
+• Array of keys → up to m-1 keys
+• Array of children references → up to m children
+• Leaf flag → true if node is a leaf
+• Key count → number of keys actually present
+𖦹 Example for order m = 4:
+[pink]Node[/pink]:
+  keys = [yellow]10, 20, 30[/yellow]      // 3 keys
+  children = [yellow]C0, C1, C2, C3[/yellow]  // 4 children
+  leaf = false
+  keyCount = 3
+• C0 contains keys < 10
+• C1 contains keys 10–19
+• C2 contains keys 20–29
+• C3 contains keys ≥ 30
+
+3. Root node
+𖦹 The root can have fewer than m-1 keys (even 1 key if not a leaf).
+𖦹 Every node except root must have at least ceil(m/2) – 1 keys.
+- Root may have fewer keys than other nodes.
+
+4. Leaf vs internal nodes
+𖦹 Leaf node: no children, only keys.
+𖦹 Internal node: has children references + keys.
+𖦹 Leaf flag helps the algorithm know whether to stop or go deeper.
+
+5. Visualization (order 4, root example)
+𖦹 Example tree:
+          [20]
+        /      \
+   [5, 10]   [25, 30]
+𖦹 Root has 1 key → 2 children
+𖦹 Left child has 2 keys → 3 children (if not leaf)
+𖦹 Right child has 2 keys → 3 children
+𖦹 Keys in children are less than, between, or greater than parent keys.
+
+6. In Essence
+𖦹 Each node can hold multiple keys.
+𖦹 Keys divide the range of children.
+𖦹 Root can have fewer keys than other nodes.
+𖦹 Leaf flag + children pointers help traverse tree efficiently.
+
+6. Search in a B-tree
+𖦹 Start at root and go down the tree until key is found or leaf reached.
+𖦹 Look at keys in the node (sorted).
+• If key matches → found
+• If key < first key → go to first child
+• If key between keys → go to corresponding child
+• If key > last key → go to last child
+𖦹 Repeat until key is found or leaf reached.
+𖦹 Example (order 4):
+         [20]
+       /     \
+   [5, 10]   [25, 30]
+• Search 10 → 10 < 20 → go left → [5, 10] → 10 found
+𖦹 Cost proportional to height → few disk reads if node size matches block size.
+
+7. Insertion in a B-tree
+𖦹 Always insert in a leaf. If leaf is full, split and push middle key to parent.
+𖦹 Steps:
+• Find the leaf where new key should go.
+• Insert key in leaf in sorted order.
+• If leaf has more than m-1 keys → split node into two.
+• Middle key moves up to parent.
+• If parent full → repeat split up to root.
+• If root splits → create new root → height increases by 1.
+𖦹 Example (order 4):
+• Insert 15 into leaf [5,10,12] → leaf full → split → [5,10] and [15,12], middle 12 goes up.
+
+8. Deletion in a B-tree
+𖦹 Remove key. If node less than half full → borrow from sibling or merge nodes.
+𖦹 Steps:
+• Find key to delete.
+• If key in leaf:
+  - Delete it.
+  - If node still has enough keys → done.
+  - If node < minimum keys → borrow from sibling or merge with sibling and move separator from parent.
+• If key in internal node:
+  - Replace with predecessor (max in left subtree) or successor (min in right subtree).
+  - Delete that key from leaf using leaf deletion rules.
+𖦹 Example:
+• Delete 10 from leaf [5,10,12] → node still enough → [5,12]
+• If underflow occurs → borrow or merge happens.
+
+9. NOTES
+𖦹 Search: follow keys → O(log n)
+𖦹 Insert: insert in leaf → split if needed → propagate up → keeps tree balanced
+𖦹 Delete: remove from leaf or internal node → borrow/merge → tree stays balanced
+--END--
+--BEGIN--25/11/2025--B+ TREES--
+IMG_URL bplustree.png
+1. Structure of a B+-tree
+𖦹 A B+-tree is a multiway search tree like a B-tree.
+𖦹 Internal nodes (non-leaves) store only keys, no actual data.
+• They serve as an index to guide searches.
+𖦹 Leaf nodes store actual keys and references to records.
+• Leaves are linked sequentially → makes range queries or ordered scanning fast.
+𖦹 Visual example (order 4):
+          [20 | 40]
+         /    |    \
+[5,10]   [25,30]   [45,50]
+• Internal node [20|40] → guides search
+• Leaves [5,10], [25,30], [45,50] → store actual data
+• Leaves linked: [5,10] → [25,30] → [45,50]
+𖦹 Difference from B-tree: data only in leaves.
+
+2. Searching in a B+-tree
+𖦹 Start at root, follow keys to correct child.
+𖦹 Repeat until leaf reached.
+𖦹 Look in leaf for the key.
+𖦹 Benefit: searching is fast and predictable since data only at leaves.
+
+3. Insertion in a B+-tree
+𖦹 Step 1: Find the leaf where key should go.
+𖦹 Step 2:
+• If leaf has room → insert in sorted order.
+• If leaf full → split leaf:
+  - Create new leaf
+  - Divide keys evenly between old and new leaf
+  - Copy first key of new leaf to parent (separator)
+• If parent full → split parent recursively
+𖦹 Important: Only leaves hold data; internal nodes are indexes.
+
+4. Deletion in a B+-tree
+𖦹 Step 1: Find the leaf containing key.
+𖦹 Step 2: Remove key from leaf.
+• If leaf ≥ half full → done
+• If leaf underflows → borrow from sibling or merge with sibling
+• Update parent separator keys if needed
+𖦹 Step 3: Fix internal nodes recursively if affected (like B-tree)
+𖦹 Example:
+• Leaves: [2,6] [8,10]
+• Delete 2 → underflow → merge → [6,8,10]
+• Remove separator in parent → fix parent keys
+
+5. Why B+-trees are useful
+𖦹 All data in leaves → sequential scan fast.
+𖦹 Internal nodes are indexes → fewer disk accesses for search.
+𖦹 Leaves linked → easy iteration and range queries.
+𖦹 Better for databases and file systems than B-trees.
+𖦹 Comparison:
+• Data storage: B-tree → any node, B+-tree → leaves only
+• Internal nodes: B-tree → keys + data references, B+-tree → keys only
+• Leaves: B-tree → not linked, B+-tree → linked sequentially
+• Range scan: B-tree → slower, B+-tree → fast
+--END--
