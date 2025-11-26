@@ -2444,28 +2444,8 @@ print()
 • INORDER: 10 → 20 → 30 → 40 → 50 → 60 → 65 → 70 → 80 → 90
 • POSTORDER: 10 → 20 → 40 → 30 → 65 → 60 → 80 → 90 → 70 → 50
 • LEVELORDER: 50 → 30 → 70 → 20 → 40 → 60 → 80 → 10 → 65 → 90
-
-𖦹 Pre Order (Root → Left → Right)
-[pink]void[/pink] [yellow]preorder[/yellow]([blue]BSTNode*[/blue] [yellow]node[/yellow]){
-    [pink]if[/pink]([yellow]node[/yellow] == [green]nullptr[/green]) [pink]return[/pink];        // base case
-    [green]cout[/green] << [yellow]node[/yellow]->data << " → ";                           // visit root
-    [yellow]preorder[/yellow]([yellow]node[/yellow]->left);                                // go left
-    [yellow]preorder[/yellow]([yellow]node[/yellow]->right);                               // go right
-}
-𖦹 In Order (Left → Root → Right)
-[pink]void[/pink] [yellow]inorder[/yellow]([blue]BSTNode*[/blue] [yellow]node[/yellow]){
-    [pink]if[/pink]([yellow]node[/yellow] == [green]nullptr[/green]) [pink]return[/pink];        // base case
-    [yellow]inorder[/yellow]([yellow]node[/yellow]->left);                                     // go left
-    [green]cout[/green] << [yellow]node[/yellow]->data << " → ";                                // visit root
-    [yellow]inorder[/yellow]([yellow]node[/yellow]->right);                                    // go right
-}
-𖦹 Post Order (Left → Right → Root)
-[pink]void[/pink] [yellow]postorder[/yellow]([blue]BSTNode*[/blue] [yellow]node[/yellow]){
-    [pink]if[/pink]([yellow]node[/yellow] == [green]nullptr[/green]) [pink]return[/pink];        // base case
-    [yellow]postorder[/yellow]([yellow]node[/yellow]->left);                                    // go left
-    [yellow]postorder[/yellow]([yellow]node[/yellow]->right);                                   // go right
-    [green]cout[/green] << [yellow]node[/yellow]->data << " → ";                                // visit root
-}
+--EMBED-GIT--
+https://github.com/arihara-sudhan/dsa/blob/main/data-structures/trees/bst.cpp
 𖦹 Level Order
 [green]#include[/green] <queue>
 [pink]void[/pink] [yellow]levelOrder[/yellow]([blue]BSTNode*[/blue] [yellow]root[/yellow]){
@@ -2525,7 +2505,6 @@ ITERATIVE INORDER AND POSTORDER ROUTINES:
         }
     }
 }
-
 --END--
 --BEGIN--24/11/2025--BINARY SEARCH TREE--
 1. Binary Search Tree (BST)
