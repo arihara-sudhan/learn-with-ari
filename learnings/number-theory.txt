@@ -84,5 +84,119 @@ IMG_URL divalgoproof.jpg
 𖦹 17 ≡ 2 (mod 5)
 • 17 = 5 × 3 + 2, so remainder is 2
 --END--
---BEGIN--25/11/2025--EUCLIDEAN ALGORITHM--
+--BEGIN--26/11/2025--FUNDAMENTAL THEOREM OF ARITHMETIC--
+1. Fundamental Theorem of Arithmetic
+𖦹 Every number greater than 1 can be written as a product of prime numbers.
+𖦹 The way to write it as primes is unique, except the order can change.
+• Example:
+- 60 = 2 × 2 × 3 × 5 = 2² ⋅ 3 ⋅ 5
+- This way of writing 60 with primes cannot be done differently (order does not matter).
+IMG_URL ftoa_proof.jpg
+2. Problem on Prime Factorization
+𖦹 Find the prime factorization of 84.
+• Step 1: Start dividing by the smallest prime number 2.
+- 84 ÷ 2 = 42
+• Step 2: Divide 42 by 2 again.
+- 42 ÷ 2 = 21
+• Step 3: Check next prime number 3.
+- 21 ÷ 3 = 7
+• Step 4: 7 is prime, stop here.
+𖦹 Solution: 84 = 2 × 2 × 3 × 7 = 2² ⋅ 3 ⋅ 7
+--END--
+--BEGIN--26/11/2025--EUCLIDEAN ALGORITHM FOR GCD/HCF--
+𖦹 Greatest Common Divisor (GCD)
+- The largest number that divides two numbers without leaving remainder.
+- Example: GCD of 12 and 18 is 6.
+
+𖦹 Euclidean Algorithm to find GCD
+• Step 1: Divide the larger number by the smaller number.
+• Step 2: Take the remainder.
+• Step 3: Replace the larger number with the smaller number and the smaller with the remainder.
+• Step 4: Repeat until remainder is 0.
+- The last non-zero remainder is the GCD.
+• Example: Find GCD of 48 and 18
+- 48 ÷ 18 = 2 remainder 12
+- 18 ÷ 12 = 1 remainder 6
+- 12 ÷ 6 = 2 remainder 0
+𖦹 GCD = 6
+--END--
+--BEGIN--26/11/2025--BASIC PROPERTIES OF CONGRUENCES--
+1. Congruence and Examples
+𖦹 Two numbers a and b are congruent modulo n if n divides (a − b).  
+- Symbolically: a ≡ b (mod n)  
+𖦹 If n does not divide (a − b), a is incongruent to b modulo n.  
+- Symbolically: a ≢ b (mod n)
+𖦹 Examples with n = 7:
+- 3 ≡ 24 (mod 7) because 24 − 3 = 21, and 21 is divisible by 7.  
+- 25 ≢ 12 (mod 7) because 25 − 12 = 13, and 13 is not divisible by 7.
+𖦹 Special cases:
+- Any two integers are congruent modulo 1.  
+- Two integers are congruent modulo 2 if both are even or both are odd.  
+- Usually, we work with n > 1.
+
+2. Complete Set of Residues
+𖦹 A complete set of residues modulo n is a set of n numbers.  
+- When each number is divided by n, the remainders are 0, 1, 2, ..., n−1 exactly once.
+𖦹 Example modulo 7:
+- Set: {−12, −4, 11, 13, 22, 82, 91}
+- Find remainders when divided by 7:
+  −12 mod 7 = 2  
+  −4 mod 7 = 3  
+  11 mod 7 = 4  
+  13 mod 7 = 6  
+  22 mod 7 = 1  
+  82 mod 7 = 5  
+  91 mod 7 = 0  
+- Rearranged remainders: 0, 1, 2, 3, 4, 5, 6
+𖦹 Important rule: No two numbers in a complete set can have the same remainder modulo n.
+
+3. Division and Remainder
+𖦹 When a number a is divided by n, it can be written as:  
+- a = q ⋅ n + r  
+• q = quotient (how many times n fits completely into a)  
+• r = remainder (what is left over), 0 ≤ r < n
+𖦹 Example: Divide 17 by 5  
+- 17 = 3 ⋅ 5 + 2  
+- Quotient q = 3 → 5 fits 3 times in 17  
+- Remainder r = 2 → 2 is left over
+𖦹 Relation to congruence
+- The remainder r is the least nonnegative residue of a modulo n.  
+- Example: 17 ≡ 2 (mod 5) → remainder is 2  
+𖦹 General rule
+- Every number a has exactly one remainder 0 ≤ r < n when divided by n.  
+- If remainder is 0, a ≡ 0 (mod n), meaning a is exactly divisible by n.  
+- Example: 20 ÷ 5 → remainder 0 → 20 ≡ 0 (mod 5)
+
+4. Congruence by Remainder
+𖦹 Two numbers a and b are congruent modulo n if they leave the same remainder when divided by n.  
+- Symbolically: a ≡ b (mod n)  
+𖦹 a≡b (mod n)⟺remainder of a divided by n=remainder of b divided by n
+
+5. Properties of Congruence
+𖦹 Let n > 1 and a, b, c, d be integers.
+(a) Reflexive property
+𖦹 a ≡ a (mod n)  
+    Any number is congruent to itself.  
+    Reason: a − a = 0, divisible by n.
+(b) Symmetric property
+𖦹 If a ≡ b (mod n), then b ≡ a (mod n)  
+    Reason: If a − b = k⋅n, then b − a = −k⋅n, still divisible by n.
+(c) Transitive property
+𖦹 If a ≡ b (mod n) and b ≡ c (mod n), then a ≡ c (mod n)  
+    Reason: a − b = h⋅n, b − c = k⋅n → a − c = (h + k)⋅n
+(d) Addition and multiplication
+𖦹 If a ≡ b (mod n) and c ≡ d (mod n):  
+    Addition: a + c ≡ b + d (mod n)  
+    Multiplication: a ⋅ c ≡ b ⋅ d (mod n)  
+    Reason: a − b = k₁⋅n, c − d = k₂⋅n → (a+c)−(b+d)=(k₁+k₂)⋅n; multiplication gives extra terms divisible by n.
+(e) Special case of addition and multiplication
+𖦹 If a ≡ b (mod n), then for any c:  
+    a + c ≡ b + c (mod n)  
+    a ⋅ c ≡ b ⋅ c (mod n)
+(f) Powers
+𖦹 If a ≡ b (mod n), then for any positive integer k:  
+    a^k ≡ b^k (mod n)  
+    Reason: Use induction on k  
+    Base: k=1 → true  
+    Step: Assume true for k → a^(k+1) = a⋅a^k ≡ b⋅b^k = b^(k+1) (mod n)
 --END--
