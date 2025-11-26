@@ -3666,9 +3666,11 @@ IMG_URL bplustree.png
 𖦹 Leaf nodes store actual keys and references to records.
 • Leaves are linked sequentially → makes range queries or ordered scanning fast.
 𖦹 Visual example (order 4):
+
           [20 | 40]
          /    |    \
-[5,10]   [25,30]   [45,50]
+    [5,10]  [25,30]   [45,50]
+
 • Internal node [20|40] → guides search
 • Leaves [5,10], [25,30], [45,50] → store actual data
 • Leaves linked: [5,10] → [25,30] → [45,50]
@@ -3713,4 +3715,281 @@ IMG_URL bplustree.png
 • Internal nodes: B-tree → keys + data references, B+-tree → keys only
 • Leaves: B-tree → not linked, B+-tree → linked sequentially
 • Range scan: B-tree → slower, B+-tree → fast
+--END--
+--BEGIN--25/11/2025--B* TREES--
+1. B*-tree
+𖦹 A B*-tree is a better form of a normal B-tree.
+𖦹 The idea is to use node space well so we do not create many nodes.
+𖦹 Fewer nodes are good because each node is on disk, and disk reading is slow.
+𖦹 To reduce nodes, each node should hold more keys.
+
+2. Need for fewer nodes
+𖦹 Each B-tree node is stored in secondary memory.
+𖦹 Accessing secondary memory is slow.
+𖦹 So we want nodes to be more full, which reduces the number of nodes.
+
+3. Difference between B-tree and B*-tree
+𖦹 Normal B-tree: Every non-root node must be at least half full.
+𖦹 B*-tree: Every non-root node must be at least two-thirds full.
+𖦹 This means B*-tree nodes hold more keys on average.
+𖦹 So the number of created nodes becomes less.
+
+4. Example of minimum keys
+𖦹 If order m = 9:
+• Normal B-tree non-root node minimum keys = 4
+• B*-tree non-root node minimum keys = 6
+
+5. Insertion in a B*-tree
+𖦹 When inserting, if a node is full, try redistribution first.
+• Instead of splitting at once, borrow or share keys with sibling.
+
+6. Redistribution example
+𖦹 Suppose you insert 6 into a left node that is full.
+𖦹 Check the right sibling:
+• If sibling has space, take keys from both nodes, sort them, divide evenly.
+• Push the middle key to the parent.
+𖦹 This fixes overflow without splitting.
+
+7. Three-way split
+𖦹 If both the node and sibling are full:
+• Combine node keys, sibling keys, and parent separator key.
+• Sort them.
+• Split them into 3 nodes.
+• Insert 2 separator keys into the parent.
+𖦹 This keeps all new nodes at least two-thirds full.
+𖦹 This reduces splits and improves disk usage.
+
+8. Fill factor
+𖦹 B*-tree average node fullness is about 81%.
+𖦹 Some systems allow different fill levels.
+• Example: 75% full is called a B**-tree.
+𖦹 General form: A Bⁿ-tree uses fill rule n / (n + 1).
+--END--
+--BEGIN--26/11/2025--BIT TREES--
+1. Bit-tree
+𖦹 A Bit-tree is like a B⁺-tree but compares keys more deeply.
+𖦹 B⁺-trees compare full keys or prefixes, but Bit-trees compare the exact bit where two keys differ.
+𖦹 Instead of comparing full values like K or N, it compares bits.
+
+2. D-bit (Distinction Bit)
+𖦹 A D-bit shows the first bit position where two keys differ.
+• Example: ASCII of K = 01001011, ASCII of N = 01001110
+• The first difference is at bit position 5
+• So D(K, N) = 5
+𖦹 Bit-trees store these D-bits at the leaves.
+
+3. Data storage in Bit-trees
+𖦹 Leaves do not store keys directly.
+𖦹 Each leaf stores:
+• Keys in sorted order in a connected data file
+• D-bit between each pair of neighbor keys
+𖦹 This reduces space and speeds up searching.
+
+4. Example leaf structure
+𖦹 Sorted keys: K, N, O, R, V
+• K = 01001011
+• N = 01001110
+• O = 01001111
+• R = 01010010
+• V = 01010110
+𖦹 D-bits:
+• K → N = 5
+• N → O = 7
+• O → R = 3
+• R → V = 5
+
+5. Searching in a Bit-tree
+𖦹 Searching uses bits of the given key plus the leaf’s D-bits.
+𖦹 Steps:
+• Start with record R₀.
+• For each D-bit:
+  - Check that bit in the search key.
+  - If the bit is 1, move to that record.
+  - If the bit is 0, skip to the next smaller D-bit.
+• After the loop, you reach some record R.
+• Finally compare R’s key with the search key.
+𖦹 If equal → found, else → not found.
+
+6. Search example for key “V”
+𖦹 V = 01010110
+𖦹 Leaf D-bits: 5, 7, 3, 5
+• D₁ = 5 → V bit 5 = 1 → pick R₁
+• D₂ = 7 → V bit 7 = 0 → skip until smaller D-bit
+• D₃ = 3 → V bit 3 = 1 → pick R₃
+• D₄ = 5 → V bit 5 = 1 → pick R₅
+𖦹 End reached → result is R₅ → correct record for V.
+
+7. If the key is not present
+𖦹 Example: S = 01010011
+𖦹 The D-bit steps may land on some record like R₃ even if S is absent.
+𖦹 Final check:
+• If record key = S → found
+• Else → not found
+𖦹 This avoids wrong answers.
+--END--
+--BEGIN--26/11/2025--R TREES--
+1. R-trees
+𖦹 R-trees store spatial data such as maps, buildings, roads, CAD models, and VLSI designs.
+𖦹 They help answer questions like “find all buildings in this area” or “find all objects within this distance”.
+𖦹 B-trees cannot store this because spatial objects are rectangles, not single numeric keys.
+
+2. How R-trees store data in leaf nodes
+𖦹 A leaf stores entries of the form (rectangle, id).
+• A rectangle can be ([x1, x2], [y1, y2]) in 2-D or ([c1, c2], …) in n-D.
+𖦹 The rectangle is the minimum bounding box (MBB) of the object.
+• Example: Object X lies in [10,100] × [5,52], so a leaf stores (([10,100], [5,52]), X).
+
+3. How R-trees store data in non-leaf nodes
+𖦹 A non-leaf node stores (enclosing_rectangle, child_pointer).
+𖦹 The enclosing rectangle fully covers all rectangles stored inside its child node.
+𖦹 The tree becomes a hierarchy: small rectangles → bigger rectangles → even bigger rectangles → root.
+
+4. Insertion in R-trees
+𖦹 Start at root and choose the child whose rectangle needs the smallest expansion to include the new object.
+𖦹 Go down until a leaf and insert the new rectangle.
+𖦹 If a leaf becomes full, split it into two nodes.
+𖦹 After splitting, parent rectangles are updated to tightly cover their children.
+• Main difficulty: finding a good split so overlap is low, area is small, and future searches are efficient.
+
+5. Overlap problem in R-trees
+𖦹 Rectangles in non-leaf nodes may overlap.
+𖦹 A search may enter many paths because the search rectangle intersects multiple parent rectangles.
+• Example: R3 lies inside both R10 and R11, so the search may follow a wrong path.
+𖦹 In large R-trees, this overlap can cause slow searches.
+
+6. R+-trees
+𖦹 R+-trees remove overlap between parent rectangles.
+𖦹 Parent rectangles are not allowed to overlap.
+𖦹 If a data rectangle crosses two parent rectangles, it is stored in both leaves.
+• Example: Rectangle R8 is stored in two leaves in the R+-tree.
+
+7. R+-tree advantages and drawbacks
+𖦹 Advantages:
+• No overlap means no confusion during search.
+• Search follows one correct path.
+𖦹 Drawbacks:
+• Node utilization is harder to maintain.
+• One object may appear in multiple leaves.
+
+8. Summary
+𖦹 Parent rectangles overlap: R-tree = Yes, R+-tree = No
+𖦹 Speed: R-tree = Slower, R+-tree = Faster
+𖦹 Object stored in: R-tree = One leaf, R+-tree = Many leaves possible
+𖦹 Node utilization: R-tree = Easier, R+-tree = Harder
+𖦹 Search paths: R-tree = May branch wrongly, R+-tree = Single correct path
+𖦹 R-tree: Tree for spatial objects using bounding rectangles; overlap allowed.
+𖦹 R+-tree: R-tree without overlap in internal nodes; objects may appear many times.
+--END--
+--BEGIN--26/11/2025--2-4 TREES--
+1. 2–4 tree
+𖦹 A 2–4 tree has nodes that can hold 1, 2, or 3 keys.
+𖦹 A node with 1 key has 2 children; 2 keys → 3 children; 3 keys → 4 children.
+𖦹 Although B-trees are for disk storage, 2–4 trees are also used in main memory.
+
+2. Reason for converting a 2–4 tree to a binary tree
+𖦹 A 2–4 node holds 3 keys and 4 pointers, which wastes space in memory.
+𖦹 So it is changed into a binary tree where each node holds only one key.
+𖦹 Special link types (horizontal or vertical, or red/black links) help recreate the original 2–4 structure.
+• This binary form is called a vh-tree or a red-black tree.
+
+3. Vertical and horizontal links
+𖦹 Vertical links show parent–child connections.
+𖦹 Horizontal links show keys that belong to the same 2–4 node.
+𖦹 Horizontal links mean “these keys came from the same original node”.
+
+4. Properties of vh-trees
+𖦹 All root-to-leaf paths have the same number of vertical links, so the tree stays balanced.
+𖦹 No path may have two horizontal links in a row.
+• This stops wrong merging of nodes.
+𖦹 Search is like BST search because we ignore link types while searching.
+
+5. vh-tree height
+𖦹 We check how tall a vh-tree can be.
+𖦹 Height lower bound: log2(n + 1)
+𖦹 Height upper bound: 2 log2(n + 2) – 2
+• Means vh-tree height is at most twice that of a balanced binary tree.
+• This is similar to red-black tree height bounds.
+
+6. Splitting a 4-node
+𖦹 A 4-node has 3 keys and must be split during insertion.
+𖦹 In a 2–4 tree, splitting creates two nodes and pushes the middle key upward.
+𖦹 In a vh-tree, splitting is done by flipping 3 link flags:
+• Two child links become vertical.
+• Parent link becomes horizontal.
+𖦹 If flipping causes two horizontal links in a row, rotations are needed.
+• There are around 8 main split patterns.
+• Only some need 1 or 2 rotations.
+
+7. Why rotations are needed
+𖦹 Sometimes the structure becomes: node → horizontal → child → horizontal → grandchild.
+𖦹 This pattern is not allowed and must be fixed.
+𖦹 Fixing uses:
+• Rotations (like in BSTs)
+• A few link flips
+𖦹 Rotations do not increase the height.
+--END--
+--BEGIN--26/11/2025--SEGMENT TREES--
+1. Segment Tree
+𖦹 A segment tree is a binary tree used to answer range-based questions fast.
+𖦹 It helps with tasks like range sum, range min/max, counting in a range, and fast updates.
+𖦹 It keeps both query and update time as O(log n).
+
+2. Reason for using segment trees
+𖦹 Normal array gives slow range queries (O(n)) but fast updates.
+𖦹 Prefix sums give fast range sums (O(1)) but slow updates (O(n)).
+𖦹 Segment tree gives both query and update in O(log n).
+
+3. Basic idea
+𖦹 The array is divided into segments.
+• Example: whole → [0,5], left → [0,2], right → [3,5].
+𖦹 Each segment stores chosen information such as sum, min, max, gcd, xor, etc.
+𖦹 Leaves store single element values; internal nodes store the combined value of their children.
+
+4. Example of building a sum segment tree
+𖦹 For A = [2, 5, 1, 4], the tree stores sums of segments.
+𖦹 Example layout:
+• [0,3] = 12
+• [0,1] = 7, [2,3] = 5
+• [0,0] = 2, [1,1] = 5, [2,2] = 1, [3,3] = 4
+𖦹 Each parent value is the sum of its two child values.
+
+5. Range query example (sum of [1,3])
+𖦹 Fully inside segments → add value.
+𖦹 Fully outside segments → ignore.
+𖦹 Partially inside → go deeper.
+𖦹 Final answer: 5 + 1 + 4 = 10 in O(log n).
+
+6. Update example (A[2] = 10)
+𖦹 Go to leaf [2,2] and change 1 → 10.
+𖦹 Move upward and fix parent values.
+• [2,3] changes.
+• [0,3] changes.
+𖦹 The tree adjusts in O(log n).
+
+7. Size of a segment tree
+𖦹 Maximum size is about 4n nodes.
+𖦹 Using an array of size 4n is safe.
+
+8. Types of segment trees
+𖦹 Sum segment tree.
+𖦹 Min or max segment tree.
+𖦹 GCD segment tree.
+𖦹 Lazy segment tree.
+• Used for range updates like adding +5 to all elements in a range.
+• Normal range update is O(n); lazy update becomes O(log n).
+
+9. Time complexity
+𖦹 Build: O(n)
+𖦹 Query: O(log n)
+𖦹 Update: O(log n)
+𖦹 Lazy propagation update: O(log n)
+
+10. When to use a segment tree
+𖦹 Use when both fast range queries and fast updates are needed.
+𖦹 Common uses:
+• Range sum
+• Range minimum or maximum
+• Range GCD
+• Range XOR
+• Range addition or increment updates
 --END--
