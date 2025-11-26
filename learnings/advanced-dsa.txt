@@ -2444,22 +2444,6 @@ print()
 • INORDER: 10 → 20 → 30 → 40 → 50 → 60 → 65 → 70 → 80 → 90
 • POSTORDER: 10 → 20 → 40 → 30 → 65 → 60 → 80 → 90 → 70 → 50
 • LEVELORDER: 50 → 30 → 70 → 20 → 40 → 60 → 80 → 10 → 65 → 90
---EMBED-GIT--
-https://github.com/arihara-sudhan/dsa/blob/main/data-structures/trees/bst.cpp
-𖦹 Level Order
-[green]#include[/green] <queue>
-[pink]void[/pink] [yellow]levelOrder[/yellow]([blue]BSTNode*[/blue] [yellow]root[/yellow]){
-    [pink]if[/pink]([yellow]root[/yellow] == [green]nullptr[/green]) [pink]return[/pink];
-    [green]queue[/green]<[blue]BSTNode*[/blue]> [yellow]q[/yellow];
-    [yellow]q[/yellow].push([yellow]root[/yellow]);
-    [pink]while[/pink](![yellow]q[/yellow].empty()){
-        [blue]BSTNode*[/blue] [yellow]node[/yellow] = [yellow]q[/yellow].front();
-        [yellow]q[/yellow].pop();
-        [green]cout[/green] << [yellow]node[/yellow]->data << " → ";
-        [pink]if[/pink]([yellow]node[/yellow]->left != [green]nullptr[/green]) [yellow]q[/yellow].push([yellow]node[/yellow]->left);
-        [pink]if[/pink]([yellow]node[/yellow]->right != [green]nullptr[/green]) [yellow]q[/yellow].push([yellow]node[/yellow]->right);
-    }
-}
 
 ITERATIVE INORDER AND POSTORDER ROUTINES:
 [pink]void[/pink] [yellow]iterativeInorder[/yellow]([blue]BSTNode*[/blue] [yellow]root[/yellow]) {
@@ -2568,72 +2552,14 @@ ITERATIVE INORDER AND POSTORDER ROUTINES:
 	         \      \
 	          65      90
 
-𖦹 Insert
-• Routine:
-[pink]BSTNode*[/pink] [yellow]insert[/yellow]([pink]BSTNode*[/pink] [yellow]root[/yellow], [pink]int[/pink] [yellow]key[/yellow]) {
-    [pink]if[/pink]([yellow]root[/yellow] == [green]nullptr[/green]) {
-        [pink]return[/pink] [pink]new[/pink] [pink]BSTNode[/pink]([yellow]key[/yellow]); // Insert here
-    }
-    [pink]if[/pink]([yellow]key[/yellow] < [yellow]root[/yellow]->key) {
-        [yellow]root[/yellow]->left = [yellow]insert[/yellow]([yellow]root[/yellow]->left, [yellow]key[/yellow]);
-    } [pink]else if[/pink]([yellow]key[/yellow] > [yellow]root[/yellow]->key) {
-        [yellow]root[/yellow]->right = [yellow]insert[/yellow]([yellow]root[/yellow]->right, [yellow]key[/yellow]);
-    }
-    [pink]return[/pink] [yellow]root[/yellow];
-}
-• Example: Insert key = 10
-- [yellow]insert[/yellow](50node, 10) → insert(30node, 10) → insert(20node, 10) → insert(null, 10)
-- 20node->left = 10node
-
-𖦹 Search
-• Routine:
-[pink]BSTNode*[/pink] [yellow]searchRecursive[/yellow]([pink]BSTNode*[/pink] [yellow]root[/yellow], [pink]int[/pink] [yellow]key[/yellow]) {
-    [pink]if[/pink]([yellow]root[/yellow] == [green]nullptr[/green] || [yellow]root[/yellow]->key == [yellow]key[/yellow]) {
-        [pink]return[/pink] [yellow]root[/yellow]; // found or reached leaf
-    }
-    [pink]if[/pink]([yellow]key[/yellow] < [yellow]root[/yellow]->key) [pink]return[/pink] [yellow]searchRecursive[/yellow]([yellow]root[/yellow]->left, [yellow]key[/yellow]);
-    [pink]else[/pink] [pink]return[/pink] [yellow]searchRecursive[/yellow]([yellow]root[/yellow]->right, [yellow]key[/yellow]);
-}
-
 𖦹 Delete
 • Three cases:
 - Node is a leaf → delete it
 - Node has one child → replace node with child
 - Node has two children → replace node with inorder successor (smallest in right subtree) or predecessor (largest in left subtree), then delete that node
-• Helper function to find minimum:
-[pink]BSTNode*[/pink] [yellow]findMin[/yellow]([pink]BSTNode*[/pink] [yellow]node[/yellow]) {
-    [pink]while[/pink]([yellow]node[/yellow]->left != [green]nullptr[/green]) {
-        [yellow]node[/yellow] = [yellow]node[/yellow]->left;
-    }
-    [pink]return[/pink] [yellow]node[/yellow];
-}
-• Delete routine:
-[pink]BSTNode*[/pink] [yellow]deleteNode[/yellow]([pink]BSTNode*[/pink] [yellow]root[/yellow], [pink]int[/pink] [yellow]key[/yellow]) {
-    [pink]if[/pink]([yellow]root[/yellow] == [green]nullptr[/green]) [pink]return[/pink] [yellow]root[/yellow]; // Tree empty
-    [pink]if[/pink]([yellow]key[/yellow] < [yellow]root[/yellow]->key) [yellow]root[/yellow]->left = [yellow]deleteNode[/yellow]([yellow]root[/yellow]->left, [yellow]key[/yellow]);
-    [pink]else if[/pink]([yellow]key[/yellow] > [yellow]root[/yellow]->key) [yellow]root[/yellow]->right = [yellow]deleteNode[/yellow]([yellow]root[/yellow]->right, [yellow]key[/yellow]);
-    [pink]else[/pink] {
-        // Node found
-        [pink]if[/pink]([yellow]root[/yellow]->left == [green]nullptr[/green] && [yellow]root[/yellow]->right == [green]nullptr[/green]) {
-            delete [yellow]root[/yellow];
-            [pink]return[/pink] [green]nullptr[/green];
-        } [pink]else if[/pink]([yellow]root[/yellow]->left == [green]nullptr[/green]) {
-            [pink]BSTNode*[/pink] [yellow]temp[/yellow] = [yellow]root[/yellow]->right;
-            delete [yellow]root[/yellow];
-            [pink]return[/pink] [yellow]temp[/yellow];
-        } [pink]else if[/pink]([yellow]root[/yellow]->right == [green]nullptr[/green]) {
-            [pink]BSTNode*[/pink] [yellow]temp[/yellow] = [yellow]root[/yellow]->left;
-            delete [yellow]root[/yellow];
-            [pink]return[/pink] [yellow]temp[/yellow];
-        } [pink]else[/pink] {
-            [pink]BSTNode*[/pink] [yellow]temp[/yellow] = [yellow]findMin[/yellow]([yellow]root[/yellow]->right); // Inorder successor
-            [yellow]root[/yellow]->key = [yellow]temp[/yellow]->key;                 // Copy value
-            [yellow]root[/yellow]->right = [yellow]deleteNode[/yellow]([yellow]root[/yellow]->right, [yellow]temp[/yellow]->key); // Delete successor
-        }
-    }
-    [pink]return[/pink] [yellow]root[/yellow];
-}
 
+--EMBED-GIT--
+https://github.com/arihara-sudhan/dsa/blob/main/data-structures/trees/bst.cpp
 3. BST Complexity
 𖦹 Search
 • Can be done recursively or iteratively
@@ -2679,7 +2605,6 @@ ITERATIVE INORDER AND POSTORDER ROUTINES:
 • Inorder: O(n), O(n)
 • Postorder: O(n), O(n)
 • Level-order: O(n), O(n)
-
 --END--
 --BEGIN--24/11/2025--BALANCING TREES--
 1. Why Balance a Tree
