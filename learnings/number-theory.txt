@@ -171,6 +171,7 @@ IMG_URL ftoa_proof.jpg
 𖦹 Two numbers a and b are congruent modulo n if they leave the same remainder when divided by n.  
 - Symbolically: a ≡ b (mod n)  
 𖦹 a≡b (mod n)⟺remainder of a divided by n=remainder of b divided by n
+IMG_URL congruent_numbers.jpg
 
 5. Properties of Congruence
 𖦹 Let n > 1 and a, b, c, d be integers.
