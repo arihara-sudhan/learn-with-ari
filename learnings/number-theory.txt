@@ -166,6 +166,7 @@ IMG_URL ftoa_proof.jpg
 - Every number a has exactly one remainder 0 ≤ r < n when divided by n.  
 - If remainder is 0, a ≡ 0 (mod n), meaning a is exactly divisible by n.  
 - Example: 20 ÷ 5 → remainder 0 → 20 ≡ 0 (mod 5)
+IMG_URL proofs_congruences.jpg
 
 4. Congruence by Remainder
 𖦹 Two numbers a and b are congruent modulo n if they leave the same remainder when divided by n.  
@@ -200,4 +201,8 @@ IMG_URL congruent_numbers.jpg
     Reason: Use induction on k  
     Base: k=1 → true  
     Step: Assume true for k → a^(k+1) = a⋅a^k ≡ b⋅b^k = b^(k+1) (mod n)
+--CAROUSEL--
+modular_ari_pblm1.jpg
+modular_ari_pblm2.jpg
+--CAROUSEL--
 --END--
