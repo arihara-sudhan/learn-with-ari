@@ -1,0 +1,82 @@
+--BEGIN--RANDOM VECTORS--27/11/2025
+1. Random vector
+𖦹 A vector is a simple list of numbers.
+𖦹 A random vector is a list where each number is a random variable.
+• Example: X = [X1, X2, X3]
+- Each Xi can take different values because it is random.
+
+2. Random matrix
+𖦹 A matrix is like a small table of numbers.
+𖦹 A random matrix is a table where each entry is a random variable.
+• Example:  
+  X = [ X11  X12  
+        X21  X22 ]
+- Each Xij is random.
+
+3. Expected value
+𖦹 Expected value of a random number X is the average value you get if you repeat the process many times.
+𖦹 For a random vector, the expected value is a vector of expected values of each part.
+• Example: E[X] = [E[X1], E[X2], E[X3]]
+𖦹 For a random matrix, the expected value is a matrix of expected values of each entry.
+• Example:
+  E[X] = [ E[X11]  E[X12]  
+           E[X21]  E[X22] ]
+
+4. Discrete random variable
+𖦹 You can list all possible values clearly.
+𖦹 Values are separate and countable.
+• Examples: number of children, dice value, number of emails, shoe size.
+- You can count each value one by one.
+𖦹 Probability is given using a probability mass function (PMF).
+• Examples: P(dice = 3) = 1/6, P(emails = 10) = 0.05
+
+5. Continuous random variable
+𖦹 You cannot list all possible values.
+𖦹 There are infinite values between any two numbers.
+• Examples: height, time, temperature.
+- Values form a smooth range.
+𖦹 Probability is given using a probability density function (PDF).
+• A single exact value has zero probability: P(X = 5) = 0
+• Probability is over an interval: P(4 < X < 6) = ∫4 to 6 f(x) dx
+
+6. Discrete case
+𖦹 A discrete variable takes clear, countable values.
+𖦹 To find expectation, we use a sum of all values multiplied by their probabilities.
+• Formula: E(Xij) = Σ x ⋅ P(Xij = x)
+- This is a weighted average; each value x adds an amount based on how likely it is.
+• Example: dice giving 3 with probability 1/6 contributes 3 × 1/6.
+
+7. Continuous case
+𖦹 A continuous variable has infinitely many possible values.
+𖦹 You cannot list values, so you use integration instead of summing.
+• Formula: E(Xij) = ∫ from −∞ to ∞ of x f(x) dx
+- f(x) is the probability density function.
+- Integration is used because probability spreads over intervals, not single points.
+
+8. MEAN/EXPECTED VALUE
+IMG_URL mean-variance.png
+𖦹 Discrete → use sum because values are separate and countable.
+• Example: E[X] = Σ x ⋅ P(x)
+IMG_URL expected_value_drv.jpg
+IMG_URL find_variance_drv.jpg
+𖦹 Continuous → use integral because values are infinite and smooth.
+• Example: E[X] = ∫ x f(x) dx
+IMG_URL expected_value_crv.jpg
+𖦹 Continuous → use integral because values are infinite and smooth.
+
+9. Expected value rules for random matrices
+𖦹 X and Y are random n×p matrices (each entry is a random variable).
+𖦹 A and B are fixed matrices, and c is a fixed number.
+• All expectations mentioned are assumed to exist.
+> Additivity rule
+𖦹 The expected value of a sum is the sum of expected values.
+• Formula: E[X + Y] = E[X] + E[Y]
+> Homogeneity rule
+𖦹 If you multiply a random matrix by a number, expectation also gets multiplied by that number.
+• Formula: E[cX] = cE[X]
+> Multiplying with constant matrices
+𖦹 If you multiply X by fixed matrices A and B, expectation follows the same pattern.
+• Formula: E[AXB] = A.E[X].B
+IMG_URL expected_value_properties.jpg
+
+--END--

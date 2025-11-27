@@ -26,6 +26,9 @@
     {
         "id": "crispr",
         "label": "CRISPR"
+    },
+    {
+        "id": "multivariate-analysis",
+        "label": "Multivariate Analysis"
     }
 ]
-
