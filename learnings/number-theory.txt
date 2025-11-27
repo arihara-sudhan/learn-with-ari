@@ -103,7 +103,7 @@ IMG_URL ftoa_proof.jpg
 • Step 4: 7 is prime, stop here.
 𖦹 Solution: 84 = 2 × 2 × 3 × 7 = 2² ⋅ 3 ⋅ 7
 --END--
---BEGIN--26/11/2025--EUCLIDEAN ALGORITHM FOR GCD/HCF--
+--BEGIN--26/11/2025--EUCLIDEAN ALGORITHM--
 𖦹 Greatest Common Divisor (GCD)
 - The largest number that divides two numbers without leaving remainder.
 - Example: GCD of 12 and 18 is 6.
@@ -120,7 +120,7 @@ IMG_URL ftoa_proof.jpg
 - 12 ÷ 6 = 2 remainder 0
 𖦹 GCD = 6
 --END--
---BEGIN--26/11/2025--BASIC PROPERTIES OF CONGRUENCES--
+--BEGIN--26/11/2025--CONGRUENCES--
 1. Congruence and Examples
 𖦹 Two numbers a and b are congruent modulo n if n divides (a − b).  
 - Symbolically: a ≡ b (mod n)  
