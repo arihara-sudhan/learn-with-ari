@@ -587,16 +587,9 @@ Please check if the file exists at one of the URLs above.
 }
 
 function updateActiveButton(topic) {
-    if (activeButton) {
-        activeButton.style.backgroundColor = "black";
-        activeButton.style.color = "lightgreen";
-    }
-
-    const clickedButton = document.querySelector(`h2[data-id="${topic}"]`);
-    if (clickedButton) {
-        clickedButton.style.backgroundColor = "red";
-        clickedButton.style.color = "white";
-        activeButton = clickedButton;
+    const select = document.getElementById('topic-select');
+    if (select) {
+        select.value = topic;
     }
 }
 
@@ -664,15 +657,18 @@ function getRouteFromUrl() {
 window.addEventListener('popstate', function(event) {
     const route = getRouteFromUrl();
     if (route) {
+        const select = document.getElementById('topic-select');
+        if (select) {
+            select.value = route;
+        }
         loadLearnings(route);
     } else {
         // Load default if no route (first item from navigation)
         // Note: navigation should already be loaded, so just load default
-        const tagsDiv = document.getElementById('tags');
-        const firstButton = tagsDiv.querySelector('h2[data-id]');
-        if (firstButton) {
-            const firstId = firstButton.getAttribute('data-id');
-            loadLearnings(firstId);
+        const select = document.getElementById('topic-select');
+        if (select && navigationItems.length > 0) {
+            select.value = navigationItems[0].id;
+            loadLearnings(navigationItems[0].id);
         }
     }
 });
@@ -692,13 +688,23 @@ async function loadNavigation() {
         navigationItems = await response.json(); // Store globally
         const tagsDiv = document.getElementById('tags');
         
+        // Create dropdown select element
+        const select = document.createElement('select');
+        select.id = 'topic-select';
+        
         navigationItems.forEach(item => {
-            const button = document.createElement('h2');
-            button.textContent = item.label;
-            button.setAttribute('data-id', item.id);
-            button.setAttribute('onclick', `loadLearnings('${item.id}')`);
-            tagsDiv.appendChild(button);
+            const option = document.createElement('option');
+            option.value = item.id;
+            option.textContent = item.label;
+            select.appendChild(option);
         });
+        
+        // Add change event listener
+        select.addEventListener('change', function() {
+            loadLearnings(this.value);
+        });
+        
+        tagsDiv.appendChild(select);
         
         // Check if there's a route in the URL
         const route = getRouteFromUrl();
@@ -706,16 +712,19 @@ async function loadNavigation() {
             // Load content based on route
             const itemExists = navigationItems.some(item => item.id === route);
             if (itemExists) {
+                select.value = route;
                 loadLearnings(route);
             } else {
                 // Invalid route, load default
                 if (navigationItems.length > 0) {
+                    select.value = navigationItems[0].id;
                     loadLearnings(navigationItems[0].id);
                 }
             }
         } else {
             // No route, load default content
             if (navigationItems.length > 0) {
+                select.value = navigationItems[0].id;
                 loadLearnings(navigationItems[0].id);
             }
         }

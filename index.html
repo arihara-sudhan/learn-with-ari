@@ -8,30 +8,90 @@
     <style>
         .tags {
             display: flex;
-            flex-wrap: wrap;
-            font-size: 0.8vw;
             justify-content: center;
             align-items: center;
-            border-radius: 0.4vw;
-            padding: 0.4vw 0.4vw 0.1vw 0.4vw;
             margin: 0;
-            gap: 0.5rem;
+            padding: 0.5rem;
+            position: relative;
         }
-        .tags h2 {
-            margin: 0;
-            padding: 0.4vw;
-            border-radius: 0.4vw;
+        .tags select {
+            padding: 0.5rem 2.5rem 0.5rem 1rem;
+            font-size: clamp(0.9rem, 1.5vw, 1.2rem);
+            border-radius: 0.8rem;
             background-color: black;
             color: lightgreen;
-            flex-shrink: 0;
-            white-space: nowrap;
-        }
-        .tags h2:hover {
+            border: none;
             cursor: pointer;
+            font-family: "Quicksand", sans-serif;
+            font-weight: 600;
+            outline: none;
+            min-width: 200px;
+            box-shadow: none;
+            text-shadow: none;
+            background-image: none;
         }
-        .tags h2:active {
-            background-color: lawngreen;
-            color: black;
+        .tags select:hover {
+            color: lawngreen;
+        }
+        /* Keep caret same green color always */
+        .tags:hover::after {
+            color: lightgreen;
+        }
+        .tags select:focus {
+            color: lawngreen;
+            box-shadow: none;
+            text-shadow: none;
+        }
+        .tags select:active {
+            box-shadow: none;
+            text-shadow: none;
+        }
+        /* Style the dropdown list itself */
+        .tags select {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+        
+        /* Style dropdown options */
+        .tags select option {
+            background-color: black;
+            color: lightgreen;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 0.8rem;
+        }
+        
+        /* Style selected/hovered option */
+        .tags select option:checked,
+        .tags select option:hover,
+        .tags select option:focus {
+            background-color: #1a1a1a;
+            color: lawngreen;
+        }
+        
+        /* Remove border from dropdown when focused */
+        .tags select:focus {
+            border: none;
+            outline: none;
+        }
+        
+        /* Custom dropdown arrow */
+        .tags::after {
+            content: '▼';
+            position: absolute;
+            right: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+            color: lightgreen;
+            font-size: 0.8rem;
+            z-index: 1;
+        }
+        
+        .tags select:hover ~ .tags::after,
+        .tags:hover::after {
+            color: lightgreen;
         }
         #source {
             font-size: 1vw;
@@ -45,16 +105,14 @@
                 gap: 0.3rem;
                 padding: 0.2rem 0.5rem;
             }
-            .tags h2 {
-                font-size: 3.5vw;
-                margin: 0;
-                padding: 1rem;
-                border-radius: 1.5vw;
-                background-color: black;
-                color: lightgreen;
-                flex: 1 1 auto;
-                min-width: 0;
-                text-align: center;
+            .tags select {
+                font-size: 1rem;
+                padding: 0.8rem 1rem;
+                min-width: 150px;
+                width: 100%;
+                max-width: 300px;
+                border-radius: 0.8rem;
+                font-weight: 600;
             }
             #source {
                 font-size: 3vw;
