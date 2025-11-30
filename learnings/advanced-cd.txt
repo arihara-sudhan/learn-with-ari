@@ -3,23 +3,23 @@
 𖦹 A definition is any point where a variable is given a value.
 𖦹 Each assignment creates a new definition.
 • Example:
-- [green]x[/green] [blue]=[/blue] [yellow]5[/yellow];    // definition of x
-- [green]y[/green] [blue]=[/blue] [green]x[/green] [blue]+[/blue] [yellow]1[/yellow];  // definition of y (uses x)
-- [green]x[/green] [blue]=[/blue] [yellow]10[/yellow];   // new definition of x
+- [green]x[/green] [blue]=[/blue] [yellow]5[/yellow];    [violet]// definition of x[/violet]
+- [green]y[/green] [blue]=[/blue] [green]x[/green] [blue]+[/blue] [yellow]1[/yellow];  [violet]// definition of y (uses x)[/violet]
+- [green]x[/green] [blue]=[/blue] [yellow]10[/yellow];   [violet]// new definition of x[/violet]
 
 2. Use of a Variable
 𖦹 A use is any point where the value of a variable is read.
 • Example:
-- [green]y[/green] [blue]=[/blue] [green]x[/green] [blue]+[/blue] [yellow]1[/yellow];  // use of x
-- [green]z[/green] [blue]=[/blue] [green]y[/green] [blue]+[/blue] [yellow]2[/yellow];  // use of y
+- [green]y[/green] [blue]=[/blue] [green]x[/green] [blue]+[/blue] [yellow]1[/yellow];  [violet]// use of x[/violet]
+- [green]z[/green] [blue]=[/blue] [green]y[/green] [blue]+[/blue] [yellow]2[/yellow];  [violet]// use of y[/violet]
 
 3. Def-Use Chains
 𖦹 A def-use chain links a variable definition to all its uses that are not overwritten.
 • Example:
-- [green]x[/green] [blue]=[/blue] [yellow]5[/yellow];      // def1
-- [green]y[/green] [blue]=[/blue] [green]x[/green] [blue]+[/blue] [yellow]1[/yellow];  // use1 of def1
-- [green]x[/green] [blue]=[/blue] [yellow]10[/yellow];     // def2
-- [green]z[/green] [blue]=[/blue] [green]x[/green] [blue]+[/blue] [yellow]2[/yellow];  // use1 of def2
+- [green]x[/green] [blue]=[/blue] [yellow]5[/yellow];      [violet]// def1[/violet]
+- [green]y[/green] [blue]=[/blue] [green]x[/green] [blue]+[/blue] [yellow]1[/yellow];  [violet]// use1 of def1[/violet]
+- [green]x[/green] [blue]=[/blue] [yellow]10[/yellow];     [violet]// def2[/violet]
+- [green]z[/green] [blue]=[/blue] [green]x[/green] [blue]+[/blue] [yellow]2[/yellow];  [violet]// use1 of def2[/violet]
 𖦹 Def-use chains:
 • def1 ([green]x[/green]=5) → use1 ([green]y[/green]=[green]x[/green]+1)
 • def2 ([green]x[/green]=10) → use1 ([green]z[/green]=[green]x[/green]+2)
@@ -31,16 +31,16 @@
 
 5. Example without SSA
 [pink]x[/pink] [blue]=[/blue] [yellow]1[/yellow];
-[pink]y[/pink] [blue]=[/blue] [green]x[/green] [blue]+[/blue] [yellow]1[/yellow];  // y = 2
+[pink]y[/pink] [blue]=[/blue] [green]x[/green] [blue]+[/blue] [yellow]1[/yellow];  [violet]// y = 2[/violet]
 [pink]x[/pink] [blue]=[/blue] [yellow]2[/yellow];
-[pink]z[/pink] [blue]=[/blue] [green]x[/green] [blue]+[/blue] [yellow]1[/yellow];  // z = 3
+[pink]z[/pink] [blue]=[/blue] [green]x[/green] [blue]+[/blue] [yellow]1[/yellow];  [violet]// z = 3[/violet]
 𖦹 Problem: The value of [green]x[/green] changes, so it's unclear which value to use when reading [green]x[/green].
 
 6. Example in SSA Form
 [pink]x1[/pink] [blue]=[/blue] [yellow]1[/yellow];
-[pink]y[/pink] [blue]=[/blue] [green]x1[/green] [blue]+[/blue] [yellow]1[/yellow];  // y = 2
+[pink]y[/pink] [blue]=[/blue] [green]x1[/green] [blue]+[/blue] [yellow]1[/yellow];  [violet]// y = 2[/violet]
 [pink]x2[/pink] [blue]=[/blue] [yellow]2[/yellow];
-[pink]z[/pink] [blue]=[/blue] [green]x2[/green] [blue]+[/blue] [yellow]1[/yellow];  // z = 3
+[pink]z[/pink] [blue]=[/blue] [green]x2[/green] [blue]+[/blue] [yellow]1[/yellow];  [violet]// z = 3[/violet]
 𖦹 Benefit: Each variable version ([green]x1[/green], [green]x2[/green]) has only one definition.
 𖦹 Compiler can directly see the correct value to use for any variable.
 𖦹 SSA simplifies optimizations like constant propagation, dead code elimination, and alias analysis.
@@ -70,7 +70,7 @@
 𖦹 Problem: Multiple definitions make checking unused variables hard.
 • With SSA:
 - [green]x1[/green] [blue]=[/blue] [yellow]5[/yellow];
-- [green]y1[/green] [blue]=[/blue] [yellow]10[/yellow];  // no uses
+- [green]y1[/green] [blue]=[/blue] [yellow]10[/yellow];  [violet]// no uses[/violet]
 - [green]z1[/green] [blue]=[/blue] [green]x1[/green] [blue]+[/blue] [yellow]2[/yellow];
 - [pink]print[/pink]([green]z1[/green]);
 𖦹 Benefit: SSA makes it easy to detect unused variables.
@@ -119,7 +119,7 @@
 • [green]x2[/green] → value from another path
 • [green]x3[/green] → new SSA variable after merge
 
-2. LEVEL 1 — Very Easy SSA Questions
+2. LEVEL 1: Very Easy SSA Questions
 𖦹 Q1
 Original:
 [pink]a[/pink] [blue]=[/blue] [yellow]5[/yellow]
@@ -162,8 +162,8 @@ else:
 print([green]x[/green])
 SSA Version:
 [pink]x1[/pink] [blue]=[/blue] [yellow]5[/yellow]
-[pink]x2[/pink] [blue]=[/blue] [green]x1[/green] [blue]+[/blue] [yellow]1[/yellow]  # if branch
-[pink]x3[/pink] [blue]=[/blue] [green]x1[/green] [blue]-[/blue] [yellow]1[/yellow]  # else branch
+[pink]x2[/pink] [blue]=[/blue] [green]x1[/green] [blue]+[/blue] [yellow]1[/yellow]
+[pink]x3[/pink] [blue]=[/blue] [green]x1[/green] [blue]-[/blue] [yellow]1[/yellow]
 [pink]x4[/pink] [blue]=[/blue] φ([green]x2[/green], [green]x3[/green])
 print([green]x4[/green])
 
