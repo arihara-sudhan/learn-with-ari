@@ -12,81 +12,99 @@
             align-items: center;
             margin: 0;
             padding: 0.5rem;
-            position: relative;
         }
-        .tags select {
-            padding: 0.5rem 2.5rem 0.5rem 1rem;
+        
+        /* Custom Dropdown Styles */
+        .custom-dropdown {
+            position: relative;
+            min-width: 200px;
+            margin: 0 auto;
+        }
+        
+        .dropdown-selected {
+            padding: 0.5rem 1rem;
             font-size: clamp(0.9rem, 1.5vw, 1.2rem);
             border-radius: 0.8rem;
-            background-color: black;
-            color: lightgreen;
-            border: none;
             cursor: pointer;
             font-family: "Quicksand", sans-serif;
             font-weight: 600;
-            outline: none;
-            min-width: 200px;
-            box-shadow: none;
-            text-shadow: none;
-            background-image: none;
-        }
-        .tags select:hover {
-            color: lawngreen;
-        }
-        /* Keep caret same green color always */
-        .tags:hover::after {
-            color: lightgreen;
-        }
-        .tags select:focus {
-            color: lawngreen;
-            box-shadow: none;
-            text-shadow: none;
-        }
-        .tags select:active {
-            box-shadow: none;
-            text-shadow: none;
-        }
-        /* Style the dropdown list itself */
-        .tags select {
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
-        }
-        
-        /* Style dropdown options */
-        .tags select option {
+            user-select: none;
+            text-align: center;
             background-color: black;
             color: lightgreen;
-            padding: 0.5rem 1rem;
-            border: none;
-            border-radius: 0.8rem;
+            border: 1px solid rgba(144, 238, 144, 0.3);
+            transition: all 0.2s ease;
         }
         
-        /* Style selected/hovered option */
-        .tags select option:checked,
-        .tags select option:hover,
-        .tags select option:focus {
-            background-color: #1a1a1a;
-            color: lawngreen;
+        .dropdown-selected:hover {
+            border-color: lightgreen;
         }
         
-        /* Remove border from dropdown when focused */
-        .tags select:focus {
-            border: none;
-            outline: none;
-        }
-        
-        /* Custom dropdown arrow */
-        .tags::after {
-            content: '▼';
+        .dropdown-options {
             position: absolute;
-            right: 1.5rem;
-            top: 50%;
-            transform: translateY(-50%);
-            pointer-events: none;
+            top: 100%;
+            left: 0;
+            right: 0;
+            margin-top: 0.25rem;
+            border-radius: 0.8rem;
+            overflow: hidden;
+            display: none;
+            z-index: 1000;
+            max-height: 300px;
+            overflow-y: auto;
+            background-color: black;
+            border: 1px solid rgba(144, 238, 144, 0.3);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Custom scrollbar for dropdown */
+        .dropdown-options::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .dropdown-options::-webkit-scrollbar-track {
+            background: #1a1a1a;
+            border-radius: 3px;
+        }
+        
+        .dropdown-options::-webkit-scrollbar-thumb {
+            background: #444;
+            border-radius: 3px;
+        }
+        
+        .dropdown-options::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        
+        /* Firefox scrollbar */
+        .dropdown-options {
+            scrollbar-width: thin;
+            scrollbar-color: #444 #1a1a1a;
+        }
+        
+        .custom-dropdown.open .dropdown-options {
+            display: block;
+        }
+        
+        .dropdown-option {
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            font-family: "Quicksand", sans-serif;
+            font-weight: 600;
+            font-size: clamp(0.9rem, 1.5vw, 1.2rem);
+            text-align: center;
             color: lightgreen;
-            font-size: 0.8rem;
-            z-index: 1;
+            background-color: black;
+            transition: background-color 0.2s ease;
+        }
+        
+        .dropdown-option:hover {
+            background-color: rgba(144, 238, 144, 0.1);
+        }
+        
+        .dropdown-option.selected {
+            background-color: rgba(144, 238, 144, 0.15);
+            color: lawngreen;
         }
         
         .tags select:hover ~ .tags::after,
@@ -127,7 +145,13 @@
         <h1>Ari's Learnings <span class="separator">⨳</span> <a href="https://arihara-sudhan.github.io">Home</a></h1>
     </header>
     <div class="tags" id="tags">
-        <!-- Navigation buttons loaded dynamically from navigation.json -->
+        <!-- Custom dropdown loaded dynamically from navigation.json -->
+        <div class="custom-dropdown" id="custom-dropdown">
+            <div class="dropdown-selected" id="dropdown-selected">
+                <span id="dropdown-text"></span>
+            </div>
+            <div class="dropdown-options" id="dropdown-options"></div>
+        </div>
     </div>
     <div id="content">
     </div>

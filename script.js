@@ -587,9 +587,24 @@ Please check if the file exists at one of the URLs above.
 }
 
 function updateActiveButton(topic) {
-    const select = document.getElementById('topic-select');
-    if (select) {
-        select.value = topic;
+    const dropdown = document.getElementById('custom-dropdown');
+    const dropdownText = document.getElementById('dropdown-text');
+    const dropdownOptions = document.getElementById('dropdown-options');
+    
+    if (dropdown && navigationItems.length > 0) {
+        const selectedItem = navigationItems.find(item => item.id === topic);
+        if (selectedItem) {
+            dropdownText.textContent = selectedItem.label;
+            
+            // Update selected state
+            dropdownOptions.querySelectorAll('.dropdown-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            const optionElement = dropdownOptions.querySelector(`[data-id="${topic}"]`);
+            if (optionElement) {
+                optionElement.classList.add('selected');
+            }
+        }
     }
 }
 
@@ -657,17 +672,31 @@ function getRouteFromUrl() {
 window.addEventListener('popstate', function(event) {
     const route = getRouteFromUrl();
     if (route) {
-        const select = document.getElementById('topic-select');
-        if (select) {
-            select.value = route;
+        const dropdownText = document.getElementById('dropdown-text');
+        const dropdownOptions = document.getElementById('dropdown-options');
+        const selectedItem = navigationItems.find(item => item.id === route);
+        if (selectedItem && dropdownText) {
+            dropdownText.textContent = selectedItem.label;
+            dropdownOptions.querySelectorAll('.dropdown-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            const optionElement = dropdownOptions.querySelector(`[data-id="${route}"]`);
+            if (optionElement) {
+                optionElement.classList.add('selected');
+            }
         }
         loadLearnings(route);
     } else {
         // Load default if no route (first item from navigation)
         // Note: navigation should already be loaded, so just load default
-        const select = document.getElementById('topic-select');
-        if (select && navigationItems.length > 0) {
-            select.value = navigationItems[0].id;
+        const dropdownText = document.getElementById('dropdown-text');
+        const dropdownOptions = document.getElementById('dropdown-options');
+        if (dropdownText && navigationItems.length > 0) {
+            dropdownText.textContent = navigationItems[0].label;
+            const firstOption = dropdownOptions.querySelector(`[data-id="${navigationItems[0].id}"]`);
+            if (firstOption) {
+                firstOption.classList.add('selected');
+            }
             loadLearnings(navigationItems[0].id);
         }
     }
@@ -686,25 +715,47 @@ async function loadNavigation() {
             throw new Error(`HTTP Error! Status: ${response.status}`);
         }
         navigationItems = await response.json(); // Store globally
-        const tagsDiv = document.getElementById('tags');
         
-        // Create dropdown select element
-        const select = document.createElement('select');
-        select.id = 'topic-select';
+        // Get custom dropdown elements
+        const dropdown = document.getElementById('custom-dropdown');
+        const dropdownText = document.getElementById('dropdown-text');
+        const dropdownOptions = document.getElementById('dropdown-options');
+        const dropdownSelected = document.getElementById('dropdown-selected');
         
+        // Populate dropdown options
         navigationItems.forEach(item => {
-            const option = document.createElement('option');
-            option.value = item.id;
+            const option = document.createElement('div');
+            option.className = 'dropdown-option';
             option.textContent = item.label;
-            select.appendChild(option);
+            option.setAttribute('data-id', item.id);
+            option.addEventListener('click', function() {
+                const selectedId = this.getAttribute('data-id');
+                dropdownText.textContent = this.textContent;
+                dropdown.classList.remove('open');
+                
+                // Update selected state
+                dropdownOptions.querySelectorAll('.dropdown-option').forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+                this.classList.add('selected');
+                
+                loadLearnings(selectedId);
+            });
+            dropdownOptions.appendChild(option);
         });
         
-        // Add change event listener
-        select.addEventListener('change', function() {
-            loadLearnings(this.value);
+        // Toggle dropdown on click
+        dropdownSelected.addEventListener('click', function(e) {
+            e.stopPropagation();
+            dropdown.classList.toggle('open');
         });
         
-        tagsDiv.appendChild(select);
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!dropdown.contains(e.target)) {
+                dropdown.classList.remove('open');
+            }
+        });
         
         // Check if there's a route in the URL
         const route = getRouteFromUrl();
@@ -712,19 +763,32 @@ async function loadNavigation() {
             // Load content based on route
             const itemExists = navigationItems.some(item => item.id === route);
             if (itemExists) {
-                select.value = route;
+                const selectedItem = navigationItems.find(item => item.id === route);
+                dropdownText.textContent = selectedItem.label;
+                const optionElement = dropdownOptions.querySelector(`[data-id="${route}"]`);
+                if (optionElement) {
+                    optionElement.classList.add('selected');
+                }
                 loadLearnings(route);
             } else {
                 // Invalid route, load default
                 if (navigationItems.length > 0) {
-                    select.value = navigationItems[0].id;
+                    dropdownText.textContent = navigationItems[0].label;
+                    const firstOption = dropdownOptions.querySelector(`[data-id="${navigationItems[0].id}"]`);
+                    if (firstOption) {
+                        firstOption.classList.add('selected');
+                    }
                     loadLearnings(navigationItems[0].id);
                 }
             }
         } else {
             // No route, load default content
             if (navigationItems.length > 0) {
-                select.value = navigationItems[0].id;
+                dropdownText.textContent = navigationItems[0].label;
+                const firstOption = dropdownOptions.querySelector(`[data-id="${navigationItems[0].id}"]`);
+                if (firstOption) {
+                    firstOption.classList.add('selected');
+                }
                 loadLearnings(navigationItems[0].id);
             }
         }
