@@ -1,0 +1,302 @@
+--BEGIN--SSA: INTRODUCTION--30/11/2025
+1. Definition of a Variable
+𖦹 A definition is any point where a variable is given a value.
+𖦹 Each assignment creates a new definition.
+• Example:
+- [green]x[/green] [blue]=[/blue] [yellow]5[/yellow];    // definition of x
+- [green]y[/green] [blue]=[/blue] [green]x[/green] [blue]+[/blue] [yellow]1[/yellow];  // definition of y (uses x)
+- [green]x[/green] [blue]=[/blue] [yellow]10[/yellow];   // new definition of x
+
+2. Use of a Variable
+𖦹 A use is any point where the value of a variable is read.
+• Example:
+- [green]y[/green] [blue]=[/blue] [green]x[/green] [blue]+[/blue] [yellow]1[/yellow];  // use of x
+- [green]z[/green] [blue]=[/blue] [green]y[/green] [blue]+[/blue] [yellow]2[/yellow];  // use of y
+
+3. Def-Use Chains
+𖦹 A def-use chain links a variable definition to all its uses that are not overwritten.
+• Example:
+- [green]x[/green] [blue]=[/blue] [yellow]5[/yellow];      // def1
+- [green]y[/green] [blue]=[/blue] [green]x[/green] [blue]+[/blue] [yellow]1[/yellow];  // use1 of def1
+- [green]x[/green] [blue]=[/blue] [yellow]10[/yellow];     // def2
+- [green]z[/green] [blue]=[/blue] [green]x[/green] [blue]+[/blue] [yellow]2[/yellow];  // use1 of def2
+𖦹 Def-use chains:
+• def1 ([green]x[/green]=5) → use1 ([green]y[/green]=[green]x[/green]+1)
+• def2 ([green]x[/green]=10) → use1 ([green]z[/green]=[green]x[/green]+2)
+
+4. Static Single Assignment (SSA) Form
+𖦹 SSA is a way of writing programs where each variable is assigned exactly once.
+𖦹 Every assignment creates a new version of the variable, usually with a subscript number.
+𖦹 SSA makes it easier for compilers to analyze and optimize code.
+
+5. Example without SSA
+[pink]x[/pink] [blue]=[/blue] [yellow]1[/yellow];
+[pink]y[/pink] [blue]=[/blue] [green]x[/green] [blue]+[/blue] [yellow]1[/yellow];  // y = 2
+[pink]x[/pink] [blue]=[/blue] [yellow]2[/yellow];
+[pink]z[/pink] [blue]=[/blue] [green]x[/green] [blue]+[/blue] [yellow]1[/yellow];  // z = 3
+𖦹 Problem: The value of [green]x[/green] changes, so it's unclear which value to use when reading [green]x[/green].
+
+6. Example in SSA Form
+[pink]x1[/pink] [blue]=[/blue] [yellow]1[/yellow];
+[pink]y[/pink] [blue]=[/blue] [green]x1[/green] [blue]+[/blue] [yellow]1[/yellow];  // y = 2
+[pink]x2[/pink] [blue]=[/blue] [yellow]2[/yellow];
+[pink]z[/pink] [blue]=[/blue] [green]x2[/green] [blue]+[/blue] [yellow]1[/yellow];  // z = 3
+𖦹 Benefit: Each variable version ([green]x1[/green], [green]x2[/green]) has only one definition.
+𖦹 Compiler can directly see the correct value to use for any variable.
+𖦹 SSA simplifies optimizations like constant propagation, dead code elimination, and alias analysis.
+
+7. Constant Propagation
+𖦹 Goal: Replace variables with known constant values during compile time.
+• Problem without SSA:
+- [green]x[/green] [blue]=[/blue] [yellow]5[/yellow];
+- [green]y[/green] [blue]=[/blue] [green]x[/green] [blue]+[/blue] [yellow]2[/yellow];
+- [green]x[/green] [blue]=[/blue] [yellow]7[/yellow];
+- [green]z[/green] [blue]=[/blue] [green]x[/green] [blue]+[/blue] [yellow]2[/yellow];
+𖦹 Problem: Multiple definitions make it hard to know which value to propagate.
+• With SSA:
+- [green]x1[/green] [blue]=[/blue] [yellow]5[/yellow];
+- [green]y[/green] [blue]=[/blue] [green]x1[/green] [blue]+[/blue] [yellow]2[/yellow];
+- [green]x2[/green] [blue]=[/blue] [yellow]7[/yellow];
+- [green]z[/green] [blue]=[/blue] [green]x2[/green] [blue]+[/blue] [yellow]2[/yellow];
+𖦹 Benefit: Single definition per variable → value propagation is clear and precise.
+
+8. Dead Code Elimination (DCE)
+𖦹 Goal: Remove code whose results are never used.
+• Problem without SSA:
+- [green]x[/green] [blue]=[/blue] [yellow]5[/yellow];
+- [green]y[/green] [blue]=[/blue] [yellow]10[/yellow];
+- [green]z[/green] [blue]=[/blue] [green]x[/green] [blue]+[/blue] [yellow]2[/yellow];
+- [pink]print[/pink]([green]z[/green]);
+𖦹 Problem: Multiple definitions make checking unused variables hard.
+• With SSA:
+- [green]x1[/green] [blue]=[/blue] [yellow]5[/yellow];
+- [green]y1[/green] [blue]=[/blue] [yellow]10[/yellow];  // no uses
+- [green]z1[/green] [blue]=[/blue] [green]x1[/green] [blue]+[/blue] [yellow]2[/yellow];
+- [pink]print[/pink]([green]z1[/green]);
+𖦹 Benefit: SSA makes it easy to detect unused variables.
+
+9. Alias Analysis
+𖦹 Goal: Find if two variables might point to the same memory.
+• Problem without SSA:
+- [pink]int[/pink] *[green]p[/green] [blue]=[/blue] &[green]a[/green];
+- [pink]int[/pink] *[green]q[/green] [blue]=[/blue] &[green]a[/green];
+- *[green]p[/green] [blue]=[/blue] [yellow]5[/yellow];
+- [pink]printf[/pink]("%d", *[green]q[/green]);
+𖦹 Problem: Compiler must track all definitions; multiple assignments make aliasing complex.
+• With SSA:
+𖦹 Each SSA variable has a single unique definition.
+𖦹 Memory effects are easier to track; aliasing is clear.
+𖦹 Temporary SSA variables make reasoning about interference easier.
+𖦹 Benefit: Simplifies analysis and allows safer optimizations.
+--END--
+--BEGIN--PHI FUNCTION--30/11/2025
+⠀⠀⠀⠀⠀⠀⠀⣤⣶⣶⣶⣶⣶⣶⣶⣶⣶⣶⣤⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠙⠛⠛⢿⣿⣿⣿⣿⡿⠛⠛⠋⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⢀⣠⣤⣴⣶⣾⣿⣿⣿⣿⣷⣶⣦⣤⣄⡀⠀⠀⠀⠀⠀
+⠀⠀⢀⣤⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣤⡀⠀⠀
+⠀⣰⣿⣿⣿⣿⣿⣿⠿⠟⢻⣿⣿⣿⣿⡟⠻⠿⣿⣿⣿⣿⣿⣿⣆⠀
+⢸⣿⣿⣿⣿⠟⠉⠀⠀⠀⢸⣿⣿⣿⣿⡇⠀⠀⠀⠉⠻⣿⣿⣿⣿⡇
+⣿⣿⣿⣿⣏⠀⠀⠀⠀⠀⢸⣿⣿⣿⣿⡇⠀⠀⠀⠀⠀⣹⣿⣿⣿⣿
+⢸⣿⣿⣿⣿⣦⣀⠀⠀⠀⢸⣿⣿⣿⣿⡇⠀⠀⠀⣀⣴⣿⣿⣿⣿⡇
+⠀⠹⣿⣿⣿⣿⣿⣿⣶⣦⣼⣿⣿⣿⣿⣧⣴⣶⣿⣿⣿⣿⣿⣿⠏⠀
+⠀⠀⠈⠛⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠛⠁⠀⠀
+⠀⠀⠀⠀⠀⠈⠙⠛⠻⠿⢿⣿⣿⣿⣿⡿⠿⠟⠛⠋⠁⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⣠⣤⣤⣾⣿⣿⣿⣿⣷⣤⣤⣄⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠛⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠋⠀⠀⠀⠀⠀⠀⠀
+
+1. φ-function (phi-function) in SSA
+𖦹 A φ-function is a pseudo-assignment used in SSA.
+𖦹 It merges values from different control-flow paths.
+𖦹 Acts like a selector to choose a value depending on which path was taken.
+𖦹 Occurs at control-flow merge points:
+• After an if-else block
+• At the start of a loop (loop header)
+𖦹 Keeps SSA property by creating a new variable for all possible values.
+𖦹 Syntax: [green]x3[/green] [blue]=[/blue] φ([green]x1[/green], [green]x2[/green])
+• [green]x1[/green] → value from one path
+• [green]x2[/green] → value from another path
+• [green]x3[/green] → new SSA variable after merge
+
+2. LEVEL 1 — Very Easy SSA Questions
+𖦹 Q1
+Original:
+[pink]a[/pink] [blue]=[/blue] [yellow]5[/yellow]
+[pink]a[/pink] [blue]=[/blue] [green]a[/green] [blue]+[/blue] [yellow]2[/yellow]
+[pink]a[/pink] [blue]=[/blue] [green]a[/green] [blue]+[/blue] [yellow]3[/yellow]
+SSA Version:
+[pink]a1[/pink] [blue]=[/blue] [yellow]5[/yellow]
+[pink]a2[/pink] [blue]=[/blue] [green]a1[/green] [blue]+[/blue] [yellow]2[/yellow]
+[pink]a3[/pink] [blue]=[/blue] [green]a2[/green] [blue]+[/blue] [yellow]3[/yellow]
+
+𖦹 Q2
+Original:
+[pink]x[/pink] [blue]=[/blue] [yellow]1[/yellow]
+[pink]y[/pink] [blue]=[/blue] [green]x[/green] [blue]+[/blue] [yellow]2[/yellow]
+[pink]x[/pink] [blue]=[/blue] [green]y[/green] [blue]+[/blue] [yellow]3[/yellow]
+SSA Version:
+[pink]x1[/pink] [blue]=[/blue] [yellow]1[/yellow]
+[pink]y1[/pink] [blue]=[/blue] [green]x1[/green] [blue]+[/blue] [yellow]2[/yellow]
+[pink]x2[/pink] [blue]=[/blue] [green]y1[/green] [blue]+[/blue] [yellow]3[/yellow]
+
+𖦹 Q3
+Original:
+[pink]p[/pink] [blue]=[/blue] [yellow]10[/yellow]
+[pink]q[/pink] [blue]=[/blue] [green]p[/green]
+[pink]p[/pink] [blue]=[/blue] [green]q[/green] [blue]+[/blue] [yellow]4[/yellow]
+SSA Version:
+[pink]p1[/pink] [blue]=[/blue] [yellow]10[/yellow]
+[pink]q1[/pink] [blue]=[/blue] [green]p1[/green]
+[pink]p2[/pink] [blue]=[/blue] [green]q1[/green] [blue]+[/blue] [yellow]4[/yellow]
+
+3. LEVEL 2 — Simple if-else SSA Questions
+IMG_URL phi_in_if.png
+𖦹 Q4
+Original:
+[pink]x[/pink] [blue]=[/blue] [yellow]5[/yellow]
+if ([green]x[/green] [blue]>[/blue] [yellow]3[/yellow]):
+    [green]x[/green] [blue]=[/blue] [green]x[/green] [blue]+[/blue] [yellow]1[/yellow]
+else:
+    [green]x[/green] [blue]=[/blue] [green]x[/green] [blue]-[/blue] [yellow]1[/yellow]
+print([green]x[/green])
+SSA Version:
+[pink]x1[/pink] [blue]=[/blue] [yellow]5[/yellow]
+[pink]x2[/pink] [blue]=[/blue] [green]x1[/green] [blue]+[/blue] [yellow]1[/yellow]  # if branch
+[pink]x3[/pink] [blue]=[/blue] [green]x1[/green] [blue]-[/blue] [yellow]1[/yellow]  # else branch
+[pink]x4[/pink] [blue]=[/blue] φ([green]x2[/green], [green]x3[/green])
+print([green]x4[/green])
+
+𖦹 Q5
+Original:
+[pink]a[/pink] [blue]=[/blue] [yellow]0[/yellow]
+if ([green]a[/green] [blue]==[/blue] [yellow]0[/yellow]):
+    [pink]b[/pink] [blue]=[/blue] [yellow]1[/yellow]
+else:
+    [pink]b[/pink] [blue]=[/blue] [yellow]2[/yellow]
+[pink]c[/pink] [blue]=[/blue] [green]b[/green] [blue]+[/blue] [yellow]3[/yellow]
+SSA Version:
+[pink]a1[/pink] [blue]=[/blue] [yellow]0[/yellow]
+[pink]b1[/pink] [blue]=[/blue] [yellow]1[/yellow]  # if branch
+[pink]b2[/pink] [blue]=[/blue] [yellow]2[/yellow]  # else branch
+[pink]b3[/pink] [blue]=[/blue] φ([green]b1[/green], [green]b2[/green])
+[pink]c1[/pink] [blue]=[/blue] [green]b3[/green] [blue]+[/blue] [yellow]3[/yellow]
+
+𖦹 Q6
+Original:
+[pink]m[/pink] [blue]=[/blue] [yellow]4[/yellow]
+[pink]n[/pink] [blue]=[/blue] [yellow]6[/yellow]
+if ([green]m[/green] [blue]<[/blue] [green]n[/green]):
+    [green]m[/green] [blue]=[/blue] [green]n[/green]
+else:
+    [green]n[/green] [blue]=[/blue] [green]m[/green]
+[pink]k[/pink] [blue]=[/blue] [green]m[/green] [blue]+[/blue] [green]n[/green]
+SSA Version:
+[pink]m1[/pink] [blue]=[/blue] [yellow]4[/yellow]
+[pink]n1[/pink] [blue]=[/blue] [yellow]6[/yellow]
+[pink]m2[/pink] [blue]=[/blue] [green]n1[/green]  # if branch
+[pink]n2[/pink] [blue]=[/blue] [green]m1[/green]  # else branch
+[pink]m3[/pink] [blue]=[/blue] φ([green]m1[/green], [green]m2[/green])
+[pink]n3[/pink] [blue]=[/blue] φ([green]n1[/green], [green]n2[/green])
+[pink]k1[/pink] [blue]=[/blue] [green]m3[/green] [blue]+[/blue] [green]n3[/green]
+
+4. LEVEL 3 — Loops (easy)
+IMG_URL phi_in_loop.png
+𖦹 Q7
+Original:
+[pink]i[/pink] [blue]=[/blue] [yellow]0[/yellow]
+while ([green]i[/green] [blue]<[/blue] [yellow]3[/yellow]):
+    [green]i[/green] [blue]=[/blue] [green]i[/green] [blue]+[/blue] [yellow]1[/yellow]
+SSA Version:
+[pink]i1[/pink] [blue]=[/blue] [yellow]0[/yellow]
+[pink]i2[/pink] [blue]=[/blue] φ([green]i1[/green], [green]i3[/green])
+while [green]i2[/green] [blue]<[/blue] [yellow]3[/yellow]:
+    [pink]i3[/pink] [blue]=[/blue] [green]i2[/green] [blue]+[/blue] [yellow]1[/yellow]
+
+𖦹 Q8
+Original:
+[pink]x[/pink] [blue]=[/blue] [yellow]2[/yellow]
+[pink]y[/pink] [blue]=[/blue] [yellow]1[/yellow]
+while ([green]x[/green] [blue]<[/blue] [yellow]5[/yellow]):
+    [green]y[/green] [blue]=[/blue] [green]y[/green] [blue]+[/blue] [green]x[/green]
+    [green]x[/green] [blue]=[/blue] [green]x[/green] [blue]+[/blue] [yellow]1[/yellow]
+SSA Version:
+[pink]x1[/pink] [blue]=[/blue] [yellow]2[/yellow]
+[pink]y1[/pink] [blue]=[/blue] [yellow]1[/yellow]
+[pink]x2[/pink] [blue]=[/blue] φ([green]x1[/green], [green]x3[/green])
+[pink]y2[/pink] [blue]=[/blue] φ([green]y1[/green], [green]y3[/green])
+while [green]x2[/green] [blue]<[/blue] [yellow]5[/yellow]:
+    [pink]y3[/pink] [blue]=[/blue] [green]y2[/green] [blue]+[/blue] [green]x2[/green]
+    [pink]x3[/pink] [blue]=[/blue] [green]x2[/green] [blue]+[/blue] [yellow]1[/yellow]
+
+𖦹 Q9
+Original:
+[pink]sum[/pink] [blue]=[/blue] [yellow]0[/yellow]
+[pink]i[/pink] [blue]=[/blue] [yellow]1[/yellow]
+while ([green]i[/green] [blue]<=[/blue] [yellow]3[/yellow]):
+    [green]sum[/green] [blue]=[/blue] [green]sum[/green] [blue]+[/blue] [green]i[/green]
+    [green]i[/green] [blue]=[/blue] [green]i[/green] [blue]+[/blue] [yellow]1[/yellow]
+SSA Version:
+[pink]sum1[/pink] [blue]=[/blue] [yellow]0[/yellow]
+[pink]i1[/pink] [blue]=[/blue] [yellow]1[/yellow]
+[pink]i2[/pink] [blue]=[/blue] φ([green]i1[/green], [green]i3[/green])
+[pink]sum2[/pink] [blue]=[/blue] φ([green]sum1[/green], [green]sum3[/green])
+while [green]i2[/green] [blue]<=[/blue] [yellow]3[/yellow]:
+    [pink]sum3[/pink] [blue]=[/blue] [green]sum2[/green] [blue]+[/blue] [green]i2[/green]
+    [pink]i3[/pink] [blue]=[/blue] [green]i2[/green] [blue]+[/blue] [yellow]1[/yellow]
+
+5. LEVEL 4 — Loop with 2 variables
+𖦹 Q10
+Original:
+[pink]a[/pink] [blue]=[/blue] [yellow]1[/yellow]
+[pink]b[/pink] [blue]=[/blue] [yellow]2[/yellow]
+while ([green]a[/green] [blue]<[/blue] [yellow]4[/yellow]):
+    [green]a[/green] [blue]=[/blue] [green]a[/green] [blue]+[/blue] [yellow]1[/yellow]
+    [green]b[/green] [blue]=[/blue] [green]b[/green] [blue]+[/blue] [green]a[/green]
+SSA Version:
+[pink]a1[/pink] [blue]=[/blue] [yellow]1[/yellow]
+[pink]b1[/pink] [blue]=[/blue] [yellow]2[/yellow]
+[pink]a2[/pink] [blue]=[/blue] φ([green]a1[/green], [green]a3[/green])
+[pink]b2[/pink] [blue]=[/blue] φ([green]b1[/green], [green]b3[/green])
+while [green]a2[/green] [blue]<[/blue] [yellow]4[/yellow]:
+    [pink]a3[/pink] [blue]=[/blue] [green]a2[/green] [blue]+[/blue] [yellow]1[/yellow]
+    [pink]b3[/pink] [blue]=[/blue] [green]b2[/green] [blue]+[/blue] [green]a3[/green]
+
+6. LEVEL 5 — Nested SSA tasks
+𖦹 Q11
+Original:
+[pink]x[/pink] [blue]=[/blue] [yellow]0[/yellow]
+[pink]y[/pink] [blue]=[/blue] [yellow]5[/yellow]
+while ([green]y[/green] [blue]>[/blue] [yellow]0[/yellow]):
+    [green]x[/green] [blue]=[/blue] [green]x[/green] [blue]+[/blue] [green]y[/green]
+    [green]y[/green] [blue]=[/blue] [green]y[/green] [blue]-[/blue] [yellow]1[/yellow]
+print([green]x[/green])
+SSA Version:
+[pink]x1[/pink] [blue]=[/blue] [yellow]0[/yellow]
+[pink]y1[/pink] [blue]=[/blue] [yellow]5[/yellow]
+[pink]x2[/pink] [blue]=[/blue] φ([green]x1[/green], [green]x3[/green])
+[pink]y2[/pink] [blue]=[/blue] φ([green]y1[/green], [green]y3[/green])
+while [green]y2[/green] [blue]>[/blue] [yellow]0[/yellow]:
+    [pink]x3[/pink] [blue]=[/blue] [green]x2[/green] [blue]+[/blue] [green]y2[/green]
+    [pink]y3[/pink] [blue]=[/blue] [green]y2[/green] [blue]-[/blue] [yellow]1[/yellow]
+print([green]x3[/green])
+
+𖦹 Q12
+Original:
+[pink]count[/pink] [blue]=[/blue] [yellow]0[/yellow]
+[pink]total[/pink] [blue]=[/blue] [yellow]0[/yellow]
+while ([green]count[/green] [blue]<[/blue] [yellow]3[/yellow]):
+    [pink]input[/pink] [blue]=[/blue] [green]count[/green] [blue]*[/blue] [yellow]2[/yellow]
+    [green]total[/green] [blue]=[/blue] [green]total[/green] [blue]+[/blue] [green]input[/green]
+    [green]count[/green] [blue]=[/blue] [green]count[/green] [blue]+[/blue] [yellow]1[/yellow]
+SSA Version:
+[pink]count1[/pink] [blue]=[/blue] [yellow]0[/yellow]
+[pink]total1[/pink] [blue]=[/blue] [yellow]0[/yellow]
+[pink]count2[/pink] [blue]=[/blue] φ([green]count1[/green], [green]count3[/green])
+[pink]total2[/pink] [blue]=[/blue] φ([green]total1[/green], [green]total3[/green])
+while [green]count2[/green] [blue]<[/blue] [yellow]3[/yellow]:
+    [pink]input1[/pink] [blue]=[/blue] [green]count2[/green] [blue]*[/blue] [yellow]2[/yellow]
+    [pink]total3[/pink] [blue]=[/blue] [green]total2[/green] [blue]+[/blue] [green]input1[/green]
+    [pink]count3[/pink] [blue]=[/blue] [green]count2[/green] [blue]+[/blue] [yellow]1[/yellow]
+7. OTHER NAMES FOR φ: Phoney-function
+--END--
