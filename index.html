@@ -17,27 +17,35 @@
         /* Custom Dropdown Styles */
         .custom-dropdown {
             position: relative;
-            min-width: 200px;
+            min-width: 150px;
             margin: 0 auto;
         }
         
         .dropdown-selected {
-            padding: 0.5rem 1rem;
-            font-size: clamp(0.9rem, 1.5vw, 1.2rem);
-            border-radius: 0.8rem;
+            padding: 0.3rem 0.8rem;
+            font-size: clamp(0.7rem, 1.2vw, 0.9rem);
+            border-radius: 0.6rem;
             cursor: pointer;
             font-family: "Quicksand", sans-serif;
             font-weight: 600;
             user-select: none;
-            text-align: center;
             background-color: black;
             color: lightgreen;
-            border: 1px solid rgba(144, 238, 144, 0.3);
-            transition: all 0.2s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
         }
         
-        .dropdown-selected:hover {
-            border-color: lightgreen;
+        #dropdown-text {
+            flex: 1;
+            text-align: center;
+        }
+        
+        .dropdown-arrow {
+            font-size: 0.7rem;
+            color: lightgreen;
+            flex-shrink: 0;
         }
         
         .dropdown-options {
@@ -46,15 +54,13 @@
             left: 0;
             right: 0;
             margin-top: 0.25rem;
-            border-radius: 0.8rem;
+            border-radius: 0.6rem;
             overflow: hidden;
             display: none;
             z-index: 1000;
             max-height: 300px;
             overflow-y: auto;
             background-color: black;
-            border: 1px solid rgba(144, 238, 144, 0.3);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
         }
         
         /* Custom scrollbar for dropdown */
@@ -87,24 +93,18 @@
         }
         
         .dropdown-option {
-            padding: 0.5rem 1rem;
+            padding: 0.3rem 0.8rem;
             cursor: pointer;
             font-family: "Quicksand", sans-serif;
             font-weight: 600;
-            font-size: clamp(0.9rem, 1.5vw, 1.2rem);
+            font-size: clamp(0.7rem, 1.2vw, 0.9rem);
             text-align: center;
             color: lightgreen;
             background-color: black;
-            transition: background-color 0.2s ease;
-        }
-        
-        .dropdown-option:hover {
-            background-color: rgba(144, 238, 144, 0.1);
         }
         
         .dropdown-option.selected {
-            background-color: rgba(144, 238, 144, 0.15);
-            color: lawngreen;
+            font-weight: 700;
         }
         
         .tags select:hover ~ .tags::after,
@@ -149,6 +149,7 @@
         <div class="custom-dropdown" id="custom-dropdown">
             <div class="dropdown-selected" id="dropdown-selected">
                 <span id="dropdown-text"></span>
+                <span class="dropdown-arrow">▼</span>
             </div>
             <div class="dropdown-options" id="dropdown-options"></div>
         </div>
@@ -168,3 +169,4 @@
     <script src="./script.js" defer></script>
 </body>
 </html>
+

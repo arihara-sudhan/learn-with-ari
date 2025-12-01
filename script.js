@@ -634,7 +634,7 @@ function updateRoute(fileName) {
     // If no route found, the entire path is the base (or empty if root)
     if (!foundRoute) {
         basePathParts = pathParts;
-    }
+        }
     
     // Construct base path
     const basePath = basePathParts.length > 0 ? '/' + basePathParts.join('/') : '';
@@ -716,11 +716,39 @@ async function loadNavigation() {
         }
         navigationItems = await response.json(); // Store globally
         
+        // Find the longest label to set dropdown width
+        let maxLength = 0;
+        let longestLabel = '';
+        navigationItems.forEach(item => {
+            if (item.label.length > maxLength) {
+                maxLength = item.label.length;
+                longestLabel = item.label;
+            }
+        });
+        
         // Get custom dropdown elements
         const dropdown = document.getElementById('custom-dropdown');
         const dropdownText = document.getElementById('dropdown-text');
         const dropdownOptions = document.getElementById('dropdown-options');
         const dropdownSelected = document.getElementById('dropdown-selected');
+        
+        // Set fixed width based on longest label
+        // Create a temporary element to measure text width
+        const tempSpan = document.createElement('span');
+        tempSpan.style.visibility = 'hidden';
+        tempSpan.style.position = 'absolute';
+        tempSpan.style.fontSize = 'clamp(0.7rem, 1.2vw, 0.9rem)';
+        tempSpan.style.fontFamily = '"Quicksand", sans-serif';
+        tempSpan.style.fontWeight = '600';
+        tempSpan.textContent = longestLabel + ' ▼';
+        document.body.appendChild(tempSpan);
+        const textWidth = tempSpan.offsetWidth;
+        document.body.removeChild(tempSpan);
+        
+        // Set dropdown width (add padding for caret and extra space)
+        const dropdownWidth = textWidth + 40; // 40px for padding and caret
+        dropdown.style.width = `${dropdownWidth}px`;
+        dropdown.style.minWidth = `${dropdownWidth}px`;
         
         // Populate dropdown options
         navigationItems.forEach(item => {
