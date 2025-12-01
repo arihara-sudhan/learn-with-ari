@@ -10,6 +10,7 @@ const getBaseUrl = () => {
     return './learnings/';
 };
 const RAW_GITHUB_URL = "https://raw.githubusercontent.com/arihara-sudhan/learn-with-ari/refs/heads/main/learnings/";
+const RAW_GITHUB_BASE = "https://raw.githubusercontent.com/arihara-sudhan/learn-with-ari/refs/heads/main/";
 
 const getImageBaseUrl = () => {
     if (window.location.origin.includes('github.io')) {
@@ -735,45 +736,60 @@ function getNavigationUrl() {
 
 async function loadNavigation() {
     try {
-        // For GitHub Pages, try base path first
+        // Known navigation IDs
+        const knownNavIds = ['nlp', 'classicalml', 'rag', 'number-theory', 'advanced-dsa', 'advanced-db', 'crispr', 'multivariate-analysis', 'advanced-cd'];
+        
         let navUrl = './navigation.json';
+        let fallbackUrl = null;
+        let rawGitHubUrl = null;
+        
         if (window.location.origin.includes('github.io')) {
-            // Try to determine base path
+            // For GitHub Pages, determine base path
             let pathname = window.location.pathname;
             pathname = pathname.replace(/\/index\.html$/, '').replace(/\/$/, '');
             const pathParts = pathname.split('/').filter(p => p && p !== 'index.html');
-            
-            // Known navigation IDs
-            const knownNavIds = ['nlp', 'classicalml', 'rag', 'number-theory', 'advanced-dsa', 'advanced-db', 'crispr', 'multivariate-analysis', 'advanced-cd'];
             
             // Remove navigation ID from path to get base
             let basePathParts = [];
             for (let i = 0; i < pathParts.length; i++) {
                 if (knownNavIds.includes(pathParts[i])) {
+                    // Found a navigation ID, everything before this is the base
                     break;
                 }
                 basePathParts.push(pathParts[i]);
             }
             
+            // Construct base path
             const basePath = basePathParts.length > 0 ? '/' + basePathParts.join('/') : '';
             navUrl = `${window.location.origin}${basePath}/navigation.json`;
+            fallbackUrl = `${window.location.origin}/learn-with-ari/navigation.json`;
+            rawGitHubUrl = `${RAW_GITHUB_BASE}navigation.json`;
         }
         
+        // Try primary URL
         let response = await fetch(navUrl);
+        let finalUrl = navUrl;
+        
+        // If failed, try fallback
+        if (!response.ok && fallbackUrl && navUrl !== fallbackUrl) {
+            console.log(`Primary navigation URL failed (${response.status}), trying fallback: ${fallbackUrl}`);
+            response = await fetch(fallbackUrl);
+            finalUrl = fallbackUrl;
+        }
+        
+        // If still failed, try raw GitHub URL
+        if (!response.ok && rawGitHubUrl) {
+            console.log(`Fallback navigation URL failed (${response.status}), trying raw GitHub: ${rawGitHubUrl}`);
+            response = await fetch(rawGitHubUrl);
+            finalUrl = rawGitHubUrl;
+        }
+        
         if (!response.ok) {
-            // Fallback: try absolute path for learn-with-ari
-            if (window.location.origin.includes('github.io')) {
-                const fallbackUrl = `${window.location.origin}/learn-with-ari/navigation.json`;
-                response = await fetch(fallbackUrl);
-                if (!response.ok) {
-                    throw new Error(`HTTP Error! Status: ${response.status} - Failed to load navigation.json from ${navUrl} and ${fallbackUrl}`);
-                }
-            } else {
-                throw new Error(`HTTP Error! Status: ${response.status}`);
-            }
+            throw new Error(`HTTP Error! Status: ${response.status} - Failed to load navigation.json from ${navUrl}, ${fallbackUrl || 'N/A'}, ${rawGitHubUrl || 'N/A'}`);
         }
         
         navigationItems = await response.json(); // Store globally
+        console.log(`Navigation loaded successfully from: ${finalUrl}`);
         
         // Find the longest label to set dropdown width
         let maxLength = 0;
