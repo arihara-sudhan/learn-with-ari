@@ -702,19 +702,58 @@ window.addEventListener('popstate', function(event) {
     }
 });
 
+function getNavigationUrl() {
+    if (window.location.origin.includes('github.io')) {
+        let pathname = window.location.pathname;
+        pathname = pathname.replace(/\/index\.html$/, '').replace(/\/$/, '');
+        
+        // Split path and filter out empty strings
+        const pathParts = pathname.split('/').filter(p => p && p !== 'index.html');
+        
+        // Known navigation IDs (fallback if navigationItems not loaded yet)
+        const knownNavIds = ['nlp', 'classicalml', 'rag', 'number-theory', 'advanced-dsa', 'advanced-db', 'crispr', 'multivariate-analysis', 'advanced-cd'];
+        const navIds = navigationItems.length > 0 
+            ? navigationItems.map(item => item.id) 
+            : knownNavIds;
+        
+        // Find base path: everything before the first navigation ID
+        let basePathParts = [];
+        for (let i = 0; i < pathParts.length; i++) {
+            if (navIds.includes(pathParts[i])) {
+                // Found a route, stop here - base path is everything before this
+                break;
+            }
+            basePathParts.push(pathParts[i]);
+        }
+        
+        // Construct base path
+        const basePath = basePathParts.length > 0 ? '/' + basePathParts.join('/') : '';
+        return `${window.location.origin}${basePath}/navigation.json`;
+    }
+    return './navigation.json';
+}
+
 async function loadNavigation() {
     try {
-        // Try relative path first (for GitHub Pages), fallback to base path
-        let navUrl = './navigation.json';
-        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-            navUrl = './navigation.json';
-        }
+        // Get navigation URL based on current path
+        let navUrl = getNavigationUrl();
         
         const response = await fetch(navUrl);
         if (!response.ok) {
-            throw new Error(`HTTP Error! Status: ${response.status}`);
+            // Fallback: try base path for learn-with-ari
+            if (window.location.origin.includes('github.io')) {
+                navUrl = `${window.location.origin}/learn-with-ari/navigation.json`;
+                const fallbackResponse = await fetch(navUrl);
+                if (!fallbackResponse.ok) {
+                    throw new Error(`HTTP Error! Status: ${response.status} - Failed to load from both ${navUrl} and fallback`);
+                }
+                navigationItems = await fallbackResponse.json();
+            } else {
+                throw new Error(`HTTP Error! Status: ${response.status}`);
+            }
+        } else {
+            navigationItems = await response.json(); // Store globally
         }
-        navigationItems = await response.json(); // Store globally
         
         // Find the longest label to set dropdown width
         let maxLength = 0;
