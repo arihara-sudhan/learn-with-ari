@@ -4121,4 +4121,69 @@ https://github.com/arihara-sudhan/dsa/blob/main/data-structures/graphs/topologic
 --EMBED-GIT--
 https://github.com/arihara-sudhan/dsa/blob/main/data-structures/graphs/topological_sort_khan.cpp
 
+21. BFS
+𖦹 BFS = Breadth-First Search; explores graph level by level like waves
+𖦹 Start at one node:
+• First explore nodes 1 step away
+• Then nodes 2 steps away
+• Then 3 steps away, and so on
+𖦹 Finish one layer before moving to next
+𖦹 BFS grows outward like ripples
+
+22. Why Use a Queue
+𖦹 Queue gives first-come, first-served order
+𖦹 When a node is discovered, add to back
+𖦹 When processing, take from front
+𖦹 Ensures earliest discovered nodes are processed first → level by level
+--EMBED-GIT--
+https://github.com/arihara-sudhan/dsa/blob/main/data-structures/graphs/bfs.cpp
+
+23. What BFS Provides
+𖦹 Order of node visits
+𖦹 Shortest path in number of edges from start node
+𖦹 Checks if graph is connected
+• If some nodes are not reached, graph has unreachable parts
+
+24. When BFS is Used
+𖦹 Shortest path problems with equal edge weight
+𖦹 Social networks (find people at distance 1,2,3…)
+𖦹 Level-order tree traversal
+𖦹 Solving puzzles (Rubik’s cube, sliding puzzles)
+𖦹 Routing and networking
+
+25. BFS Complexity
+𖦹 Time = O(V + E)
+𖦹 Space = O(V) (for queue and visited nodes)
+
+26. DFS
+𖦹 DFS = Depth-First Search; explores graph deep along a path before backtracking
+𖦹 Like walking in a maze:
+• Pick a path and follow it as far as possible
+• If dead end, backtrack to previous junction
+• Repeat until all paths explored
+
+27. How DFS Works
+𖦹 Start at a node and mark it visited
+𖦹 Pick one unvisited neighbor and explore recursively
+𖦹 Backtrack when no more unvisited neighbors
+𖦹 Repeat until all reachable nodes are visited
+--EMBED-GIT--
+https://github.com/arihara-sudhan/dsa/blob/main/data-structures/graphs/dfs.cpp
+
+28. Why a Stack is Used
+𖦹 DFS can use recursion (call stack) or an explicit stack
+𖦹 Stack remembers current path for correct backtracking
+--EMBED-GIT--
+https://github.com/arihara-sudhan/dsa/blob/main/data-structures/graphs/dfs_stack.cpp
+
+29. What DFS Provides
+𖦹 Order of nodes visited (depth-first)
+𖦹 Can detect cycles
+𖦹 Can classify edges: tree, back, forward, cross
+𖦹 Helps in connected components, checking paths, and solving puzzles
+
+30. DFS Complexity
+𖦹 Time = O(V + E)
+𖦹 Space = O(V) (for recursion stack or explicit stack)
+
 --END--
