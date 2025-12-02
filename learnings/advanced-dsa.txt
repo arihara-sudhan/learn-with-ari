@@ -4096,4 +4096,29 @@ IMG_URL directed_g.png
 • Euler path/cycle → degree conditions decide existence
 • Graph traversal → vertices with higher degree may take longer to explore
 
+18. Topological Sort
+𖦹 If there is an edge u→v, then u must come before v in the order
+𖦹 Works only for graphs with no cycles (DAGs)
+• A cycle makes the order impossible because each node depends on another in a loop
+
+19. Basic Idea
+𖦹 Nodes with no incoming edges are the starting points
+𖦹 Pick all zero-indegree nodes first
+𖦹 After picking a node, remove it and its outgoing edges
+• This may create new zero-indegree nodes
+𖦹 Repeat until all nodes are processed or no zero-indegree node is left
+𖦹 If nodes remain but none have indegree 0, a cycle exists and no valid order is possible
+--EMBED-GIT--
+https://github.com/arihara-sudhan/dsa/blob/main/data-structures/graphs/topological_sort_bruteforce.cpp
+
+20. Kahn’s Algorithm (BFS Style)
+𖦹 Count indegree of each node once
+𖦹 Put all zero-indegree nodes into a queue
+𖦹 Remove nodes from queue one by one
+• Reduce indegree of their neighbors
+• When a neighbor’s indegree becomes zero, add it to the queue
+𖦹 If all nodes are removed, order is valid; else, there is a cycle
+--EMBED-GIT--
+https://github.com/arihara-sudhan/dsa/blob/main/data-structures/graphs/topological_sort_khan.cpp
+
 --END--
