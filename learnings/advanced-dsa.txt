@@ -4095,7 +4095,8 @@ IMG_URL directed_g.png
 • Topological sort → uses in-degree in directed graphs
 • Euler path/cycle → degree conditions decide existence
 • Graph traversal → vertices with higher degree may take longer to explore
-
+--END--
+--BEGIN--02/12/2025--TOPOLOGICAL SORT--
 18. Topological Sort
 𖦹 If there is an edge u→v, then u must come before v in the order
 𖦹 Works only for graphs with no cycles (DAGs)
@@ -4121,6 +4122,8 @@ https://github.com/arihara-sudhan/dsa/blob/main/data-structures/graphs/topologic
 --EMBED-GIT--
 https://github.com/arihara-sudhan/dsa/blob/main/data-structures/graphs/topological_sort_khan.cpp
 
+--END--
+--BEGIN--02/12/2025--BFS AND DFS--
 21. BFS
 𖦹 BFS = Breadth-First Search; explores graph level by level like waves
 𖦹 Start at one node:
@@ -4185,5 +4188,4 @@ https://github.com/arihara-sudhan/dsa/blob/main/data-structures/graphs/dfs_stack
 30. DFS Complexity
 𖦹 Time = O(V + E)
 𖦹 Space = O(V) (for recursion stack or explicit stack)
-
 --END--
