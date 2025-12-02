@@ -4189,3 +4189,40 @@ https://github.com/arihara-sudhan/dsa/blob/main/data-structures/graphs/dfs_stack
 𖦹 Time = O(V + E)
 𖦹 Space = O(V) (for recursion stack or explicit stack)
 --END--
+--BEGIN--02/12/2025--SHORTEST PATH--
+1. Shortest Path Problems
+𖦹 A network of cities connected by roads can have costs like distance, time, or money
+𖦹 A path = sequence of connected roads from one city to another
+𖦹 Weighted path length = sum of all road costs
+𖦹 Unweighted path length = number of roads only
+𖦹 Single-source shortest path = find cheapest route from one city to all others
+𖦹 Useful in real life:
+• Sending data over networks
+• Planning flight/train routes
+• GPS navigation
+
+2. Unweighted Shortest Path
+𖦹 All roads considered equal or we care only about number of roads
+𖦹 Start from source city, visit cities 1 road away, then 2 roads away, and so on
+𖦹 Uses BFS:
+• Start at source, distance = 0
+• Visit neighbors, distance = 1
+• Visit neighbors of neighbors, distance = 2
+• Repeat until all reachable cities are visited
+𖦹 Distance recorded is guaranteed shortest in terms of number of roads
+𖦹 Time Complexity = O(V + E), Space Complexity = O(V)
+
+3. Weighted Shortest Path
+𖦹 Roads have different costs (weights)
+𖦹 Positive weights only → use Dijkstra’s algorithm
+• Pick city with smallest known cost, update neighbors
+𖦹 Negative weights allowed → use Bellman-Ford algorithm
+• Handles negative cycles, but shortest path may not exist if negative cycle exists
+𖦹 Useful for:
+• Roads with tolls or different travel times
+• Optimizing network traffic with varying link costs
+• Scheduling tasks with dependencies and costs
+𖦹 Time & Space Complexity:
+• Dijkstra (with min-heap) → Time O((V+E) log V), Space O(V)
+• Bellman-Ford → Time O(VE), Space O(V)
+--END--
