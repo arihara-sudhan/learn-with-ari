@@ -1786,11 +1786,7 @@ IMG_URL queue-types.jpg
     }
 };
 
-15. Summary table
-𖦹 Unsorted list: fast insert, slow delete.
-𖦹 Sorted list: slow insert, fast delete.
-𖦹 Table:
-
+15. Comparison
 Structure   Insert   Delete_best   Notes
 Unsorted    O(1)     O(n)          Fast insert, slow delete
 Sorted      O(n)     O(1)          Slow insert, fast delete
@@ -1829,7 +1825,7 @@ Sorted      O(n)     O(1)          Slow insert, fast delete
 19. What happens on pop()
 𖦹 pq.[yellow]pop[/yellow]() removes the root (highest priority)
 𖦹 Last element moves to the root
-𖦹 Then “heapify-down” runs
+𖦹 Then “heapify-down (Percolate Down/Sift Down)” runs
 • It swaps with the larger child until heap rule becomes correct
 - Same as heap pop
 
@@ -2081,7 +2077,7 @@ public:
 
 --END--
 --BEGIN--24/11/2025--HEAPS--
-1. Heap
+1. Heaps
 IMG_URL heaps.png
 𖦹 A heap is a tree where each parent is more important than its children
 𖦹 More important means smaller (min-heap) or larger (max-heap)
@@ -2116,14 +2112,19 @@ IMG_URL heaps.png
 • Index: 1 2 3 4 5 6 7
 • Value: 2 5 6 8 9 10 11
 𖦹 Same tree shape using array positions
+ROOT: FLOOR[(i-1)/2]
 
-5. Pop operation idea (extract-min)
+5. Pop operation idea (Extract-min)
 𖦹 Remove root (minimum element)
 𖦹 Move last element to root
 𖦹 Heapify down to fix heap property
-- Explanation: each pop removes smallest element in min-heap
 
 6. First pop
+        2
+      /    \
+     5      6
+    / \    / \ 
+   8  9  10   11
 𖦹 Remove 2 and move 11 to root
 𖦹 Heapify by swapping with smaller child until property holds
 𖦹 Tree after moving 11:
@@ -2146,7 +2147,7 @@ IMG_URL heaps.png
         10
       /    \
      8      6
-    / \    / 
+    / \    
    11 9  
 𖦹 Swap with smaller child 6:
         6
@@ -2162,7 +2163,7 @@ IMG_URL heaps.png
         9
       /   \
      8     10
-    / \    
+    /  
    11     
 𖦹 Swap with 8:
         8
@@ -2209,180 +2210,15 @@ IMG_URL heaps.png
 • 2, 5, 6, 8, 9, 10, 11
 - Explanation: min-heap gives ascending order when popping
 
-14. Implementation in C++
-𖦹 We add a dummy value at index 0 so that child and parent formulas become easy
-𖦹 When heap uses 1-based indexing, child and parent math is clean
-• left child = 2*i
-• right child = 2*i + 1
-• parent = i/2
-- No need for +1 or -1 adjustments, so mistakes are fewer
+14. MinHeap
+--EMBED-GIT--
+https://github.com/arihara-sudhan/dsa/blob/main/data-structures/heaps/min_heap.cpp
 
-15. The internal structure
-𖦹 The heap is stored in a dynamic array using [blue]vector<int>[/blue] [yellow]heap[/yellow]
-𖦹 Even though it looks like an array, it behaves like a full binary tree
-• index 1 is the root
-• index 2,3 are next level
-• index 4,5,6,7 are next level
-- This shape always stays full from left to right
-
-16. push(x): Adding a value
-𖦹 Step 1: Put new value at end of array using [green]push_back[/green]
-• This is like adding a new leaf in a tree
-𖦹 Step 2: Bubble Up to keep heap rules correct
-• If the child is smaller than the parent, swap and move up
-- This continues until the new value reaches the right place
-
-17. pop(): Removing the smallest value
-𖦹 Step 1: Take out the root and replace it with last element
-• Put last element into root spot
-• Remove last element from array
-𖦹 Step 2: Heapify Down
-• Compare root with its children
-• Swap with the smaller child
-• Keep going down until heap rules are correct
-
-18. top()
-𖦹 Returns the smallest element which is at index 0 (root)
-empty()
-𖦹 Returns true if the array has no elements
-print()
-𖦹 Shows the array that represents the heap
-
-19. Time needed for each action
-𖦹 push(x) takes O(log n)
-𖦹 pop() also takes O(log n)
-𖦹 top() takes O(1)
-𖦹 empty() takes O(1)
-
-20. MinHeap code
-[pink]#include[/pink] <[yellow]iostream[/yellow]>
-[pink]#include[/pink] <[yellow]vector[/yellow]>
-[pink]using[/pink] [pink]namespace[/pink] [yellow]std[/yellow];
-
-[pink]class[/pink] [yellow]MinHeap[/yellow] {
-    [blue]vector<int>[/blue] [yellow]heap[/yellow];
-
-    [pink]int[/pink] [yellow]parent[/yellow]([pink]int[/pink] [yellow]i[/yellow]) { [pink]return[/pink] ([yellow]i[/yellow] - 1) / 2; }
-    [pink]int[/pink] [yellow]left[/yellow]([pink]int[/pink] [yellow]i[/yellow])   { [pink]return[/pink] 2 * [yellow]i[/yellow] + 1; }
-    [pink]int[/pink] [yellow]right[/yellow]([pink]int[/pink] [yellow]i[/yellow])  { [pink]return[/pink] 2 * [yellow]i[/yellow] + 2; }
-
-[pink]public[/pink]:
-
-    // Insert a new value
-    [pink]void[/pink] [yellow]push[/yellow]([pink]int[/pink] [yellow]x[/yellow]) {
-        [yellow]heap[/yellow].[green]push_back[/green]([yellow]x[/yellow]);
-        [pink]int[/pink] [yellow]i[/yellow] = [yellow]heap[/yellow].size() - 1;
-
-        // Bubble up
-        [pink]while[/pink] ([yellow]i[/yellow] != 0 && [yellow]heap[/yellow][parent([yellow]i[/yellow])] > [yellow]heap[/yellow][[yellow]i[/yellow]]) {
-            [green]swap[/green]([yellow]heap[/yellow][[yellow]i[/yellow]], [yellow]heap[/yellow][parent([yellow]i[/yellow])]);
-            [yellow]i[/yellow] = parent([yellow]i[/yellow]);
-        }
-    }
-
-    // Remove minimum (root)
-    [pink]int[/pink] [yellow]pop[/yellow]() {
-        [pink]if[/pink] ([yellow]heap[/yellow].empty()) {
-            [green]cout[/green] << "Heap empty\n";
-            [pink]return[/pink] -1;
-        }
-
-        [pink]int[/pink] [yellow]root[/yellow] = [yellow]heap[/yellow][0];
-        [yellow]heap[/yellow][0] = [yellow]heap[/yellow].back();
-        [yellow]heap[/yellow].[green]pop_back[/green]();
-
-        ;
-        [pink]return[/pink] [yellow]root[/yellow];
-    }
-
-    // Heapify down from i
-    [pink]void[/pink] [yellow]heapify[/yellow]([pink]int[/pink] [yellow]i[/yellow]) {
-        [pink]int[/pink] [yellow]smallest[/yellow] = [yellow]i[/yellow];
-        [pink]int[/pink] [yellow]l[/yellow] = left([yellow]i[/yellow]);
-        [pink]int[/pink] [yellow]r[/yellow] = right([yellow]i[/yellow]);
-
-        [pink]if[/pink] ([yellow]l[/yellow] < [yellow]heap[/yellow].size() && [yellow]heap[/yellow][[yellow]l[/yellow]] < [yellow]heap[/yellow][[yellow]smallest[/yellow]]) [yellow]smallest[/yellow] = [yellow]l[/yellow];
-        [pink]if[/pink] ([yellow]r[/yellow] < [yellow]heap[/yellow].size() && [yellow]heap[/yellow][[yellow]r[/yellow]] < [yellow]heap[/yellow][[yellow]smallest[/yellow]]) [yellow]smallest[/yellow] = [yellow]r[/yellow];
-
-        [pink]if[/pink] ([yellow]smallest[/yellow] != [yellow]i[/yellow]) {
-            [green]swap[/green]([yellow]heap[/yellow][[yellow]i[/yellow]], [yellow]heap[/yellow][[yellow]smallest[/yellow]]);
-            [yellow]heapify[/yellow]([yellow]smallest[/yellow]);
-        }
-    }
-
-    [pink]int[/pink] [yellow]top[/yellow]() {
-        [pink]if[/pink] ([yellow]heap[/yellow].empty()) [pink]return[/pink] -1;
-        [pink]return[/pink] [yellow]heap[/yellow][0];
-    }
-
-    [pink]bool[/pink] [yellow]empty[/yellow]() {
-        [pink]return[/pink] [yellow]heap[/yellow].empty();
-    }
-};
-
-21. MaxHeap code
-[pink]#include[/pink] <[yellow]iostream[/yellow]>
-[pink]#include[/pink] <[yellow]vector[/yellow]>
-[pink]using[/pink] [pink]namespace[/pink] [yellow]std[/yellow];
-
-[pink]class[/pink] [yellow]MaxHeap[/yellow] {
-    [blue]vector<int>[/blue] [yellow]heap[/yellow];
-
-    [pink]int[/pink] [yellow]parent[/yellow]([pink]int[/pink] [yellow]i[/yellow]) { [pink]return[/pink] ([yellow]i[/yellow] - 1) / 2; }
-    [pink]int[/pink] [yellow]left[/yellow]([pink]int[/pink] [yellow]i[/yellow])   { [pink]return[/pink] 2 * [yellow]i[/yellow] + 1; }
-    [pink]int[/pink] [yellow]right[/yellow]([pink]int[/pink] [yellow]i[/yellow])  { [pink]return[/pink] 2 * [yellow]i[/yellow] + 2; }
-
-[pink]public[/pink]:
-
-    [pink]void[/pink] [yellow]push[/yellow]([pink]int[/pink] [yellow]x[/yellow]) {
-        [yellow]heap[/yellow].[green]push_back[/green]([yellow]x[/yellow]);
-        [pink]int[/pink] [yellow]i[/yellow] = [yellow]heap[/yellow].size() - 1;
-
-        // Bubble up
-        [pink]while[/pink] ([yellow]i[/yellow] != 0 && [yellow]heap[/yellow][parent([yellow]i[/yellow])] < [yellow]heap[/yellow][[yellow]i[/yellow]]) {
-            [green]swap[/green]([yellow]heap[/yellow][[yellow]i[/yellow]], [yellow]heap[/yellow][parent([yellow]i[/yellow])]);
-            [yellow]i[/yellow] = parent([yellow]i[/yellow]);
-        }
-    }
-
-    [pink]int[/pink] [yellow]pop[/yellow]() {
-        [pink]if[/pink] ([yellow]heap[/yellow].empty()) {
-            [green]cout[/green] << "Heap empty\n";
-            [pink]return[/pink] -1;
-        }
-
-        [pink]int[/pink] [yellow]root[/yellow] = [yellow]heap[/yellow][0];
-        [yellow]heap[/yellow][0] = [yellow]heap[/yellow].back();
-        [yellow]heap[/yellow].[green]pop_back[/green]();
-
-        ;
-        [pink]return[/pink] [yellow]root[/yellow];
-    }
-
-    [pink]void[/pink] [yellow]heapify[/yellow]([pink]int[/pink] [yellow]i[/yellow]) {
-        [pink]int[/pink] [yellow]largest[/yellow] = [yellow]i[/yellow];
-        [pink]int[/pink] [yellow]l[/yellow] = left([yellow]i[/yellow]);
-        [pink]int[/pink] [yellow]r[/yellow] = right([yellow]i[/yellow]);
-
-        [pink]if[/pink] ([yellow]l[/yellow] < [yellow]heap[/yellow].size() && [yellow]heap[/yellow][[yellow]l[/yellow]] > [yellow]heap[/yellow][[yellow]largest[/yellow]]) [yellow]largest[/yellow] = [yellow]l[/yellow];
-        [pink]if[/pink] ([yellow]r[/yellow] < [yellow]heap[/yellow].size() && [yellow]heap[/yellow][[yellow]r[/yellow]] > [yellow]heap[/yellow][[yellow]largest[/yellow]]) [yellow]largest[/yellow] = [yellow]r[/yellow];
-
-        [pink]if[/pink] ([yellow]largest[/yellow] != [yellow]i[/yellow]) {
-            [green]swap[/green]([yellow]heap[/yellow][[yellow]i[/yellow]], [yellow]heap[/yellow][[yellow]largest[/yellow]]);
-            [yellow]heapify[/yellow]([yellow]largest[/yellow]);
-        }
-    }
-
-    [pink]int[/pink] [yellow]top[/yellow]() {
-        [pink]if[/pink] ([yellow]heap[/yellow].empty()) [pink]return[/pink] -1;
-        [pink]return[/pink] [yellow]heap[/yellow][0];
-    }
-
-    [pink]bool[/pink] [yellow]empty[/yellow]() {
-        [pink]return[/pink] [yellow]heap[/yellow].empty();
-    }
-};
+15. MaxHeap code
+--EMBED-GIT--
+https://github.com/arihara-sudhan/dsa/blob/main/data-structures/heaps/max_heap.cpp
 --END--
+
 --BEGIN--24/11/2025--TREES--
 1. Trees
 𖦹 A tree organizes data in a hierarchy like a family tree or company structure
