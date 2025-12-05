@@ -4052,3 +4052,81 @@ https://github.com/arihara-sudhan/dsa/blob/main/data-structures/graphs/dfs_stack
 • Dijkstra (with min-heap) → Time O((V+E) log V), Space O(V)
 • Bellman-Ford → Time O(VE), Space O(V)
 --END--
+--BEGIN--05/12/2025--DIVIDE AND CONQUER--
+1. Divide and Conquer
+𖦹 Break hard problems into smaller pieces
+𖦹 Solve each small piece the same way (recursively)
+𖦹 Combine answers from small pieces to get final answer
+- Example: Sorting a huge pile by splitting in half, sorting halves, then merging (MergeSort)
+𖦹 Faster than brute-force for big problems
+- Brute-force like checking every pair of points takes n² time
+- Divide and conquer can reduce it to n.log n
+𖦹 Analyze speed using recurrence relations
+• Recurrence example: T(n) = 2T(n/2) + O(n)
+- Means split job into 2 smaller jobs and do extra work to combine
+- Solving gives time complexity like O(n.log n)
+𖦹 Useful applications
+• Finding two closest points on a map
+• Multiplying very big numbers fast
+• Comparing two ranked lists
+• Cleaning noisy signals
+𖦹 Big picture
+- Dumb way is already polynomial (like n²)
+- Divide and conquer makes it much faster (n.log n or better)
+- Goal: not just doable, but blazing fast
+
+2. Karatsuba Multiplication
+𖦹 Normal way for multiplying n-digit numbers needs n² small multiplications
+𖦹 Example: 123 × 456 needs 9 small multiplications in the usual method
+𖦹 Karatsuba splits each number into two halves for faster work
+• Example split:
+- 123 → 12 | 3
+- 456 → 45 | 6
+𖦹 Normal half-way method needs 4 multiplications:
+• 12 × 45
+• 12 × 6
+• 3 × 45
+• 3 × 6
+𖦹 Karatsuba uses only 3 multiplications
+• A = 12 × 45
+• B = 3 × 6
+• C = (12 + 3) × (45 + 6)
+- With A, B, C and simple add/subtract, we get the final answer (123 × 456 = 56088)
+𖦹 Fewer recursive steps give big speedup when numbers get very large
+• Normal method keeps doing 4 half-size problems → time is n²
+• Karatsuba keeps doing 3 half-size problems → time is about n¹·⁶
+- This makes large-number multiplication much faster
+• Formula using split pieces:
+x = a·B + b  
+y = c·B + d  
+Compute:
+[pink]p1[/pink] = [yellow]a[/yellow]·[yellow]c[/yellow]  
+[pink]p2[/pink] = [yellow]b[/yellow]·[yellow]d[/yellow]  
+[pink]p3[/pink] = ([yellow]a[/yellow] + [yellow]b[/yellow])([yellow]c[/yellow] + [yellow]d[/yellow])  
+Middle term:
+[pink]m[/pink] = [pink]p3[/pink] − [pink]p1[/pink] − [pink]p2[/pink]  
+Combine:
+x·y = [pink]p1[/pink]·B² + [pink]m[/pink]·B + [pink]p2[/pink]
+- Time complexity: roughly n¹·⁶  
+- Space complexity: depends on recursion depth, about O(n)
+--EMBED-GIT--
+https://github.com/arihara-sudhan/dsa/blob/main/algorithms/karatsuba.py
+𖦹 Large example: 12345678 × 87654321
+• Level 0: two 8-digit numbers  
+• Choose B = 10⁴  
+• Split:  
+- 12345678 → 1234 | 5678  
+- 87654321 → 8765 | 4321
+𖦹 Karatsuba Level-1 (three 4-digit × 4-digit problems)
+• [pink]p1[/pink] = 1234 × 8765  
+• [pink]p2[/pink] = 5678 × 4321  
+• [pink]p3[/pink] = (1234 + 5678)(8765 + 4321) = 6912 × 13086
+𖦹 Karatsuba Level-2 (nine 2-digit × 2-digit problems)
+• Examples: 12×87, 34×65, 46×152, 56×43, 78×21, 134×64, 69×130, 12×86, 81×216
+𖦹 Karatsuba Level-3 (base case)
+• Single-digit multiplications like 1×8, 2×7, 3×5, etc.
+- Total: 27 one-digit multiplications
+- This is the stopping point
+- Time complexity: about n¹·⁶  
+- Space complexity: depends on recursion depth, roughly O(n)
+--END--
