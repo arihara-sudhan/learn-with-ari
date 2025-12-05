@@ -4111,6 +4111,7 @@ x·y = [pink]p1[/pink]·B² + [pink]m[/pink]·B + [pink]p2[/pink]
 - Space complexity: depends on recursion depth, about O(n)
 --EMBED-GIT--
 https://github.com/arihara-sudhan/dsa/blob/main/algorithms/karatsuba.py
+Recurrence Relation: T(n)=3T(n/2)+O(n)
 𖦹 Large example: 12345678 × 87654321
 • Level 0: two 8-digit numbers  
 • Choose B = 10⁴  
@@ -4129,4 +4130,329 @@ https://github.com/arihara-sudhan/dsa/blob/main/algorithms/karatsuba.py
 - This is the stopping point
 - Time complexity: about n¹·⁶  
 - Space complexity: depends on recursion depth, roughly O(n)
+
+3. Strassen Matrix Multiplication
+𖦹 Normal 2×2 multiplication needs 8 multiplications
+• Example: [ a b ] × [ e f ] → results:
+  [ c d ]   [ g h ]  
+- Each result: a·e + b·g, a·f + b·h, c·e + d·g, c·f + d·h → total 8 multiplications
+𖦹 For n×n matrices → n³ multiplications
+- Example: n = 1024 → over a billion multiplications
+
+𖦹 Strassen reduces 2×2 multiplication to 7 multiplications
+• M1 = (a + d)(e + h)  
+• M2 = (c + d)·e  
+• M3 = a·(f − h)  
+• M4 = d·(g − e)  
+• M5 = (a + b)·h  
+• M6 = (c − a)(e + f)  
+• M7 = (b − d)(g + h)
+- Final 4 entries are built from M1…M7 using only additions/subtractions
+- 2×2 multiplication: 8 → 7 multiplications
+
+𖦹 Divide-and-conquer for big matrices
+• Split n×n matrices into four (n/2)×(n/2) blocks:  
+  A = [ A11  A12 ]   B = [ B11  B12 ]  
+      [ A21  A22 ]       [ B21  B22 ]
+• Use 7-trick recursively on blocks
+• Combine the seven results with additions/subtractions to get final matrix
+--EMBED-GIT--
+https://github.com/arihara-sudhan/dsa/blob/main/algorithms/strassen.py
+𖦹 Recurrence relation
+• T(n) = 7 · T(n/2) + O(n²)  
+- Only 7 recursive calls per level
+- Extra O(n²) = additions and subtractions of blocks
+
+𖦹 Speed comparison
+• Normal method: n³ multiplications  
+• Strassen method: roughly n²·⁸⁰⁷ multiplications  
+- Example: 1024×1024 → ~10⁹ normal vs ~10⁸ Strassen → 7–8× faster  
+- Example: 1,000,000×1,000,000 → hundreds of times faster
+- Current best: n²·³⁷²⁸⁶, but Strassen started the revolution
+- Time complexity: roughly n²·⁸⁰⁷  
+- Space complexity: O(n²) for storing intermediate blocks
+--END--
+--BEGIN--05/12/2025--GREEDY TECHNIQUES--
+1. Greedy Method
+𖦹 Make a choice that looks best at the moment (local optimum)
+𖦹 Repeat this step by step
+𖦹 Hope these local choices lead to global best
+- In short: "Take the best option now and keep going"
+𖦹 Key idea
+• Works step by step
+• Does not go back or change previous choices
+• Always chooses locally best option
+- If problem has greedy-choice property → gives global best
+𖦹 Examples
+• Coin Change Problem (with standard coins)
+- Always pick largest coin ≤ remaining amount
+• Fractional Knapsack Problem
+- Pick items with highest value/weight ratio first
+• Activity Selection Problem
+- Pick next activity that finishes earliest
+𖦹 Time Complexity
+• Depends on how choices are selected
+• O(n log n) if sorting is needed
+• O(n) if no sorting is required
+
+2. Huffman Coding
+𖦹 Huffman coding compresses text by giving short codes to frequent characters and long codes to rare characters
+𖦹 Goal: make the total message size as small as possible
+𖦹 Steps to build Huffman code
+• Step 1: Count frequency of each character
+- Example "AABABC": A=3, B=2, C=1
+• Step 2: Build tree using greedy rule
+- Always pick two least frequent items and combine
+- Example:
+  - Start nodes: C(1), B(2), A(3)
+  - Combine C(1) + B(2) → Node(3)
+  - Combine Node(3) + A(3) → Root(6)
+• Step 3: Assign binary codes from tree
+- Go left → 0, go right → 1
+- Example codes:
+  - A = 0  
+  - C = 10  
+  - B = 11
+• Step 4: Encode message
+- "AABABC" → 0 0 11 0 11 10 → 001101110
+- Original: 6 characters × 8 bits = 48 bits  
+- Huffman: 9 bits → ~80% smaller
+--EMBED-GIT--
+https://github.com/arihara-sudhan/dsa/blob/main/algorithms/huffman.py
+𖦹 Another example: "beep"
+• Frequency: b=1, e=2, p=1
+• Build tree:
+  - Combine b(1)+p(1) → Node(2)
+  - Combine Node(2)+e(2) → Root(4)
+• Assign codes: e=1, b=00, p=01
+• Encode "beep": b e e p → 00 1 1 01 → 001101
+- Original 4×8 = 32 bits → Huffman 6 bits
+- Time complexity: O(n log n) (for building tree with n characters)  
+- Space complexity: O(n) (to store tree and codes)
+
+3. Interval Scheduling (Maximum Non-Overlapping Intervals)
+𖦹 Goal: Select the maximum number of intervals that do not overlap
+𖦹 Correct greedy strategy:
+• Sort intervals by ending time (earliest first)
+• Pick the first interval
+• Repeatedly pick next interval that starts after or when the last picked one ends
+- Time complexity: O(n log n) due to sorting
+- Optimal: YES
+𖦹 Activity Selection Problem
+• You are given n intervals [start_time, end_time]
+• Select maximum number of non-overlapping intervals
+• Golden greedy rule: always pick interval with earliest finish among remaining compatible intervals
+𖦹 Step-by-step algorithm
+• Sort all intervals by end time (ascending)
+• Initialize: count = 0, last_end_time = -∞
+• For each interval in sorted order:
+  - If start_time ≥ last_end_time → take it
+  - Then count++, update last_end_time = end_time
+• Return count
+𖦹 Example 1
+• Intervals: A(1-4), B(3-5), C(0-6), D(5-7), E(8-9), F(5-9), G(3-8)
+• Sorted by end time: A(1-4), B(3-5), C(0-6), D(5-7), G(3-8), F(5-9), E(8-9)
+• Greedy selection:
+  - Pick A → last_end = 4
+  - Next compatible: D → last_end = 7
+  - Next compatible: E → last_end = 9
+• Selected: A, D, E → 3 intervals (maximum possible)
+--EMBED-GIT--
+https://github.com/arihara-sudhan/dsa/blob/main/algorithms/activity_selection.py
+𖦹 Example 2: Where other strategies fail
+• Picking longest → only 1 interval
+• Picking shortest duration → easy to mess order → not always optimal
+• Picking earliest start → only 1 interval
+• Correct greedy (earliest finish) → picks A → B → C → 3 intervals (optimal)
+𖦹 Proof of optimality
+• Theorem: earliest finish greedy always selects maximum intervals
+• Proof idea: “Greedy stays ahead” + exchange argument
+• Let G = greedy solution, O = any optimal solution
+• Sort both by finish time
+• By induction, k-th interval in G finishes no later than k-th in O
+- Therefore G fits at least as many intervals as O → optimal
+
+4. Set Cover Problem
+𖦹 Goal: Find the fewest subsets whose union is the entire universe U
+𖦹 Given:
+• Universe U = {1,2,...,n}
+• Family of subsets S₁, S₂,..., Sₘ ⊆ U
+• Cost of each subset: usually 1 (unweighted) or cᵢ (weighted)
+𖦹 Set Cover is NP-hard → no exact polynomial-time solution
+𖦹 Greedy algorithm gives best possible approximation
+𖦹 Greedy Algorithm
+--EMBED-GIT--
+https://github.com/arihara-sudhan/dsa/blob/main/algorithms/set_cover.py
+• Initialize: C = ∅ (selected sets), Covered = ∅
+• While Covered ≠ U:
+  - Pick set Sⱼ that covers the most new elements not yet covered
+  - Add Sⱼ to C
+  - Update Covered = Covered ∪ Sⱼ
+  - Remove elements in Sⱼ from consideration
+• Return C
+𖦹 Two versions of Set Cover
+• Unweighted: minimize number of sets, all sets cost same
+  - Greedy: pick set covering most new elements
+• Weighted: minimize total cost, each set has a price
+  - Greedy: pick set with best ratio (new elements covered ÷ cost)
+𖦹 Example 1: Unweighted Set Cover
+• Universe = {1,2,3,4,5,6}, Sets:
+  - A={1,2,3,4}, B={3,4,5,6}, C={1,2}, D={3,4}, E={5,6}
+• Step-by-step greedy:
+  - Pick A → covers {1,2,3,4}
+  - Pick B → covers {5,6}
+• Total sets used = 2 (optimal)
+𖦹 Example 2: Weighted Set Cover
+• Same universe, sets with costs:
+  - A=100, B=100, C=10, D=10, E=10
+• Step-by-step weighted greedy (pick max new/cost):
+  - Ratios: C=0.2, D=0.2, E=0.2, A=0.04
+  - Pick C, D, E → total cost = 30 (optimal)
+• Wrong unweighted greedy (pick most new elements) → total cost 110
+𖦹 Approximation Guarantee
+• Greedy solution uses at most Hₙ × OPT sets
+  - OPT = size of optimal cover
+  - Hₙ = 1 + 1/2 + 1/3 + ... + 1/n ≈ ln n + 1
+• Best possible: no algorithm can do better than ln n-approximation unless P=NP
+• For n ≤ 1000 → Hₙ ≤ ~7 → greedy at most 7× optimal
+𖦹 Time Complexity: O(mn) for unweighted, can be improved with heaps  
+𖦹 Space Complexity: O(n + m) (to track covered elements and sets)
+--END--
+--BEGIN--05/12/2025--DYNAMIC PROGRAMMING--
+1. What is Dynamic Programming
+𖦹 Dynamic Programming (DP) solves problems by breaking them into smaller subproblems and storing their results to avoid repeating work
+𖦹 Used when a problem has overlapping subproblems and optimal substructure
+𖦹 Key Features
+• Optimal Substructure
+- Solution of problem can be built from solutions of subproblems
+- Example: shortest path in a graph uses shortest paths of smaller segments
+• Overlapping Subproblems
+- Same subproblems appear multiple times
+- Example: Fibonacci numbers → fib(n-1) and fib(n-2) are reused
+
+2. Difference from Divide and Conquer
+𖦹 Subproblems: Divide & Conquer = independent, DP = overlapping
+𖦹 Strategy: Divide & Conquer = solve recursively, DP = solve recursively or iteratively + store results
+𖦹 Time Complexity: Divide & Conquer often O(2^n), DP usually polynomial O(n), O(n²), etc.
+𖦹 Example: Divide & Conquer = Merge Sort, DP = Fibonacci, Knapsack
+
+3. Two Approaches in DP
+A. Top-Down (Memoization)
+𖦹 Solve main problem recursively
+𖦹 Store results of subproblems in cache (dictionary or array)
+𖦹 Before solving subproblem, check if result exists
+𖦹 Example: Fibonacci Numbers
+[pink]def[/pink] [yellow]fib_memo(n, memo={}):[/yellow]
+    [pink]if[/pink] [yellow]n in memo:[/yellow]
+        [pink]return[/pink] [yellow]memo[n][/yellow]
+    [pink]if[/pink] [yellow]n <= 1:[/yellow]
+        [pink]return[/pink] [yellow]n[/yellow]
+    [yellow]memo[n] = fib_memo(n-1, memo) + fib_memo(n-2, memo)[/yellow]
+    [pink]return[/pink] [yellow]memo[n][/yellow]
+[ pink]print[/pink]([yellow]fib_memo(10)[/yellow])  # 55
+𖦹 Time Complexity: O(n)
+𖦹 Space Complexity: O(n) (for memo + recursion stack)
+
+B. Bottom-Up (Tabulation)
+𖦹 Solve smallest subproblems first
+𖦹 Build solution iteratively
+𖦹 Often uses arrays to store intermediate results
+𖦹 Example: Fibonacci Numbers
+[pink]def[/pink] [yellow]fib_tab(n):[/yellow]
+    [pink]if[/pink] [yellow]n <= 1:[/yellow]
+        [pink]return[/pink] [yellow]n[/yellow]
+    [yellow]dp = [0]*(n+1)[/yellow]
+    [yellow]dp[0], dp[1] = 0, 1[/yellow]
+    [pink]for[/pink] [yellow]i in range(2, n+1):[/yellow]
+        [yellow]dp[i] = dp[i-1] + dp[i-2][/yellow]
+    [pink]return[/pink] [yellow]dp[n][/yellow]
+[pink]print[/pink]([yellow]fib_tab(10)[/yellow])  # 55
+𖦹 Time Complexity: O(n)
+𖦹 Space Complexity: O(n) (can reduce to O(1) using two variables)
+
+4. Common DP Problems
+𖦹 Fibonacci sequence
+• Subproblem: fib(n) = fib(n-1) + fib(n-2)
+𖦹 0/1 Knapsack Problem
+• Subproblem: max value for first i items and capacity w
+𖦹 Longest Common Subsequence (LCS)
+• Subproblem: LCS of first i characters of string1 and first j of string2
+𖦹 Matrix Chain Multiplication
+• Subproblem: minimum multiplications for matrices i to j
+𖦹 Coin Change Problem
+• Subproblem: min number of coins to make amount x
+
+5. Matrix Chain Multiplication (MCM)
+𖦹 Problem Statement
+• Given matrices A1, A2, ..., An with dimensions pi-1 × pi
+• Goal: Multiply all matrices A1 × A2 × ... × An with minimum scalar multiplications
+- Only multiplication cost matters, not the resulting matrix
+𖦹 Example
+• A1: 10×30, A2: 30×5, A3: 5×60
+• (A1 × A2) × A3 → cost = 10×30×5 + 10×5×60 = 4500 (optimal)
+• A1 × (A2 × A3) → cost = 30×5×60 + 10×30×60 = 27000
+--EMBED-GIT--
+https://github.com/arihara-sudhan/dsa/blob/main/algorithms/matrix_chain_multiplication.py
+𖦹 Key Idea
+• Optimal Substructure
+- Minimum cost for multiplying matrices i to j = min over all k (i ≤ k < j) of:
+  m[i][k] + m[k+1][j] + pi-1 × pk × pj
+- Base case: m[i][i] = 0 (single matrix, no multiplication)
+• Overlapping Subproblems
+- Subchains like A1×A2, A2×A3 are used multiple times
+𖦹 DP Table
+• Use dp[i][j] to store minimum cost for multiplying matrices i to j
+• Fill table by increasing chain length from 2 to n
+𖦹 Recurrence Relation
+dp[i][j] = min over k = i to j-1 of (dp[i][k] + dp[k+1][j] + pi-1 × pk × pj)
+• Iterate i = n…1
+• Iterate j = i+1…n
+• Iterate k = i…j-1
+𖦹 Complexity
+• Time Complexity: O(n³) → 3 nested loops
+• Space Complexity: O(n²) → DP table
+
+6. Floyd-Warshall Algorithm
+𖦹 Problem Statement
+• Given a weighted directed graph with n vertices
+• Some edges may be missing (no direct connection)
+• Goal: Find shortest distances between all pairs of vertices
+- Works with negative edge weights if no negative cycles exist
+- Finds all-pairs shortest paths unlike Dijkstra
+𖦹 Key Idea (Dynamic Programming)
+• Let dist[i][j] = shortest distance from vertex i to vertex j
+• Consider vertices 1 to k as possible intermediate points
+• Recurrence:
+  dist[i][j][k] = min(dist[i][j][k-1], dist[i][k][k-1] + dist[k][j][k-1])
+- dist[i][j][k-1] → shortest distance without using vertex k
+- dist[i][k][k-1] + dist[k][j][k-1] → shortest distance through vertex k
+• Simpler version:
+- Start with dist[i][j] = weight[i][j] (∞ if no edge)
+- For each intermediate vertex k = 0..n-1:
+  • For each pair (i, j):
+    dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j])
+- After all vertices considered, dist[i][j] = shortest path from i to j
+--EMBED-GIT--
+https://github.com/arihara-sudhan/dsa/blob/main/algorithms/floyd_warshall.py
+𖦹 Example
+• Graph with 4 vertices (0 to 3)
+Edges:
+0 → 1 : 5, 0 → 3 : 10, 1 → 2 : 3, 2 → 3 : 1
+• Initial distance matrix:
+From\To 0  1  2  3
+0       0  5  ∞ 10
+1       ∞  0  3  ∞
+2       ∞  ∞ 0  1
+3       ∞  ∞  ∞ 0
+• Run algorithm → update distances using each vertex as intermediate
+• Final distance matrix:
+From\To 0  1  2  3
+0       0  5  8  9
+1       ∞  0  3  4
+2       ∞  ∞ 0  1
+3       ∞  ∞  ∞ 0
+𖦹 Complexity
+• Time Complexity: O(n³) → 3 nested loops
+• Space Complexity: O(n²) → distance matrix
+
 --END--
