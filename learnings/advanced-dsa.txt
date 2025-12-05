@@ -797,6 +797,8 @@ function reverseLinkedList(head):
 𖦹 Randomized levels: each node gets level randomly, balances list probabilistically
 𖦹 Average time: O(log n) for search, insertion, deletion
 𖦹 Space: O(n)
+--EMBED--GIT--
+https://github.com/arihara-sudhan/dsa/blob/main/data-structures/linked-list/skiplist_node.cpp
 
 31. Analogy
 𖦹 Like a book with page numbers
@@ -1660,44 +1662,35 @@ IMG_URL queue-types.jpg
 - Explanation: The best priority can be anywhere, so we need a full scan.
 𖦹 Useful when inserts happen many times and deletes happen few times.
 𖦹 Related code:
-
 [pink]#include[/pink] <iostream>
 [pink]using[/pink] [pink]namespace[/pink] std;
-
 [pink]struct[/pink] [yellow]Node[/yellow] {
     [pink]int[/pink] [yellow]value[/yellow];
     [pink]int[/pink] [yellow]priority[/yellow];
     [blue]Node*[/blue] [yellow]next[/yellow];
     [pink]Node[/pink]([pink]int[/pink] v, [pink]int[/pink] p) : [yellow]value[/yellow](v), [yellow]priority[/yellow](p), [yellow]next[/yellow](nullptr) {}
 };
-
 [pink]class[/pink] [yellow]UnsortedPriorityQueue[/yellow] {
 [pink]private[/pink]:
     [blue]Node*[/blue] [yellow]head[/yellow];
-
 [pink]public[/pink]:
     [pink]UnsortedPriorityQueue[/pink]() : [yellow]head[/yellow](nullptr) {}
-
     // Insert at head
     [pink]void[/pink] [yellow]enqueue[/yellow]([pink]int[/pink] value, [pink]int[/pink] priority) {
         [blue]Node*[/blue] [yellow]newNode[/yellow] = [pink]new[/pink] [yellow]Node[/yellow](value, priority);
         [yellow]newNode[/yellow]->[yellow]next[/yellow] = [yellow]head[/yellow];
         [yellow]head[/yellow] = [yellow]newNode[/yellow];
     }
-
     // Remove highest priority
     [pink]int[/pink] [yellow]dequeue[/yellow]() {
         [pink]if[/pink] (![yellow]head[/yellow]) {
             [green]cout[/green] << "Queue empty\n";
             [pink]return[/pink] -1;
         }
-
         [blue]Node*[/blue] [yellow]best[/yellow] = [yellow]head[/yellow];
         [blue]Node*[/blue] [yellow]bestPrev[/yellow] = nullptr;
-
         [blue]Node*[/blue] [yellow]curr[/yellow] = [yellow]head[/yellow]->[yellow]next[/yellow];
         [blue]Node*[/blue] [yellow]prev[/yellow] = [yellow]head[/yellow];
-
         [pink]while[/pink] ([yellow]curr[/yellow]) {
             [pink]if[/pink] ([yellow]curr[/yellow]->[yellow]priority[/yellow] < [yellow]best[/yellow]->[yellow]priority[/yellow]) {
                 [yellow]best[/yellow] = [yellow]curr[/yellow];
@@ -1706,15 +1699,12 @@ IMG_URL queue-types.jpg
             [yellow]prev[/yellow] = [yellow]curr[/yellow];
             [yellow]curr[/yellow] = [yellow]curr[/yellow]->[yellow]next[/yellow];
         }
-
         [pink]if[/pink] ([yellow]bestPrev[/yellow]) [yellow]bestPrev[/yellow]->[yellow]next[/yellow] = [yellow]best[/yellow]->[yellow]next[/yellow];
         [pink]else[/pink] [yellow]head[/yellow] = [yellow]best[/yellow]->[yellow]next[/yellow];
-
         [pink]int[/pink] [yellow]val[/yellow] = [yellow]best[/yellow]->[yellow]value[/yellow];
         [pink]delete[/pink] [yellow]best[/yellow];
         [pink]return[/pink] [yellow]val[/yellow];
     }
-
     [pink]bool[/pink] [yellow]isEmpty[/yellow]() {
         [pink]return[/pink] [yellow]head[/yellow] == nullptr;
     }
@@ -2107,7 +2097,7 @@ IMG_URL heaps.png
    8  10
 - Explanation: 5 ≤ 7, 5 ≤ 9, 7 ≤ 8, 7 ≤ 10
 
-4. Heap as array form
+4. Heap as Array form
 𖦹 A min-heap stored in array form
 • Index: 1 2 3 4 5 6 7
 • Value: 2 5 6 8 9 10 11

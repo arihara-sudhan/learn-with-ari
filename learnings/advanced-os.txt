@@ -1,0 +1,283 @@
+--BEGIN--12/03/2025--OPERATING SYSTEM--
+1. What OS does?
+𖦹 Hardware, operating system, application programs, and users
+𖦹 Hardware gives raw power
+𖦹 Applications do the user’s tasks
+𖦹 OS manages hardware so all apps can use it smoothly
+𖦹 Hardware, software, and data
+𖦹 OS gives a good place for everything to work well
+𖦹 OS is like a government
+• It does not do the actual work
+• It allows others to work safely and fast
+
+2. User view of an operating system
+𖦹 What the user sees changes with the device
+𖦹 Personal computers or laptops
+• One user often uses the whole system
+• OS is made for easy use
+• Less focus on sharing resources
+𖦹 Mobile phones or tablets
+• Touch, gestures, voice helpers
+• Apps run with more limits
+𖦹 Embedded systems (cars, appliances)
+• Very small or no user interface
+• OS runs by itself with little user control
+
+3. System view of an operating system
+𖦹 OS is a resource allocator
+• Manages CPU time, memory, I/O devices, and storage
+• Must give resources fairly and efficiently
+𖦹 OS is also a control program
+• Controls running of user programs
+• Controls I/O operations
+• Stops errors and misuse
+
+4. Defining an operating system
+𖦹 No single perfect definition
+• Computers are used everywhere
+• Different devices have different needs
+• OS designs are very different
+𖦹 What is part of the OS?
+• One idea: everything that comes when you install an OS
+• More accepted idea: OS = kernel + system programs (not apps)
+
+5. Kernel, system programs, and application programs
+𖦹 Kernel
+• Main part that is always running
+𖦹 System programs
+• Tools like file managers, shells, editors
+𖦹 Application programs
+• Things like browsers, games, IDEs
+
+6. Modern operating systems
+𖦹 Include kernel and middleware
+• Middleware = extra frameworks like graphics and multimedia
+--END--
+--BEGIN--12/03/2025--INTERRUPTS--
+1. Interrupts
+𖦹 Interrupt is a signal that tells the CPU to stop and handle something important
+𖦹 Example: you press a key → keyboard sends interrupt → CPU stops current work → reads the key
+𖦹 Normal I/O flow
+• OS driver tells controller to start I/O
+• Controller works and fills its buffer
+• When done, controller sends interrupt
+• CPU runs the interrupt service routine (ISR) and then returns to old work
+𖦹 Interrupt can mean work finished or an error happened
+
+2. Overview of how interrupts work
+𖦹 Interrupt can happen anytime
+𖦹 When CPU gets an interrupt, it pauses the program and jumps to a fixed place in memory
+𖦹 That place stores the address of the interrupt handler
+𖦹 Handler runs and CPU returns to the paused point
+𖦹 Interrupt vector table helps CPU find the correct handler
+• Table in low memory with addresses of all handlers
+• Example: 0 for divide error, 14 for page fault, 32+ for device interrupts
+𖦹 CPU must save program counter, registers, and flags so it can restore them later
+
+3. Implementation of interrupts
+𖦹 CPU checks the interrupt-request line after each instruction
+𖦹 If device raises interrupt, CPU reads interrupt number and finds handler in vector table
+𖦹 CPU saves current state, runs the handler, restores state, and returns
+𖦹 Simple steps: raise → catch → handle → clear → resume
+𖦹 OS needs extra features
+• Ability to disable interrupts for short time to avoid data issues
+• Fast way to find correct handler (vectored interrupts)
+• Priority levels so urgent interrupts stop less urgent ones
+- Example: memory error is high priority, mouse movement is low priority
+
+4. Maskable and non-maskable interrupts
+𖦹 Non-maskable interrupt (NMI)
+• CPU cannot ignore it
+• Used for serious problems like memory errors
+𖦹 Maskable interrupt
+• CPU can disable it when needed
+• Used for normal devices like disk and keyboard
+
+5. Interrupt chaining
+𖦹 Sometimes there are more devices than vector-table entries
+𖦹 One entry may point to a list of handlers
+𖦹 CPU runs handlers in order until one handles the device interrupt
+
+6. Interrupt vector numbers and priority
+𖦹 Vector range 0–31 is for CPU errors
+𖦹 Vector range 32–255 is for device interrupts
+𖦹 High-priority interrupts can interrupt low-priority ones
+𖦹 This makes sure urgent tasks happen first
+--END--
+--BEGIN--12/03/2025--STORAGE STRUCTURE--
+1. Storage structure
+𖦹 Computer needs memory to run programs
+𖦹 CPU can run instructions only from memory
+𖦹 So every program must be loaded into memory before running
+
+2. Main memory (RAM)
+𖦹 RAM is fast, readable, and writable
+𖦹 Stores programs while they run
+𖦹 Built using DRAM
+𖦹 RAM is volatile
+• Loses all data when power goes off
+
+3. Bootstrap programs
+𖦹 When system starts, RAM is empty
+𖦹 First program (bootstrap) cannot be inside RAM
+𖦹 Stored in non-volatile memory like EEPROM
+• EEPROM is slow and cannot be erased often
+• Keeps data even without power
+𖦹 RAM is fast and temporary, EEPROM is slow and permanent
+
+4. Storage building blocks
+𖦹 Bit is the smallest unit (0 or 1)
+𖦹 Byte is 8 bits and is the basic move unit for CPU
+𖦹 Word is CPU’s natural data size (like 32-bit or 64-bit)
+𖦹 Memory sizes
+• KB = 1024 bytes
+• MB = 1024² bytes
+• GB = 1024³ bytes
+• TB = 1024⁴ bytes
+• PB = 1024⁵ bytes
+- Companies often round using 1000
+- Networking counts in bits
+
+5. How CPU uses memory
+𖦹 Memory is an array of bytes, each with an address
+𖦹 CPU uses load and store instructions
+• load: memory → register
+• store: register → memory
+𖦹 CPU fetches instructions using program counter
+
+6. Instruction cycle
+𖦹 Fetch instruction
+𖦹 Decode instruction
+𖦹 Fetch operands if needed
+𖦹 Execute
+𖦹 Store result if needed
+𖦹 Memory only receives addresses; it does not know if they are instructions or data
+
+7. Need for secondary storage
+𖦹 RAM is small and volatile
+𖦹 So we need long-term storage like HDD and SSD
+𖦹 Programs stay in secondary storage → loaded into RAM → run
+
+8. Storage types in a system
+𖦹 Registers: inside CPU, smallest and fastest
+𖦹 Cache: between CPU and RAM, very fast (L1, L2, L3)
+𖦹 RAM: fast and volatile
+𖦹 Non-volatile memory (SSD, flash): slower than RAM, keeps data after power off
+𖦹 Hard Disk: slower but large
+𖦹 Optical disk, tape: very slow, used for backup
+
+9. Storage hierarchy
+𖦹 Rule: closer to CPU = faster, smaller, more costly
+𖦹 Order:
+• Registers
+• Cache
+• Main memory
+• NVM (SSD, flash)
+• HDD
+• Optical disk
+• Magnetic tapes
+𖦹 Volatile: registers, cache, RAM
+𖦹 Non-volatile: SSD, HDD, optical, tapes
+
+10. Volatile vs non-volatile terms
+𖦹 Memory = volatile storage (registers, cache, RAM)
+𖦹 NVS = non-volatile storage (HDD, SSD, flash)
+𖦹 Mechanical NVS: HDD, optical, tape
+• Cheap, large, slow
+𖦹 Electrical NVS: SSD, flash, FRAM, NRAM
+• Fast, small, expensive
+
+11. Why caches are used
+𖦹 Large speed gap exists between levels like RAM and HDD
+𖦹 Cache holds recently used data so CPU can access it faster
+--END--
+--BEGIN--12/03/2025--COMPUTER SYSTEM ARCH--
+1. Computer-system architecture
+𖦹 Computer can be built in many ways based on how many general-purpose processors it has
+𖦹 Three types: single-processor, multiprocessor, clustered systems
+
+2. Single-processor systems
+𖦹 Have one main CPU core that runs programs and OS work
+𖦹 System may also have small helper processors
+• Disk, keyboard, graphics controllers
+• These do small fixed tasks, not full programs
+𖦹 Still called single-processor if there is only one main CPU core
+𖦹 True single-processor systems are rare today
+
+3. Multiprocessor systems
+𖦹 Have two or more processors
+𖦹 Earlier: many chips, each chip had one core
+𖦹 All processors share bus, memory, and I/O
+𖦹 Used to increase total work done
+𖦹 Speed does not grow exactly N times for N processors
+
+4. Symmetric multiprocessing (SMP)
+𖦹 All processors are equal
+𖦹 Any processor can run OS tasks or user processes
+𖦹 Each CPU has its own registers and private cache
+𖦹 All CPUs share main memory
+𖦹 N processes can run in parallel on N CPUs
+𖦹 OS must balance load so no CPU is idle
+
+5. Multicore systems
+𖦹 One chip contains multiple CPU cores
+𖦹 Cores talk faster since they are on same chip
+𖦹 Uses less power and space
+𖦹 Example: dual-core has two cores with private L1 caches and shared L2
+𖦹 OS sees a chip with N cores as N CPUs
+
+6. NUMA systems
+𖦹 Many CPUs can make one main bus too slow
+𖦹 Fix: give each CPU or CPU group its own local memory
+𖦹 CPUs linked by high-speed interconnect
+𖦹 All share same address space
+𖦹 Local memory is faster than remote memory (non-uniform access)
+𖦹 OS must place tasks near their memory to avoid slowdowns
+
+7. Blade servers
+𖦹 Many small computer boards kept in one chassis
+𖦹 Each blade has CPU, memory, and its own OS
+𖦹 Some blades may also be multiprocessor systems
+𖦹 Works like many independent computers inside one box
+
+8. Clustered systems
+𖦹 A cluster is many separate computers (nodes) connected together
+𖦹 Different from multiprocessors: multiprocessor = many CPUs in one system; cluster = many systems connected by network
+𖦹 Nodes are often multicore and share storage
+𖦹 Connected through LAN or fast networks
+
+9. High availability clusters
+𖦹 Used when services must stay running
+𖦹 Nodes watch each other
+𖦹 If one fails, another node takes over quickly
+𖦹 Users see only a short break
+𖦹 System that keeps running even after failure is fault-tolerant
+
+10. Types of clustering
+𖦹 Asymmetric clustering
+• One active node
+• One standby node
+• Standby becomes active if main fails
+𖦹 Symmetric clustering
+• Many active nodes
+• All run applications
+• All watch each other
+• More efficient
+
+11. High-performance clusters
+𖦹 Used for scientific work, simulations, and big data
+𖦹 Work must be split among nodes
+𖦹 Each node solves a part and results are combined
+
+12. Parallel clusters
+𖦹 Many nodes access the same shared storage
+𖦹 Needs special OS or software to avoid conflicts
+𖦹 Uses lock managers to manage shared data
+
+13. Modern clusters
+𖦹 Can have thousands of nodes
+𖦹 Nodes can be far apart
+𖦹 Use shared storage systems like SAN
+𖦹 Any node can run any app from SAN
+𖦹 If one node fails, another takes over instantly
+--END--
