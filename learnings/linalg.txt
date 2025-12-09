@@ -1,0 +1,51 @@
+--BEGIN--09/12/2025--VECTOR SPACE--
+1. Vector space axioms
+𖦹 A vector space has a set V with two actions: adding vectors and multiplying a vector by a number.
+𖦹 The following rules must hold for all vectors u, v, w in V and numbers c, d.
+• Axioms for addition (5 rules)
+    - Closure: u + v stays inside V.
+    - Commutative: u + v = v + u.
+    - Associative: (u + v) + w = u + (v + w).
+    - Zero vector: there is a 0 in V such that u + 0 = u.
+    - Additive inverse: each u has a −u such that u + (−u) = 0.
+• Axioms for scalar multiplication (4 rules)
+    - Closure: cu stays inside V.
+    - Distributive over vectors: c(u + v) = cu + cv.
+    - Distributive over scalars: (c + d)u = cu + du.
+    - Associative with scalars: c(du) = (cd)u.
+• Scalar identity (1 rule)
+    - 1u = u.
+
+2. Definition of span
+𖦹 The span of vectors v1, v2, v3 is the set of all vectors made using:
+• c1v1 + c2v2 + c3v3
+- Here c1, c2, c3 are any real numbers.
+𖦹 It means “all possible combinations of these vectors.”
+
+3. Linear independence
+𖦹 A set of vectors is linearly independent when the only way to make:
+• c1v1 + c2v2 + … + cnvn = 0
+is to have all c1 = c2 = … = cn = 0.
+𖦹 In simple words: no vector can be made from others; none is redundant.
+• Example of independent
+    - v1 = (1, 0), v2 = (0, 1).
+    - Solving a(1, 0) + b(0, 1) = (0, 0) gives a = 0, b = 0 → independent.
+• Linear dependence
+    - A set is dependent if there exists at least one non-zero choice of c1, c2, …, cn that makes:
+c1v1 + c2v2 + … + cnvn = 0.
+    - Meaning one vector can be made from others.
+• Example of dependent
+    - v1 = (1, 2), v2 = (2, 4).
+    - a(1, 2) + b(2, 4) = (0, 0) has many solutions (like a = 2, b = −1).
+    - So dependent. Also v2 = 2v1.
+𖦹 Quick idea:
+• In R²: two vectors are independent if they are not on the same line.
+• In R³: three vectors are independent if they are not in the same plane.
+
+4. Basis of a vector space
+𖦹 A set B = {v1, v2, …, vn} is a basis of V if:
+• The vectors are linearly independent.
+• They span the full space V.
+- Meaning every vector in V can be written as:
+  a1v1 + a2v2 + … + anvn.
+--END--

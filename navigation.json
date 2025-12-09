@@ -1,5 +1,17 @@
 [
     {
+        "id": "linalg",
+        "label": "Linear Algebra"
+    },
+    {
+        "id": "multivariate-analysis",
+        "label": "Multivariate Analysis"
+    },
+    {
+        "id": "number-theory",
+        "label": "Number Theory"
+    },
+    {
         "id": "nlp",
         "label": "NLP"
     },
@@ -12,10 +24,6 @@
         "label": "RAG"
     },
     {
-        "id": "number-theory",
-        "label": "Number Theory"
-    },
-    {
         "id": "advanced-dsa",
         "label": "Advanced DSA"
     },
@@ -26,10 +34,6 @@
     {
         "id": "crispr",
         "label": "CRISPR"
-    },
-    {
-        "id": "multivariate-analysis",
-        "label": "Multivariate Analysis"
     },
     {
         "id": "advanced-cd",
