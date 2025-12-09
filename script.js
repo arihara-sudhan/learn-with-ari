@@ -85,10 +85,16 @@ function processCarousel(images, fileName, carouselId) {
 function processTable(rows) {
     if (!rows || rows.length === 0) return '';
     
-    // Parse CSV-like rows (split by comma)
+    // Parse CSV-like rows (split by comma or tab)
     const parsedRows = rows.map(row => {
-        // Split by comma, but handle cases where commas might be in quoted strings
-        const cells = row.split(',').map(cell => cell.trim());
+        // Try comma first, if no commas, try tab
+        let cells;
+        if (row.includes(',')) {
+            cells = row.split(',').map(cell => cell.trim());
+        } else {
+            // Handle tab-separated values
+            cells = row.split(/\t/).map(cell => cell.trim());
+        }
         return cells;
     });
     
@@ -105,7 +111,6 @@ function processTable(rows) {
             row.push('');
         }
         
-        const tag = rowIndex === 0 ? 'th' : 'td';
         tableHTML += '<tr>';
         
         row.forEach(cell => {
