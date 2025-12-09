@@ -1,5 +1,10 @@
 --BEGIN--22/11/2025--TIME COMPLEXITY--
 1. Computational and asymptotic complexity
+--TABLE-BEGIN--
+OPERATION, TIME COMPLEXITY, SPACE COMPLEXITY
+INSERTION1, O(1), O(n)
+INSERTION2, O(n), O(n)
+--TABLE-END--
 𖦹 A single problem can have many algorithms, each with different efficiency.
 𖦹 For small data, these differences are small; for large data, the differences grow.
 • Computational complexity
@@ -294,6 +299,30 @@ In other words, f(n cannot grow slower than g(n) after some point N)
 • Checked array sizes go n → n/2 → n/4 → ... → 1
 - Explanation: Number of halvings = m where n / 2^m = 1, so m = log₂ n  
 • Complexity = O(log n)
+--END--
+--BEGIN--09/12/2025--ADVANCED ARRAYS--
+1. Sparse Arrays
+𖦹 Sparse array is an array where most positions are empty (zero or no value)
+𖦹 Example: array of size 1 million, but only 5 positions have non-zero values
+𖦹 Problem: storing all positions wastes memory
+𖦹 Idea: store only non-empty values with their positions
+𖦹 Why use it:
+• Saves memory
+• Faster for some operations
+• Good when data is mostly empty
+𖦹 IMPLEMENTATION IDEAS
+• List of (index, value) pairs
+--EMBED-GIT--
+https://github.com/arihara-sudhan/dsa/blob/main/data-structures/advanced-arrays/sparse_array_list_of_kv.cpp
+• Two Arrays: one for indexes, one for values
+--EMBED-GIT--
+https://github.com/arihara-sudhan/dsa/blob/main/data-structures/advanced-arrays/sparse_array_two_lists.cpp
+• Linked list representation
+--EMBED-GIT--
+https://github.com/arihara-sudhan/dsa/blob/main/data-structures/advanced-arrays/sparse_array_linked_list.cpp
+• Compressed formats (CSR, CSC for matrices)
+--EMBED-GIT--
+https://github.com/arihara-sudhan/dsa/blob/main/data-structures/advanced-arrays/sparse_array_matrix_csr.cpp
 --END--
 --BEGIN--23/11/2025--LINKED LISTS--
 1. Arrays and their limitations

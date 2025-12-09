@@ -35,6 +35,8 @@ const SNIPPET_END_REGEX = /--END--/g;
 const CAROUSEL_BEGIN_REGEX = /^--CAROUSEL--$/i;
 const CAROUSEL_END_REGEX = /^--CAROUSEL--$/i;
 const EMBED_GIT_REGEX = /^--EMBED-GIT--$/i;
+const TABLE_BEGIN_REGEX = /^--TABLE-BEGIN--$/i;
+const TABLE_END_REGEX = /^--TABLE-END--$/i;
 const VALID_COLOR_NAMES = ['pink', 'yellow', 'blue', 'green', 'red', 'orange', 'purple', 'cyan', 'gray', 'grey', 'white', 'black', 'lightblue', 'lightgreen', 'lightyellow', 'lightpink', 'lightcyan', 'lightgray', 'lightgrey', 'darkblue', 'darkgreen', 'darkred', 'darkorange', 'darkpurple', 'brown', 'gold', 'silver', 'magenta', 'lime', 'aqua', 'navy', 'teal', 'maroon', 'olive', 'coral', 'salmon', 'violet', 'indigo', 'turquoise', 'tan', 'beige', 'khaki', 'plum', 'orchid', 'crimson', 'azure'];
 const BRACKET_COLOR_REGEX = new RegExp(`\\[(${VALID_COLOR_NAMES.join('|')})\\](.*?)\\[/\\1\\]`, 'gis');
 
@@ -80,12 +82,57 @@ function processCarousel(images, fileName, carouselId) {
     return carouselHTML;
 }
 
+function processTable(rows) {
+    if (!rows || rows.length === 0) return '';
+    
+    // Parse CSV-like rows (split by comma)
+    const parsedRows = rows.map(row => {
+        // Split by comma, but handle cases where commas might be in quoted strings
+        const cells = row.split(',').map(cell => cell.trim());
+        return cells;
+    });
+    
+    if (parsedRows.length === 0) return '';
+    
+    // Determine number of columns from first row
+    const numColumns = parsedRows[0].length;
+    
+    let tableHTML = '<table class="content-table">';
+    
+    parsedRows.forEach((row, rowIndex) => {
+        // Ensure row has correct number of columns (pad with empty strings if needed)
+        while (row.length < numColumns) {
+            row.push('');
+        }
+        
+        const tag = rowIndex === 0 ? 'th' : 'td';
+        tableHTML += '<tr>';
+        
+        row.forEach(cell => {
+            const cellContent = colorizeText(cell || '');
+            if (rowIndex === 0) {
+                tableHTML += `<th>${cellContent}</th>`;
+            } else {
+                tableHTML += `<td>${cellContent}</td>`;
+            }
+        });
+        
+        tableHTML += '</tr>';
+    });
+    
+    tableHTML += '</table>';
+    
+    return tableHTML;
+}
+
 async function processContentLines(lines, fileName) {
     const result = [];
     let inCarousel = false;
     let carouselImages = [];
     let carouselId = null;
     let waitingForEmbedUrl = false;
+    let inTable = false;
+    let tableRows = [];
     
     for (let i = 0; i < lines.length; i++) {
         const line = lines[i];
@@ -93,8 +140,10 @@ async function processContentLines(lines, fileName) {
         const isCarouselBegin = CAROUSEL_BEGIN_REGEX.test(trimmedLine);
         const isCarouselEnd = CAROUSEL_END_REGEX.test(trimmedLine);
         const isEmbedGit = EMBED_GIT_REGEX.test(trimmedLine);
+        const isTableBegin = TABLE_BEGIN_REGEX.test(trimmedLine);
+        const isTableEnd = TABLE_END_REGEX.test(trimmedLine);
         
-        if (isCarouselBegin && !inCarousel) {
+        if (isCarouselBegin && !inCarousel && !inTable) {
             inCarousel = true;
             carouselImages = [];
             carouselId = `carousel-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
@@ -108,6 +157,19 @@ async function processContentLines(lines, fileName) {
         } else if (inCarousel) {
             if (trimmedLine) {
                 carouselImages.push(trimmedLine);
+            }
+        } else if (isTableBegin && !inTable && !inCarousel) {
+            inTable = true;
+            tableRows = [];
+        } else if (isTableEnd && inTable) {
+            inTable = false;
+            if (tableRows.length > 0) {
+                result.push(processTable(tableRows));
+            }
+            tableRows = [];
+        } else if (inTable) {
+            if (trimmedLine) {
+                tableRows.push(trimmedLine);
             }
         } else if (isEmbedGit) {
             waitingForEmbedUrl = true;
@@ -146,6 +208,11 @@ async function processContentLines(lines, fileName) {
     // Handle case where carousel wasn't closed
     if (inCarousel && carouselImages.length > 0) {
         result.push(processCarousel(carouselImages, fileName, carouselId));
+    }
+    
+    // Handle case where table wasn't closed
+    if (inTable && tableRows.length > 0) {
+        result.push(processTable(tableRows));
     }
     
     return result.join('\n');
