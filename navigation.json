@@ -24,8 +24,24 @@
         "label": "RAG"
     },
     {
-        "id": "advanced-dsa",
-        "label": "Advanced DSA"
+        "id": "dsa-complexity",
+        "label": "DSA: Time Complexity"
+    },
+    {
+        "id": "dsa-linear",
+        "label": "DSA: List, Queue, Stack, Hashing"
+    },
+    {
+        "id": "dsa-trees",
+        "label": "DSA: Trees"
+    },
+    {
+        "id": "dsa-graphs",
+        "label": "DSA: Graphs"
+    },
+    {
+        "id": "dsa-misc",
+        "label": "DSA: Miscellaneous"
     },
     {
         "id": "advanced-db",

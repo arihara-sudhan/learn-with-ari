@@ -1,0 +1,329 @@
+--BEGIN--02/12/2025--GRAPHS--
+1. Graph
+𖦹 A graph has two sets: vertices V and edges E.
+𖦹 An edge is a pair (v, w). If the pair has order, the graph is directed.
+𖦹 In a directed graph, (v, w) means w is next to v. In undirected graphs, (v, w) and (w, v) mean both are next to each other.
+𖦹 An edge can also have a weight or cost.
+⠀⠀⠀⠀⠀⠀⠀⢀⣠⣤⣤⣄⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⡴⣟⣯⡷⣿⡽⣟⣷⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⢀⢄⢄⢀⠙⢯⣿⠻⠙⠓⠀⢀⢀⡀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣠⣠⣀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠸⡸⡸⡸⠀⢀⣠⣴⣾⣻⣟⣿⣻⣟⣿⣻⣟⣷⣶⣤⣄⡀⠀⠰⣟⣯⣿⣽⣯⡿⣆⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠣⠃⣠⡾⣟⣯⡷⣿⣽⣯⣿⣽⣯⣿⣽⣯⡷⣿⢾⣯⡿⣷⣦⡈⠳⢿⢾⠳⠛⠙⠂⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⢀⣴⣟⣿⢯⣿⣻⣽⡾⣷⢿⡾⣷⢿⡾⣷⣟⣿⣻⡷⣟⣿⢾⡿⣆⠈⢀⢔⢔⢲⠂⠀⠀⠀
+⠀⠀⠀⠀⠀⢀⣾⣯⡿⣾⣻⣽⢿⣾⣻⣟⣿⣻⣟⣿⣻⣯⣿⣽⣯⣿⣻⣽⣟⣿⣻⣷⠀⢱⢱⠑⠁⠀⠀⠀
+⠀⠀⠀⠀⠀⢼⡷⣿⡽⣿⣽⢾⣿⣽⣯⣿⣽⣯⣿⣽⣯⡷⣿⢾⡷⣿⣽⡷⣿⣽⣟⣾⣇⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⢀⣿⣻⣽⢿⣽⣾⣻⢷⡿⣾⢷⡿⣾⢷⡿⣾⣟⣿⣻⣟⣿⢾⣟⣿⢾⣯⣷⢿⡀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⢐⣿⣽⢾⣻⣷⠋⠉⠉⢻⣟⣿⣻⣟⣿⣻⣯⣿⣽⣯⠿⠽⢻⣯⣿⣻⡷⣿⣻⡂⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠐⣿⢾⣿⣽⢾⡀⠀⠀⣰⣿⣽⣿⠟⠛⢿⣷⡿⣞⠇⠀⠀⠈⣷⢿⣽⣟⣿⣽⠂⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⢹⣟⣷⢿⣻⣟⣯⡿⣯⣿⣿⠿⠂⠀⢾⣿⣿⡿⣷⣤⠤⠐⠛⠫⢷⡿⣽⡞⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠙⣿⣻⣽⣯⣷⢿⣯⣿⣯⣤⣶⣧⣄⣼⣿⣟⣿⠎⢠⡺⡿⣦⠈⣿⡯⠃⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠑⠿⢾⣯⡿⣷⢿⣾⣻⣟⣿⣻⣯⡷⡿⠙⣁⣸⡻⣿⣎⡀⠙⠁⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⢉⠉⠋⠓⠻⠽⠯⠷⠻⠽⠀⣼⣝⠟⠻⣾⣮⡻⡷⣦⣀⢤⢤⡀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣻⣟⣷⢶⣖⣆⠀⠒⠀⠐⣝⣟⢧⢴⠝⢻⢿⢿⣮⣻⡻⡷⠁⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣿⣽⣯⢿⣻⣽⣯⡿⣿⢶⡀⠈⠻⣷⣤⡂⢸⣷⣀⣸⡻⡇⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠰⣿⣞⣯⣿⣻⡚⠳⠿⡻⠿⠁⣸⡢⣄⠉⠻⠷⣷⣝⡟⠟⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠨⣿⢾⣷⣻⣽⣷⣶⡆⢀⢶⣮⣯⡻⣮⣟⣖⢦⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠨⣿⢯⡷⣟⣷⢿⣽⣇⣈⣁⣄⠙⠻⢾⣮⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠹⣟⣿⠤⠀⠀⠀⠈⠀⠀⠀⠸⡀⠙⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠈⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+2. Paths
+𖦹 A path is a sequence of vertices w1, w2, …, wN where each pair (wi, wi+1) is an edge.
+𖦹 Path length = number of edges = N − 1.
+𖦹 A path from a vertex to itself with no edges has length 0.
+𖦹 A loop is an edge like (v, v). We usually avoid loops.
+𖦹 A simple path has all different vertices (first and last may match).
+
+3. Cycles
+𖦹 A cycle in a directed graph is a path with length ≥ 1 where first and last vertices are the same.
+𖦹 A simple cycle has all distinct vertices except first and last.
+𖦹 In undirected graphs, edges in the cycle must be different.
+𖦹 A directed graph with no cycles is acyclic (DAG).
+
+4. Connectivity
+𖦹 An undirected graph is connected if every vertex can reach every other.
+𖦹 A directed graph is strongly connected if every vertex can reach every other with direction.
+𖦹 If it is not strongly connected but becomes connected when ignoring direction, it is weakly connected.
+𖦹 A complete graph has an edge between every pair of vertices.
+
+5. Graph Representations
+IMG_URL directed_g.png
+𖦹 Graph has 7 vertices and 13 edges
+𖦹 Edges: 1→2, 1→3, 1→4, 2→4, 2→5, 3→4, 3→6, 4→6, 4→7, 5→4, 5→7, 6→7, 7→6
+
+6. Adjacency Matrix
+𖦹 Rows = source vertex, Columns = target vertex
+𖦹 1 = edge exists, 0 = no edge
+𖦹 Table:
+      1 2 3 4 5 6 7
+1     0 1 1 1 0 0 0
+2     0 0 0 1 1 0 0
+3     0 0 0 1 0 1 0
+4     0 0 0 0 0 1 1
+5     0 0 0 1 0 0 1
+6     0 0 0 0 0 0 1
+7     0 0 0 0 0 1 0
+
+7. Adjacency List
+𖦹 Each vertex stores a list of neighbors
+𖦹 List:
+1: 2, 3, 4
+2: 4, 5
+3: 4, 6
+4: 6, 7
+5: 4, 7
+6: 7
+7: 6
+
+8. Incidence Matrix
+𖦹 Rows = vertices, Columns = edges (e1 to e13)
+𖦹 Use -1 for edge start, +1 for edge end, 0 otherwise
+𖦹 Table:
+	e1	e2	e3	e4	e5	e6	e7	e8	e9	e10	e11	e12	e13
+1	-1	-1	-1	0	0	0	0	0	0	0	0	0	0
+2	1	0	0	-1	-1	0	0	0	0	0	0	0	0
+3	0	1	0	0	0	-1	0	0	0	0	0	0	0
+4	0	0	1	1	0	1	-1	-1	0	0	0	0	0
+5	0	0	0	0	1	0	0	1	0	0	0	0	0
+6	0	0	0	0	0	0	1	0	-1	0	0	0	0
+7	0	0	0	0	0	0	0	0	1	-1	0	0	0
+𖦹 Column meaning: e1=1→2, e2=1→3, e3=1→4, e4=2→4, e5=2→5, e6=3→4, e7=3→6, e8=4→6, e9=4→7, e10=5→4, e11=5→7, e12=6→7, e13=7→6
+
+9. Compressed Sparse Row (CSR)
+𖦹 Step 1: List edges per vertex (values, columns)
+• Vertex 1 → 2, 3, 4
+• Vertex 2 → 4, 5
+• Vertex 3 → 4, 6
+• Vertex 4 → 6, 7
+• Vertex 5 → 4, 7
+• Vertex 6 → 7
+• Vertex 7 → 6
+𖦹 Step 2: values = [1,1,1, 1,1, 1,1, 1,1, 1,1, 1,1]  # 13 edges
+𖦹 Step 3: columns = [2,3,4, 4,5, 4,6, 6,7, 4,7, 7,6]
+𖦹 Step 4: row_ptr = [0, 3, 5, 7, 9, 11, 12, 13]
+• Vertex 1 edges → indices 0:3 → 3 edges
+• Vertex 2 edges → indices 3:5 → 2 edges
+• Vertex 3 edges → indices 5:7 → 2 edges
+• Vertex 4 edges → indices 7:9 → 2 edges
+• Vertex 5 edges → indices 9:11 → 2 edges
+• Vertex 6 edges → indices 11:12 → 1 edge
+• Vertex 7 edges → indices 12:13 → 1 edge
+
+10. Adjacency Matrix
+𖦹 Structure: V×V matrix
+𖦹 Space: O(V²)
+• Reason: store 0 for every missing edge
+𖦹 Time:
+• Check edge (u,v) → O(1)
+• Iterate neighbors of vertex → O(V)
+• Iterate all edges → O(V²)
+𖦹 Summary:
+• Space: O(V²)
+• Check edge: O(1)
+• Iterate neighbors: O(V)
+• Iterate all edges: O(V²)
+
+11. Adjacency List
+𖦹 Structure: Array or list of lists; each vertex stores outgoing neighbors
+𖦹 Space: O(V + E)
+• Reason: pointers for V vertices + E edges
+𖦹 Time:
+• Check edge (u,v) → O(degree(u)) worst-case O(V)
+• Iterate neighbors → O(degree(u))
+• Iterate all edges → O(V + E)
+𖦹 Summary:
+• Space: O(V + E)
+• Check edge: O(degree(u))
+• Iterate neighbors: O(degree(u))
+• Iterate all edges: O(V + E)
+
+12. Incidence Matrix
+𖦹 Structure: V×E matrix; row = vertex, column = edge, values -1,0,1
+𖦹 Space: O(V×E)
+• Reason: stores outgoing and incoming info
+𖦹 Time:
+• Check edge (u,v) → O(E)
+• Iterate neighbors → O(E)
+• Iterate all edges → O(V×E)
+𖦹 Summary:
+• Space: O(V×E)
+• Check edge: O(E)
+• Iterate neighbors: O(E)
+• Iterate all edges: O(V×E)
+
+13. Compressed Sparse Row (CSR)
+𖦹 Structure:
+• values → store edges (size E)
+• columns → target vertices (size E)
+• row_ptr → start index of each vertex (size V+1)
+𖦹 Space: O(V + E)
+• Reason: values + columns = 2E, row_ptr = V+1
+𖦹 Time:
+• Check edge (u,v) → O(degree(u))
+• Iterate neighbors → O(degree(u))
+• Iterate all edges → O(E)
+𖦹 Summary:
+• Space: O(V + E)
+• Check edge: O(degree(u))
+• Iterate neighbors: O(degree(u))
+• Iterate all edges: O(E)
+
+14. Quick Comparison
+𖦹 Adjacency Matrix: Space O(V²), Edge check O(1), Neighbors O(V), All edges O(V²)
+𖦹 Adjacency List: Space O(V+E), Edge check O(deg(u)), Neighbors O(deg(u)), All edges O(V+E)
+𖦹 Incidence Matrix: Space O(V×E), Edge check O(E), Neighbors O(E), All edges O(V×E)
+𖦹 CSR: Space O(V+E), Edge check O(deg(u)), Neighbors O(deg(u)), All edges O(E)
+
+15. Degree in a Graph
+𖦹 Degree of a vertex = number of edges connected to it
+𖦹 In undirected graphs, each edge counts for both connected vertices
+𖦹 In directed graphs:
+• In-degree = number of edges coming into the vertex
+• Out-degree = number of edges going out from the vertex
+
+16. Examples
+𖦹 Directed Graph: Edges 1→2, 1→3, 2→3
+• Vertex 1: Out-degree = 2, In-degree = 0
+• Vertex 2: Out-degree = 1, In-degree = 1
+• Vertex 3: Out-degree = 0, In-degree = 2
+𖦹 Undirected Graph: Edges 1—2, 1—3, 2—3
+• Vertex 1 degree = 2
+• Vertex 2 degree = 2
+• Vertex 3 degree = 2
+
+17. Importance of Degree
+𖦹 Shows how connected a vertex is
+𖦹 Used in algorithms:
+• Topological sort → uses in-degree in directed graphs
+• Euler path/cycle → degree conditions decide existence
+• Graph traversal → vertices with higher degree may take longer to explore
+--END--
+--BEGIN--02/12/2025--TOPOLOGICAL SORT--
+18. Topological Sort
+𖦹 If there is an edge u→v, then u must come before v in the order
+𖦹 Works only for graphs with no cycles (DAGs)
+• A cycle makes the order impossible because each node depends on another in a loop
+
+19. Basic Idea
+𖦹 Nodes with no incoming edges are the starting points
+𖦹 Pick all zero-indegree nodes first
+𖦹 After picking a node, remove it and its outgoing edges
+• This may create new zero-indegree nodes
+𖦹 Repeat until all nodes are processed or no zero-indegree node is left
+𖦹 If nodes remain but none have indegree 0, a cycle exists and no valid order is possible
+--EMBED-GIT--
+https://github.com/arihara-sudhan/dsa/blob/main/data-structures/graphs/topological_sort_bruteforce.cpp
+
+20. Kahn’s Algorithm (BFS Style)
+𖦹 Count indegree of each node once
+𖦹 Put all zero-indegree nodes into a queue
+𖦹 Remove nodes from queue one by one
+• Reduce indegree of their neighbors
+• When a neighbor’s indegree becomes zero, add it to the queue
+𖦹 If all nodes are removed, order is valid; else, there is a cycle
+--EMBED-GIT--
+https://github.com/arihara-sudhan/dsa/blob/main/data-structures/graphs/topological_sort_khan.cpp
+
+--END--
+--BEGIN--02/12/2025--BFS AND DFS--
+21. BFS
+𖦹 BFS = Breadth-First Search; explores graph level by level like waves
+𖦹 Start at one node:
+• First explore nodes 1 step away
+• Then nodes 2 steps away
+• Then 3 steps away, and so on
+𖦹 Finish one layer before moving to next
+𖦹 BFS grows outward like ripples
+
+22. Why Use a Queue
+𖦹 Queue gives first-come, first-served order
+𖦹 When a node is discovered, add to back
+𖦹 When processing, take from front
+𖦹 Ensures earliest discovered nodes are processed first → level by level
+--EMBED-GIT--
+https://github.com/arihara-sudhan/dsa/blob/main/data-structures/graphs/bfs.cpp
+
+23. What BFS Provides
+𖦹 Order of node visits
+𖦹 Shortest path in number of edges from start node
+𖦹 Checks if graph is connected
+• If some nodes are not reached, graph has unreachable parts
+
+24. When BFS is Used
+𖦹 Shortest path problems with equal edge weight
+𖦹 Social networks (find people at distance 1,2,3…)
+𖦹 Level-order tree traversal
+𖦹 Solving puzzles (Rubik’s cube, sliding puzzles)
+𖦹 Routing and networking
+
+25. BFS Complexity
+𖦹 Time = O(V + E)
+𖦹 Space = O(V) (for queue and visited nodes)
+
+26. DFS
+𖦹 DFS = Depth-First Search; explores graph deep along a path before backtracking
+𖦹 Like walking in a maze:
+• Pick a path and follow it as far as possible
+• If dead end, backtrack to previous junction
+• Repeat until all paths explored
+
+27. How DFS Works
+𖦹 Start at a node and mark it visited
+𖦹 Pick one unvisited neighbor and explore recursively
+𖦹 Backtrack when no more unvisited neighbors
+𖦹 Repeat until all reachable nodes are visited
+--EMBED-GIT--
+https://github.com/arihara-sudhan/dsa/blob/main/data-structures/graphs/dfs.cpp
+
+28. Why a Stack is Used
+𖦹 DFS can use recursion (call stack) or an explicit stack
+𖦹 Stack remembers current path for correct backtracking
+--EMBED-GIT--
+https://github.com/arihara-sudhan/dsa/blob/main/data-structures/graphs/dfs_stack.cpp
+
+29. What DFS Provides
+𖦹 Order of nodes visited (depth-first)
+𖦹 Can detect cycles
+𖦹 Can classify edges: tree, back, forward, cross
+𖦹 Helps in connected components, checking paths, and solving puzzles
+
+30. DFS Complexity
+𖦹 Time = O(V + E)
+𖦹 Space = O(V) (for recursion stack or explicit stack)
+--END--
+--BEGIN--02/12/2025--SHORTEST PATH--
+1. Shortest Path Problems
+𖦹 A network of cities connected by roads can have costs like distance, time, or money
+𖦹 A path = sequence of connected roads from one city to another
+𖦹 Weighted path length = sum of all road costs
+𖦹 Unweighted path length = number of roads only
+𖦹 Single-source shortest path = find cheapest route from one city to all others
+𖦹 Useful in real life:
+• Sending data over networks
+• Planning flight/train routes
+• GPS navigation
+
+2. Unweighted Shortest Path
+𖦹 All roads considered equal or we care only about number of roads
+𖦹 Start from source city, visit cities 1 road away, then 2 roads away, and so on
+𖦹 Uses BFS:
+• Start at source, distance = 0
+• Visit neighbors, distance = 1
+• Visit neighbors of neighbors, distance = 2
+• Repeat until all reachable cities are visited
+𖦹 Distance recorded is guaranteed shortest in terms of number of roads
+𖦹 Time Complexity = O(V + E), Space Complexity = O(V)
+
+3. Weighted Shortest Path
+𖦹 Roads have different costs (weights)
+𖦹 Positive weights only → use Dijkstra’s algorithm
+• Pick city with smallest known cost, update neighbors
+𖦹 Negative weights allowed → use Bellman-Ford algorithm
+• Handles negative cycles, but shortest path may not exist if negative cycle exists
+𖦹 Useful for:
+• Roads with tolls or different travel times
+• Optimizing network traffic with varying link costs
+• Scheduling tasks with dependencies and costs
+𖦹 Time & Space Complexity:
+• Dijkstra (with min-heap) → Time O((V+E) log V), Space O(V)
+• Bellman-Ford → Time O(VE), Space O(V)
+--END--
