@@ -49,3 +49,6 @@ c1v1 + c2v2 + … + cnvn = 0.
 - Meaning every vector in V can be written as:
   a1v1 + a2v2 + … + anvn.
 --END--
+--BEGIN--12/12/2025--NORMS--
+
+--END--

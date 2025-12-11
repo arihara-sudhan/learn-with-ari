@@ -21,6 +21,34 @@ https://github.com/arihara-sudhan/dsa/blob/main/data-structures/advanced-arrays/
 • Compressed formats (CSR, CSC for matrices)
 --EMBED-GIT--
 https://github.com/arihara-sudhan/dsa/blob/main/data-structures/advanced-arrays/sparse_array_matrix_csr.cpp
+
+2. Dynamic array
+𖦹 It is an array that can grow or shrink when needed.
+𖦹 In Python, list works like this. In C++ we use std::vector. In C we change size using malloc or realloc.
+𖦹 Most insertions are cheap (O(1)) because free space is already there.
+- When the array becomes full, it makes a bigger array, copies all items, and adds the new item (O(n)).
+𖦹 The array usually doubles its size when full, so resizing is rare.
+𖦹 Even though some insertions are costly, the average insertion cost stays O(1) (amortized).
+𖦹 Time complexity: insert (amortized O(1)), resize (O(n))
+𖦹 Space complexity: O(n)
+
+3. Cache-oblivious data structures
+𖦹 These are made to work fast with memory hierarchy without knowing cache size.
+𖦹 CPU memory levels: registers → L1 → L2 → L3 → main memory.
+𖦹 Cache hit is fast; cache miss is slow.
+𖦹 These structures try to keep data close together in memory so fewer cache misses happen.
+• Matrix transpose
+- Normal transpose jumps in memory and causes many misses.
+- Cache-oblivious transpose splits the matrix into smaller blocks and works on each block by recursion, giving more hits.
+• KD-tree
+- Normal tree nodes are scattered in memory.
+- Cache-oblivious KD-tree uses Van Emde Boas layout so parent and child nodes are stored close, giving more hits.
+• FunnelSort
+- Array is split into √n blocks, each block sorted by recursion.
+- A K-merger takes small chunks that fit in cache, merges them, and continues until all are sorted.
+𖦹 The main idea is: use recursion + work on small local blocks so cache is used well automatically.
+𖦹 Time complexity depends on the specific algorithm (example: FunnelSort is O(n log n)).
+𖦹 Space complexity: usually O(n)
 --END--
 --BEGIN--23/11/2025--LINKED LISTS--
 1. Arrays and their limitations
