@@ -401,3 +401,68 @@ From\To 0  1  2  3
 • Time Complexity: O(n³) → 3 nested loops
 • Space Complexity: O(n²) → distance matrix
 --END--
+--BEGIN--12/13/2025--RANDOMIZED ALGORITHMS--
+1. Randomized Algorithms
+𖦹 Randomized algorithms use randomness to improve performance, especially in average-case scenarios or against difficult inputs.
+𖦹 They use random bits or pseudorandom generators, making runtime or output probabilistic.
+𖦹 Types:
+• Las Vegas: always correct, runtime may vary.
+• Monte Carlo: fixed runtime, small probability of error, often used for approximation.
+𖦹 Monte Carlo error is bounded by ε with probability 1−δ; increasing sample size reduces error as 1/√N.
+𖦹 Monte Carlo method steps:
+• Define input domain.
+• Generate random samples.
+• Compute deterministically.
+• Aggregate results.
+- Convergence is guaranteed by the law of large numbers.
+𖦹 Variants: Markov Chain Monte Carlo (sampling distributions), Importance Sampling (biased regions).
+𖦹 Examples:
+• Approximate π by scattering points in a unit square and counting inside a quarter circle.
+• Karger’s Min-Cut algorithm contracts random edges to find minimum cuts.
+• Randomized Quicksort chooses a random pivot for expected O(n log n) time.
+• Simulate dice throws by averaging over many trials.
+𖦹 Monte Carlo expected value algorithm: run N samples and average results.
+• Time complexity: O(N × computation per sample)
+• Space complexity: low
+𖦹 Derandomization: convert to deterministic via conditional probabilities or expanders, but may be inefficient.
+𖦹 Complexity classes:
+• BPP: bounded error, polynomial time
+• RP: one-sided error
+𖦹 Applications: optimization, physics simulations, integration, AI (Monte Carlo Tree Search), cryptography.
+
+2. Pseudorandom Number Generation
+𖦹 Computers generate pseudorandom numbers using formulas like Linear Congruential Generator (LCG): [pink]xi+1 = (A ⋅ xi) mod M[/pink]
+• xi = current number, xi+1 = next number, A = multiplier, M = modulus.
+• Start from seed x0; each next number = A * current number mod M.
+𖦹 Example: M = 11, A = 7, x0 = 1 → sequence: 1, 7, 5, 2, 3, ...
+𖦹 Proper choice of A and M ensures long period; sequence is reproducible if seed known.
+𖦹 Modern libraries provide generators like LCG, Mersenne Twister.
+• Distributions like uniform or normal can be applied.
+
+3. Skip Lists
+𖦹 Skip lists are randomized data structures for fast search and insertion.
+𖦹 Linked lists alone: O(N) search.
+𖦹 Skip lists add shortcut links to skip nodes.
+𖦹 Node levels are chosen randomly:
+• Flip a coin until heads appear; number of flips = node level.
+• About 50% level 1, 25% level 2, 12.5% level 3, etc.
+𖦹 Search starts at highest level and drops down as needed.
+• Expected search and insertion time: O(log N)
+• Space complexity: O(N)
+𖦹 Skip lists are efficient and robust against worst-case inputs.
+
+4. Randomized Primality Testing
+𖦹 Checks if large number N is prime faster than naive methods.
+𖦹 Fermat’s Little Theorem: for prime P and 0 < A < P, [pink]A^(P−1) ≡ 1 mod P[/pink]
+𖦹 Algorithm:
+• Pick A randomly between 1 and N−1.
+• If [pink]A^(N−1) ≡ 1 mod N[/pink] fails → N is composite.
+• If holds → N is probably prime.
+𖦹 Randomization reduces being fooled by Carmichael numbers.
+• Carmichael numbers: composite but satisfy [pink]A^(N−1) ≡ 1 mod N[/pink] for all A coprime to N.
+• Examples: 561, 1105, 1729, 2465.
+𖦹 Multiple random trials reduce error probability to very small.
+𖦹 Randomized tests like Miller-Rabin ensure fast and reliable primality checking.
+• Time complexity: polynomial in number of digits
+• Space complexity: low
+--END--
