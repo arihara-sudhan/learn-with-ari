@@ -466,3 +466,119 @@ From\To 0  1  2  3
 • Time complexity: polynomial in number of digits
 • Space complexity: low
 --END--
+--BEGIN--14/12/2025--PARAL & DIST ALGORITHMS--
+1. PRAM
+𖦹 PRAM is a simple model to design parallel algorithms
+𖦹 Many processors work at the same time in sync
+𖦹 All processors can access the same shared memory instantly
+𖦹 It assumes no delay, no communication cost, and no memory conflict
+• Cost measures
+- Parallel time means number of global steps
+- Total work means parallel_time × number_of_processors
+• Memory access types
+- EREW: no two processors can read or write the same memory at the same time
+- CREW: many can read the same memory, but only one can write
+- CRCW: many can read and write the same memory
+• Write conflict rules in CRCW
+- Common: all write the same value
+- Arbitrary: any one writer wins
+- Priority: highest priority wins
+- Reduction: values are combined like sum or max
+𖦹 Used mainly to think about parallel limits, not real hardware
+𖦹 Inspires multicore CPUs and GPUs
+• Complexity and limits
+- Time: often O(log n) for problems like sorting
+- Space: assumes unlimited shared memory
+- Limits: ignores cache, delay, and real hardware issues
+• Comparison
+- PRAM uses shared memory
+- Distributed systems use message passing
+
+2. DIVIDE AND CONQUER
+𖦹 Break a problem into smaller independent parts
+𖦹 Solve each part
+𖦹 Combine all answers
+• Basic idea
+- Divide data into parts
+- Solve parts using recursion
+- Combine results
+• Parallel version
+- Independent subproblems run at the same time
+- Left and right parts are solved together
+- Works well with PRAM and distributed systems
+• Parallel steps
+- Divide: split data into chunks (often O(1) or O(n/p))
+- Conquer: each chunk runs on different processors
+- Combine: merge partial results
+• Recursion tree view
+- Each level has more subproblems
+- All problems in one level run in parallel
+- Number of levels is log n
+- Parallel time becomes O(log n) if enough processors exist
+• Models
+- Shared memory: easy access and merging
+- Distributed: local memory and message passing
+• Techniques
+- Team parallel model: processors split into groups for each subproblem
+- Work stealing: idle processors take tasks from busy ones
+- Communication minimization: reduce data transfer during combine
+• Examples
+- Parallel quicksort
+  • Independent left and right parts
+  • Parallel time: O(log n)
+  • Total work: O(n log n)
+- Parallel mergesort
+  • Sort halves in parallel
+  • Merge can also be parallel
+  • Parallel time: O(log² n)
+  • Work: O(n log n)
+- Matrix multiplication
+  • Split matrices into submatrices
+  • Independent multiplications run in parallel
+• Key terms
+- Parallel time: longest dependency chain
+- Work: total operations
+- Efficiency: work / time
+• Why powerful
+- Naturally parallel
+- Scales well
+- Used in sorting, FFT, and matrix algorithms
+
+3. LOAD BALANCING
+𖦹 Load balancing means spreading work evenly across processors
+𖦹 Goal is to avoid idle processors and reduce finish time
+𖦹 Used in parallel and distributed systems
+• Types
+- Static: tasks assigned before execution
+  • Low overhead
+  • Poor for uneven tasks
+- Dynamic: tasks assigned during execution
+  • Better balance
+  • Has communication cost
+• Common methods
+- Round robin
+  • Tasks given one by one in order
+  • Simple but may cause imbalance
+- Power of two choices
+  • Pick two processors randomly
+  • Assign task to less loaded one
+  • Very good balance with low cost
+- Work stealing
+  • Each processor has its own task list
+  • Idle ones steal tasks
+  • Scalable and decentralized
+- Master–worker
+  • One master assigns tasks
+  • Can become a bottleneck
+• Prefix sum based method
+- Used when task sizes are known
+- Divides work evenly
+- Parallel time: O(log n)
+• Applications
+- Clusters and cloud systems
+- Parallel sorting
+- Multicore runtimes
+• Complexity reminder
+- Time depends on balance quality
+- Space includes task queues and buffers
+--END--
